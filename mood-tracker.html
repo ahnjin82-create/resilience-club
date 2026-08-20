@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>감정 온도계 — 다시봄</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+
+  .wrap{max-width:480px;margin:0 auto;padding:0 0 40px;}
+  .wrap.hidden{display:none;}
+
+  .hero{padding:28px 20px 22px;text-align:center;background:var(--navy);}
+  .hero .eyebrow{color:var(--mint);font-weight:700;font-size:12px;letter-spacing:.08em;margin:0 0 6px;}
+  .hero h1{font-size:22px;margin:0 0 6px;color:#fff;}
+  .hero .sub{color:#B9C6E0;font-size:13px;margin:0;}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 16px 0;}
+  .card label{display:block;font-size:12.5px;font-weight:700;color:#374151;margin-bottom:6px;}
+  select, input[type=text]{
+    width:100%;border:1.6px solid #d8dce4;border-radius:9px;padding:10px 12px;
+    font-size:14.5px;font-family:inherit;background:#fbfbfa;
+  }
+  .id-row{display:flex;gap:10px;}
+  .id-field{flex:1;}
+
+  .temp-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin:16px;}
+  .temp-q{font-size:15px;font-weight:700;color:var(--navy);text-align:center;margin:0 0 16px;}
+  .temp-display{text-align:center;}
+  .temp-face{font-size:44px;line-height:1;margin-bottom:8px;}
+  .temp-badge{
+    display:inline-block;background:var(--coral);color:#fff;font-weight:900;font-size:18px;
+    padding:5px 18px;border-radius:999px;margin-bottom:6px;
+  }
+  .temp-desc{font-size:13.5px;color:#374151;font-weight:700;margin-bottom:16px;}
+  input[type=range]{width:100%;accent-color:var(--coral);height:6px;margin:6px 0 8px;}
+  .temp-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);}
+
+  .reflect-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px;}
+  .reflect-card label{display:block;font-size:12.5px;font-weight:700;color:#374151;margin-bottom:8px;}
+  textarea{
+    width:100%;min-height:70px;border:1.6px solid #d8dce4;border-radius:9px;padding:10px 12px;
+    font-size:14.5px;font-family:inherit;resize:vertical;background:#fbfbfa;
+  }
+  .hint{font-size:11.5px;color:var(--muted);margin-top:6px;}
+
+  .submit-zone{margin:20px 16px 0;}
+  button.submit{
+    width:100%;background:var(--coral);color:#fff;border:none;border-radius:14px;
+    padding:16px;font-size:16px;font-weight:900;cursor:pointer;
+  }
+  button.submit:disabled{opacity:.5;cursor:not-allowed;}
+  .error-msg{color:#b91c1c;font-size:13px;font-weight:700;text-align:center;margin-top:10px;display:none;}
+
+  .done-screen{display:none;text-align:center;padding:70px 24px;}
+  .done-screen.show{display:block;}
+  .badge-circle{
+    width:88px;height:88px;border-radius:50%;background:var(--mint);
+    margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff;
+  }
+  .done-title{font-size:22px;font-weight:900;color:var(--navy);margin:0 0 8px;}
+  .done-sub{font-size:14px;color:var(--muted);max-width:300px;margin:0 auto;}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="formWrap">
+  <div class="hero">
+    <p class="eyebrow">회복탄력성 동아리 「다시봄」</p>
+    <h1>감정 온도계</h1>
+    <p class="sub">지금 내 마음은 몇 도인가요?</p>
+  </div>
+
+  <div class="card">
+    <label for="session">오늘 세션</label>
+    <select id="session">
+      <option value="OT">OT (8/20)</option>
+      <option value="준비①">준비① (8/27)</option>
+      <option value="준비②">준비② (9/3)</option>
+      <option value="준비③">준비③ (9/10)</option>
+      <option value="5주차_공개수업">5주차 · 공개수업 (9/17)</option>
+      <option value="6주차">6주차</option>
+      <option value="7주차">7주차</option>
+      <option value="8주차">8주차</option>
+      <option value="9주차">9주차</option>
+      <option value="10주차">10주차</option>
+      <option value="11주차">11주차</option>
+      <option value="12주차">12주차</option>
+      <option value="13주차">13주차</option>
+      <option value="14주차">14주차</option>
+      <option value="15주차">15주차</option>
+      <option value="16주차">16주차</option>
+      <option value="17주차">17주차</option>
+    </select>
+    <div class="id-row" style="margin-top:12px">
+      <div class="id-field">
+        <label for="grpNo">모둠</label>
+        <input type="text" id="grpNo" inputmode="numeric" placeholder="예: 3">
+      </div>
+      <div class="id-field">
+        <label for="stuName">이름</label>
+        <input type="text" id="stuName" placeholder="이름 입력">
+      </div>
+    </div>
+  </div>
+
+  <div class="temp-card">
+    <p class="temp-q">“지금 내 마음은 몇 도인가요?”</p>
+    <div class="temp-display">
+      <div class="temp-face" id="tempFace">😊</div>
+      <div class="temp-badge" id="tempBadge">7도</div>
+      <div class="temp-desc" id="tempDesc">따뜻하고 마음이 안정되어 있어요</div>
+    </div>
+    <input type="range" id="feelTemp" min="1" max="10" value="7" oninput="updateTemp(this.value)">
+    <div class="temp-scale">
+      <span>1 차가움·우울</span><span>5 보통·평온</span><span>10 열정·최상</span>
+    </div>
+  </div>
+
+  <div class="reflect-card">
+    <label for="reflection">한 줄 성찰</label>
+    <textarea id="reflection" placeholder="오늘 활동에서 느낀 점을 한 줄로 적어주세요"></textarea>
+    <p class="hint">짧아도 괜찮아요 — 오늘 느낀 것 그대로</p>
+  </div>
+
+  <div class="submit-zone">
+    <button class="submit" id="submitBtn" onclick="submitMood()">제출하기</button>
+    <p class="error-msg" id="errorMsg"></p>
+  </div>
+</div>
+
+<div class="done-screen" id="doneScreen">
+  <div class="badge-circle">✓</div>
+  <p class="done-title">기록 완료!</p>
+  <p class="done-sub">오늘의 온도가 저장됐어요. 다음 시간에 또 만나요.</p>
+</div>
+
+<script>
+  // ⚠️ 아래 URL을 본인의 Google Apps Script 웹앱 배포 URL로 교체하세요.
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/여기에_배포된_스크립트_ID/exec";
+
+  function updateTemp(v){
+    v = parseInt(v, 10);
+    const face = document.getElementById('tempFace');
+    const badge = document.getElementById('tempBadge');
+    const desc = document.getElementById('tempDesc');
+    badge.textContent = v + "도";
+
+    if(v <= 3){
+      face.textContent = "😢";
+      desc.textContent = "차갑고 조금 우울한 하루예요";
+      badge.style.background = "#3B82F6";
+    } else if(v <= 5){
+      face.textContent = "😐";
+      desc.textContent = "그저 그런, 평온한 하루예요";
+      badge.style.background = "#94A3B8";
+    } else if(v <= 8){
+      face.textContent = "😊";
+      desc.textContent = "따뜻하고 마음이 안정되어 있어요";
+      badge.style.background = "#FF6B4A";
+    } else {
+      face.textContent = "🤩";
+      desc.textContent = "열정 가득, 최고로 좋은 하루예요!";
+      badge.style.background = "#02C39A";
+    }
+  }
+
+  function submitMood(){
+    const session = document.getElementById('session').value;
+    const grpNo = document.getElementById('grpNo').value.trim();
+    const stuName = document.getElementById('stuName').value.trim();
+    const feelTemp = document.getElementById('feelTemp').value;
+    const reflection = document.getElementById('reflection').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+
+    if(!stuName){
+      errorMsg.textContent = "이름을 입력해주세요.";
+      errorMsg.style.display = "block";
+      return;
+    }
+    errorMsg.style.display = "none";
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = "저장 중...";
+
+    const params = new URLSearchParams({
+      timestamp: new Date().toISOString(),
+      session: session,
+      group: grpNo,
+      name: stuName,
+      feelTemp: feelTemp,
+      reflection: reflection
+    });
+
+    fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
+      .then(() => {
+        document.getElementById('formWrap').classList.add('hidden');
+        document.getElementById('doneScreen').classList.add('show');
+      })
+      .catch(() => {
+        errorMsg.textContent = "저장에 실패했어요. 다시 시도해주세요.";
+        errorMsg.style.display = "block";
+        btn.disabled = false;
+        btn.textContent = "제출하기";
+      });
+  }
+</script>
+
+</body>
+</html>
