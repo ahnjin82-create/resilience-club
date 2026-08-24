@@ -33,6 +33,8 @@
   .id-field{flex:1;}
   .id-field label{display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:4px;}
   .id-field input{width:100%;border:1.6px solid #d8dce4;border-radius:8px;padding:9px 8px;font-size:14px;font-family:inherit;}
+  .id-field input::placeholder{color:#b7bec9;font-style:italic;}
+  .id-field input:focus{border-color:var(--coral);}
 
   .weather-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
   .weather-opt{
@@ -90,9 +92,9 @@
   <div class="card">
     <p class="card-title"><span class="step-num">1</span> 학년 · 반 · 번호 · 이름</p>
     <div class="id-grid">
-      <div class="id-field"><label>학년</label><input type="text" id="grade" inputmode="numeric" placeholder="2"></div>
-      <div class="id-field"><label>반</label><input type="text" id="classNo" inputmode="numeric" placeholder="3"></div>
-      <div class="id-field"><label>번호</label><input type="text" id="stuNo" inputmode="numeric" placeholder="15"></div>
+      <div class="id-field"><label>학년</label><input type="text" id="grade" inputmode="numeric" placeholder="예)2"></div>
+      <div class="id-field"><label>반</label><input type="text" id="classNo" inputmode="numeric" placeholder="예)3"></div>
+      <div class="id-field"><label>번호</label><input type="text" id="stuNo" inputmode="numeric" placeholder="예)15"></div>
       <div class="id-field" style="flex:1.4"><label>이름</label><input type="text" id="stuName" placeholder="이름"></div>
     </div>
   </div>
