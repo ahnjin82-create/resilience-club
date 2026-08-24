@@ -244,8 +244,8 @@
     fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
       .then(() => {
         const rx = PRESCRIPTIONS[selectedWeather.cat];
-        document.getElementById('resultIcon').textContent = rx.icon;
-        document.getElementById('rxTitle').textContent = rx.title;
+        document.getElementById('resultIcon').textContent = selectedWeather.emoji;
+        document.getElementById('rxTitle').textContent = selectedWeather.key + "일 때는";
         const priority = calcPriority(selectedWeather.cat, selectedTemp);
         document.getElementById('rxBody').textContent =
           (priority === "한번 봐도 좋을듯")
