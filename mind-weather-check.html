@@ -78,8 +78,21 @@
     background:#fff;border:2px solid var(--line);border-radius:16px;padding:20px;text-align:center;
   }
   .prescription-card .rx-title{font-size:16px;font-weight:900;margin-bottom:10px;}
-  .prescription-card .rx-body{font-size:14.5px;color:#374151;line-height:1.6;}
-  .done-note{text-align:center;font-size:12.5px;color:var(--muted);margin-top:18px;}
+  .prescription-card .rx-body{font-size:14.5px;color:#374151;line-height:1.7;text-align:left;}
+
+  .mindful-banner{
+    background:linear-gradient(135deg,#EAF6F4,#F3FBF9);border:1.6px solid var(--mint);
+    border-radius:16px;padding:18px 20px;text-align:center;margin-bottom:16px;
+  }
+  .mindful-emoji{font-size:26px;display:block;margin-bottom:4px;}
+  .mindful-title{font-size:15px;font-weight:900;color:#0a8a68;margin:0 0 6px;}
+  .mindful-body{font-size:13px;color:#2f6b58;line-height:1.6;margin:0;}
+
+  .gift-note{
+    text-align:center;font-size:12.5px;color:var(--coral);font-weight:700;
+    margin-top:14px;background:#FFF3EF;border-radius:10px;padding:9px;
+  }
+  .done-note{text-align:center;font-size:12.5px;color:var(--muted);margin-top:14px;}
 </style>
 </head>
 <body>
@@ -129,10 +142,16 @@
     <div class="icon" id="resultIcon">☀️</div>
     <p class="result-title">마음날씨 기록 완료!</p>
   </div>
+  <div class="mindful-banner">
+    <span class="mindful-emoji">🌿</span>
+    <p class="mindful-title">오늘, 이미 마음챙김을 실천했어요</p>
+    <p class="mindful-body">내 감정을 알아차리고 이렇게 들여다본 것, 그 자체로 훌륭한 마음챙김이에요. 매일 이렇게 나를 살피는 연습이 쌓이면, 그게 바로 회복탄력성이 됩니다.</p>
+  </div>
   <div class="prescription-card">
     <p class="rx-title" id="rxTitle">맑음이라면</p>
     <p class="rx-body" id="rxBody">좋은 에너지를 친구에게도 나눠줘요. 칭찬 한 마디가 햇살이 돼요!</p>
   </div>
+  <p class="gift-note">🎁 캠페인 참여 선물 안내는 곧 따로 공지될 예정이에요</p>
   <p class="done-note">궁금한 점이나 힘든 일이 있으면 언제든 보건실로 오세요 😊</p>
 </div>
 
@@ -154,21 +173,22 @@
   ];
   const TEMPS = ["아주 약하게", "약하게", "보통이에요", "강하게", "아주 강하게"];
   const PRESCRIPTIONS = {
-    "맑음": { icon: "☀️", title: "맑음이라면", body: "좋은 에너지를 친구에게도 나눠줘요. 칭찬 한 마디가 햇살이 돼요!" },
-    "흐림": { icon: "⛅", title: "흐림이라면", body: "억지로 웃지 않아도 돼요. 창밖 보며 숨 세 번 깊게 쉬어보세요 🌿" },
-    "비":   { icon: "🌧", title: "비가 온다면", body: "혼자 있고 싶을 수 있어요. 보건실 문은 언제나 열려 있어요 🫧" },
-    "폭풍": { icon: "⛈", title: "폭풍이라면", body: "지금 정말 힘들 거예요. 선생님이나 친구에게 꼭 이야기해 줘요 💙" },
+    "맑음": { icon: "☀️", title: "맑음이라면",
+      body: "오늘의 좋은 에너지, 그냥 흘려보내지 말고 꼭 붙잡아두세요! 이 기분 좋은 감정을 만든 게 무엇이었는지 한 번 더 떠올려보세요. 그리고 주변 친구에게 오늘 있었던 좋은 일 하나를 나눠보는 건 어떨까요? 작은 칭찬 한 마디, 따뜻한 인사 한 번이 누군가에게는 오늘의 햇살이 될 수 있어요." },
+    "흐림": { icon: "⛅", title: "흐림이라면",
+      body: "괜찮아요, 매일이 맑을 수는 없어요. 지금 무겁게 느껴지는 이 마음을 억지로 밝게 만들려 하지 않아도 돼요. 잠깐 창밖을 보며 숨을 크게 세 번 쉬어보세요. 좋아하는 노래를 들으며 5분만 온전히 나에게 집중하는 시간을 가져보는 것도 좋아요. 이 흐림은 곧 지나갈 거예요." },
+    "비":   { icon: "🌧", title: "비가 온다면",
+      body: "지금 속상하고 눈물이 날 것 같은 마음, 그 감정을 그대로 느껴도 괜찮아요. 억지로 참거나 숨기지 않아도 돼요. 혼자 조용히 있고 싶다면 그래도 괜찮고, 누군가에게 털어놓고 싶다면 언제든 보건실 문을 두드려주세요. 선생님은 항상 그 자리에 있어요. 오늘은 나에게 조금 더 다정해지는 시간을 가져보세요." },
+    "폭풍": { icon: "⛈", title: "폭풍이라면",
+      body: "지금 정말 많이 힘들고 지친 상태인 것 같아요. 혼자 견디려 하지 않아도 돼요. 오늘 이 마음을 선생님이나 믿을 수 있는 어른, 친구에게 꼭 이야기해 주세요. 말하는 것만으로도 마음의 무게가 조금은 가벼워질 수 있어요. 보건실은 언제나 열려 있고, 언제든 여러분의 이야기를 들을 준비가 되어 있어요." },
   };
 
-  // 날씨×온도 조합에 따른 우선순위 판정 — 서버 전송용, 화면에는 표시하지 않음
+  // 폭풍/비 + 강한 강도 조합일 때만 가볍게 표시 — 진단이나 위험도 판정이 아니라
+  // "이유란을 한번 읽어볼 만한 항목"이라는 개인 참고용 하이라이트일 뿐임
   function calcPriority(cat, temp){
-    const hot = (temp === "강하게" || temp === "아주 강하게");
     const veryHot = (temp === "아주 강하게");
-    if (cat === "폭풍" && veryHot) return "최우선확인";
-    if (cat === "폭풍" && hot) return "우선확인";
-    if (cat === "비" && veryHot) return "우선확인";
-    if (cat === "폭풍" || (cat === "비" && hot)) return "관찰필요";
-    return "정상";
+    if ((cat === "폭풍" || cat === "비") && veryHot) return "한번 봐도 좋을듯";
+    return "";
   }
 
   let selectedWeather = null, selectedTemp = null;
@@ -233,7 +253,7 @@
         document.getElementById('rxTitle').textContent = rx.title;
         const priority = calcPriority(selectedWeather.cat, selectedTemp);
         document.getElementById('rxBody').textContent =
-          (priority === "최우선확인")
+          (priority === "한번 봐도 좋을듯")
             ? "지금 많이 힘든 시간을 보내고 있는 것 같아요. 선생님이나 믿을 수 있는 어른에게 오늘 꼭 이야기해 주세요 — 혼자 견디지 않아도 돼요 💙"
             : rx.body;
         document.getElementById('formWrap').classList.add('hidden');
