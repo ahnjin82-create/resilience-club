@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오늘 우리 학교 마음날씨 — POGOK WELL+</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A; --amber:#FFB627;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);}
+
+  .toolbar{
+    text-align:center;padding:12px;background:#1B3A6B;display:flex;gap:10px;justify-content:center;
+  }
+  .toolbar button{
+    background:#FF6B4A;color:#fff;border:none;border-radius:8px;
+    padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;
+  }
+  .toolbar button.alt{ background:#028090; }
+
+  .poster{
+    max-width:900px;margin:20px auto;background:#fff;border-radius:20px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.12);padding:36px 40px;
+  }
+  .poster-header{text-align:center;margin-bottom:22px;}
+  .eyebrow{color:var(--coral);font-weight:700;font-size:13px;letter-spacing:.08em;margin:0 0 8px;}
+  .poster-title{font-family:'Black Han Sans',sans-serif;font-size:34px;color:var(--navy);margin:0 0 8px;}
+  .poster-sub{color:var(--muted);font-size:14px;}
+  .meta-row{display:flex;justify-content:center;gap:24px;margin-top:14px;font-size:13px;color:var(--muted);}
+  .meta-row b{color:var(--navy);font-size:20px;}
+
+  .cat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0;}
+  .cat-card{
+    border-radius:16px;padding:18px 10px;text-align:center;color:#fff;
+  }
+  .cat-card .icon{font-size:32px;}
+  .cat-card .name{font-size:14px;font-weight:900;margin:6px 0 2px;}
+  .cat-card .pct{font-family:'Black Han Sans',sans-serif;font-size:26px;}
+  .cat-card .cnt{font-size:11px;opacity:.85;}
+
+  .detail-section{margin-top:10px;}
+  .detail-title{font-size:15px;font-weight:900;color:var(--navy);margin-bottom:12px;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+  .bar-icon{font-size:18px;flex:0 0 24px;text-align:center;}
+  .bar-label{flex:0 0 68px;font-size:12px;font-weight:700;color:#374151;}
+  .bar-track{flex:1;background:#F0F1F3;border-radius:6px;height:16px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;transition:width .5s;}
+  .bar-num{flex:0 0 56px;font-size:11.5px;color:var(--muted);text-align:right;}
+
+  .poster-footer{text-align:center;margin-top:26px;font-size:11.5px;color:#9ca3af;}
+
+  .loading{text-align:center;padding:60px;color:var(--muted);}
+
+  @media print {
+    .toolbar{display:none;}
+    body{background:#fff;}
+    .poster{box-shadow:none;margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="loadData()">🔄 새로고침</button>
+  <button class="alt" onclick="window.print()">🖨️ 인쇄하기</button>
+</div>
+
+<div class="poster" id="poster">
+  <div class="loading" id="loadingMsg">데이터를 불러오는 중...</div>
+</div>
+
+<script>
+  // ⚠️ 아래 URL을 mind-weather-check.html과 동일한 Apps Script 배포 URL로 설정하세요.
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbz-J4BQzDs-7bGtHaLvGBtha3_dO0f-luuNLtvjKGjhqr7TK19lQGPRe8wD2GVy_rbJ/exec";
+
+  const WEATHER_META = {
+    "맑음": { emoji: "☀️", color: "#FFB627" },
+    "구름조금": { emoji: "⛅", color: "#FFB627" },
+    "흐림": { emoji: "☁️", color: "#94A3B8" },
+    "비": { emoji: "🌧", color: "#3B82F6" },
+    "폭풍": { emoji: "⛈", color: "#DC2626" },
+    "비후맑음": { emoji: "🌈", color: "#02C39A" },
+    "안개": { emoji: "🌫", color: "#94A3B8" },
+    "바람": { emoji: "🌬", color: "#94A3B8" },
+    "눈추위": { emoji: "❄️", color: "#60A5FA" },
+    "밤하늘": { emoji: "🌙", color: "#64748B" },
+  };
+  const CAT_META = {
+    "맑음": { emoji: "☀️", color: "#FFB627" },
+    "흐림": { emoji: "☁️", color: "#94A3B8" },
+    "비":   { emoji: "🌧", color: "#3B82F6" },
+    "폭풍": { emoji: "⛈", color: "#DC2626" },
+  };
+  const CAT_ORDER = ["맑음", "흐림", "비", "폭풍"];
+  const WEATHER_ORDER = ["맑음","구름조금","흐림","비","폭풍","비후맑음","안개","바람","눈추위","밤하늘"];
+
+  function loadData(){
+    document.getElementById('poster').innerHTML = '<div class="loading" id="loadingMsg">데이터를 불러오는 중...</div>';
+    const script = document.createElement('script');
+    script.src = SHEET_ENDPOINT + "?callback=renderPoster&t=" + Date.now();
+    script.onerror = showLoadError;
+    document.body.appendChild(script);
+
+    window._posterLoaded = false;
+    setTimeout(() => {
+      script.remove();
+      if (!window._posterLoaded) showLoadError();
+    }, 6000);
+  }
+
+  function showLoadError(){
+    document.getElementById('poster').innerHTML =
+      '<div class="loading">⚠️ 데이터를 불러오지 못했어요.<br><br>' +
+      '① Apps Script가 최신 코드로 새 배포되었는지<br>' +
+      '② SHEET_ENDPOINT 주소가 정확한지<br>' +
+      '확인한 뒤 새로고침을 눌러주세요.</div>';
+  }
+
+  function renderPoster(data){
+    window._posterLoaded = true;
+    const total = data.total || 0;
+    const wc = data.weatherCounts || {};
+    const cc = data.catCounts || {};
+    const today = new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' });
+
+    let catHtml = '';
+    CAT_ORDER.forEach(cat => {
+      const cnt = cc[cat] || 0;
+      const pct = total ? Math.round(cnt / total * 100) : 0;
+      const meta = CAT_META[cat];
+      catHtml += `
+        <div class="cat-card" style="background:${meta.color}">
+          <div class="icon">${meta.emoji}</div>
+          <div class="name">${cat}</div>
+          <div class="pct">${pct}%</div>
+          <div class="cnt">${cnt}명</div>
+        </div>`;
+    });
+
+    let barHtml = '';
+    WEATHER_ORDER.forEach(w => {
+      const cnt = wc[w] || 0;
+      const pct = total ? Math.round(cnt / total * 100) : 0;
+      const meta = WEATHER_META[w];
+      barHtml += `
+        <div class="bar-row">
+          <div class="bar-icon">${meta.emoji}</div>
+          <div class="bar-label">${w}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${meta.color}"></div></div>
+          <div class="bar-num">${cnt}명 (${pct}%)</div>
+        </div>`;
+    });
+
+    document.getElementById('poster').innerHTML = `
+      <div class="poster-header">
+        <p class="eyebrow">POGOK WELL+ · 2026 마음날씨 캠페인</p>
+        <p class="poster-title">오늘 우리 학교 마음날씨</p>
+        <p class="poster-sub">${today} 기준 · 전교생 참여 현황</p>
+        <div class="meta-row">
+          <span>참여 인원 <b>${total}</b>명</span>
+        </div>
+      </div>
+      <div class="cat-row">${catHtml}</div>
+      <div class="detail-section">
+        <p class="detail-title">세부 날씨 분포</p>
+        ${barHtml}
+      </div>
+      <p class="poster-footer">포곡중학교 보건실 · POGOK WELL+ · 궁금한 점이나 힘든 일이 있으면 보건실로 오세요 😊</p>
+    `;
+  }
+
+  window.onload = loadData;
+</script>
+
+</body>
+</html>
