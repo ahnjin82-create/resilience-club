@@ -33,14 +33,14 @@
   .meta-row{display:flex;justify-content:center;gap:24px;margin-top:14px;font-size:13px;color:var(--muted);}
   .meta-row b{color:var(--navy);font-size:20px;}
 
-  .cat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0;}
+  .cat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0;}
   .cat-card{
-    border-radius:16px;padding:18px 10px;text-align:center;color:#fff;
+    border-radius:16px;padding:16px 8px;text-align:center;color:#fff;
   }
-  .cat-card .icon{font-size:32px;}
-  .cat-card .name{font-size:14px;font-weight:900;margin:6px 0 2px;}
-  .cat-card .pct{font-family:'Black Han Sans',sans-serif;font-size:26px;}
-  .cat-card .cnt{font-size:11px;opacity:.85;}
+  .cat-card .icon{font-size:26px;}
+  .cat-card .name{font-size:12.5px;font-weight:900;margin:5px 0 2px;}
+  .cat-card .pct{font-family:'Black Han Sans',sans-serif;font-size:22px;}
+  .cat-card .cnt{font-size:10.5px;opacity:.85;}
 
   .detail-section{margin-top:10px;}
   .detail-title{font-size:15px;font-weight:900;color:var(--navy);margin-bottom:12px;}
@@ -85,17 +85,19 @@
     "폭풍": { emoji: "⛈", color: "#DC2626" },
     "비후맑음": { emoji: "🌈", color: "#02C39A" },
     "안개": { emoji: "🌫", color: "#94A3B8" },
-    "바람": { emoji: "🌬", color: "#94A3B8" },
-    "눈추위": { emoji: "❄️", color: "#60A5FA" },
-    "밤하늘": { emoji: "🌙", color: "#64748B" },
+    "바람": { emoji: "🌬", color: "#A78BFA" },
+    "눈추위": { emoji: "❄️", color: "#6366F1" },
+    "밤하늘": { emoji: "🌙", color: "#6366F1" },
   };
   const CAT_META = {
     "맑음": { emoji: "☀️", color: "#FFB627" },
     "흐림": { emoji: "☁️", color: "#94A3B8" },
     "비":   { emoji: "🌧", color: "#3B82F6" },
     "폭풍": { emoji: "⛈", color: "#DC2626" },
+    "불안": { emoji: "🌬", color: "#A78BFA" },
+    "고립감": { emoji: "🌙", color: "#6366F1" },
   };
-  const CAT_ORDER = ["맑음", "흐림", "비", "폭풍"];
+  const CAT_ORDER = ["맑음", "흐림", "비", "폭풍", "불안", "고립감"];
   const WEATHER_ORDER = ["맑음","구름조금","흐림","비","폭풍","비후맑음","안개","바람","눈추위","밤하늘"];
 
   function loadData(){

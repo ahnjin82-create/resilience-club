@@ -162,9 +162,9 @@
     { key: "폭풍", emoji: "⛈", cat: "폭풍", desc: "화나고 힘들어 너무 지쳐" },
     { key: "비후맑음", emoji: "🌈", cat: "맑음", desc: "힘들었지만 나아지는 중" },
     { key: "안개", emoji: "🌫", cat: "흐림", desc: "뭔가 모르겠고 멍한 느낌" },
-    { key: "바람", emoji: "🌬", cat: "흐림", desc: "불안하고 뭔가 흔들려" },
-    { key: "눈추위", emoji: "❄️", cat: "흐림", desc: "차갑고 외로운 기분" },
-    { key: "밤하늘", emoji: "🌙", cat: "흐림", desc: "조용하고 혼자 있고 싶어" },
+    { key: "바람", emoji: "🌬", cat: "불안", desc: "불안하고 뭔가 흔들려" },
+    { key: "눈추위", emoji: "❄️", cat: "고립감", desc: "차갑고 외로운 기분" },
+    { key: "밤하늘", emoji: "🌙", cat: "고립감", desc: "조용하고 혼자 있고 싶어" },
   ];
   const TEMPS = ["아주 약하게", "약하게", "보통이에요", "강하게", "아주 강하게"];
   const PRESCRIPTIONS = {
@@ -184,7 +184,7 @@
   // "이유란을 한번 읽어볼 만한 항목"이라는 개인 참고용 하이라이트일 뿐임
   function calcPriority(cat, temp){
     const veryHot = (temp === "아주 강하게");
-    if ((cat === "폭풍" || cat === "비") && veryHot) return "한번 봐도 좋을듯";
+    if (veryHot && (cat === "폭풍" || cat === "비" || cat === "불안" || cat === "고립감")) return "한번 봐도 좋을듯";
     return "";
   }
 
