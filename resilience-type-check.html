@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>역경 반응 자가진단 — 다시봄</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:60px;}
+
+  .wrap{max-width:480px;margin:0 auto;}
+  .wrap.hidden{display:none;}
+
+  .hero{padding:26px 20px 20px;text-align:center;background:var(--navy);}
+  .hero .eyebrow{color:var(--mint);font-weight:700;font-size:12px;letter-spacing:.08em;margin:0 0 6px;}
+  .hero h1{font-size:21px;margin:0 0 6px;color:#fff;}
+  .hero .sub{color:#B9C6E0;font-size:13px;margin:0;}
+
+  .id-card{max-width:480px;margin:16px auto 0;padding:0 16px;}
+  .id-row{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;}
+  .id-field{flex:1;}
+  .id-field label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:4px;}
+  .id-field input{width:100%;border:1.6px solid #d8dce4;border-radius:8px;padding:9px 10px;font-size:14px;font-family:inherit;}
+
+  .rule-box{
+    margin:14px 16px 0;background:#EAF3FB;border-radius:12px;padding:12px 14px;
+    font-size:12.5px;color:#2b3b52;line-height:1.6;
+  }
+
+  .edu-box{
+    margin:14px 16px 0;background:#FDF3E3;border-radius:12px;padding:14px 16px;
+    font-size:12.5px;color:#5a4321;line-height:1.65;
+  }
+  .edu-box .edu-title{font-weight:900;font-size:13px;color:#8a5a1f;margin:0 0 6px;display:flex;align-items:center;gap:5px;}
+
+  .q-list{padding:0 16px;}
+  .q-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;margin:14px 0 0;}
+  .q-num{
+    display:inline-block;background:var(--navy);color:#fff;font-size:11px;font-weight:700;
+    padding:2px 9px;border-radius:6px;margin-bottom:8px;
+  }
+  .q-text{font-size:14.5px;font-weight:800;margin:0 0 12px;color:var(--ink);}
+  .opt-btn{
+    display:block;width:100%;text-align:left;background:#F7F8FA;border:1.8px solid #e5e7eb;
+    border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:13.5px;color:#374151;
+    font-family:inherit;cursor:pointer;line-height:1.5;
+  }
+  .opt-btn:last-child{margin-bottom:0;}
+  .opt-btn.selected{background:#FFF0EA;border-color:var(--coral);color:#7a2e18;font-weight:700;}
+
+  .submit-zone{padding:20px 16px 0;}
+  button.submit{
+    width:100%;background:var(--coral);color:#fff;border:none;border-radius:14px;
+    padding:16px;font-size:16px;font-weight:900;cursor:pointer;
+  }
+  button.submit:disabled{opacity:.5;}
+  .error-msg{color:#b91c1c;font-size:12.5px;font-weight:700;text-align:center;margin:10px 16px 0;display:none;}
+
+  /* 결과 화면 */
+  .done-screen{display:none;padding:22px 18px 10px;}
+  .done-screen.show{display:block;}
+
+  .rx-card{
+    border-radius:20px; padding:26px 22px 22px; color:#fff; margin-bottom:16px;
+    box-shadow:0 10px 30px rgba(27,54,107,0.18); text-align:center;
+  }
+  .rx-eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.06em;opacity:.85;margin:0 0 10px;}
+  .rx-emoji{font-size:46px;margin-bottom:8px;}
+  .rx-title{font-family:'Black Han Sans', sans-serif;font-size:26px;margin:0 0 4px;}
+  .rx-sub{font-size:12.5px;opacity:.9;margin:0 0 14px;}
+  .rx-desc{font-size:13.5px;line-height:1.65;background:rgba(255,255,255,0.16);border-radius:12px;padding:12px 14px;text-align:left;}
+
+  .result-block{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+  .result-title{font-size:13.5px;font-weight:900;margin:0 0 10px;}
+
+  .rank-row{
+    display:flex;align-items:center;gap:12px;padding:10px 6px;border-radius:10px;margin-bottom:6px;
+  }
+  .rank-row:last-child{margin-bottom:0;}
+  .rank-row.top{background:#F7F8FA;}
+  .rank-medal{font-size:22px;flex:0 0 30px;text-align:center;}
+  .rank-info{flex:1;}
+  .rank-info .rn{font-size:13.5px;font-weight:800;color:var(--ink);}
+  .rank-info .rn .rc{font-weight:400;color:var(--muted);font-size:11.5px;margin-left:4px;}
+  .rank-bar-track{background:#EEF0F3;border-radius:999px;height:8px;overflow:hidden;margin-top:5px;}
+  .rank-bar-fill{height:100%;border-radius:999px;}
+  .rank-count{flex:0 0 26px;text-align:right;font-family:'Black Han Sans', sans-serif;font-size:16px;color:var(--navy);}
+
+  .fun-block{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+  .fun-block .fun-title{font-size:12.5px;font-weight:900;color:var(--coral);margin:0 0 8px;display:flex;align-items:center;gap:5px;}
+  .fun-block .fun-txt{font-size:13px;line-height:1.6;color:#374151;margin:0 0 10px;}
+  .fun-block .fun-txt:last-child{margin-bottom:0;}
+  .fun-block .pair-tag{
+    display:inline-flex;align-items:center;gap:5px;background:#FFF0EA;color:#c2410c;font-weight:800;
+    font-size:12.5px;padding:5px 12px;border-radius:999px;margin-top:2px;
+  }
+
+  .pick-box{background:var(--navy); color:#fff; border-radius:14px; padding:18px 18px 20px; margin-bottom:14px;}
+  .pick-box .label{color:var(--mint);font-weight:900;font-size:12px;letter-spacing:.04em;margin-bottom:8px;display:block;}
+  .pick-box .txt{font-size:13.5px;line-height:1.6;color:#e6ecf6;margin-bottom:6px;}
+  .pick-box .txt:last-child{margin-bottom:0;}
+  .pick-box .txt b{color:#fff;}
+
+  .restart-btn{
+    width:100%;margin-top:2px;background:transparent;border:1.6px solid var(--line);
+    color:var(--muted);border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="formWrap">
+  <div class="hero">
+    <p class="eyebrow">회복탄력성 동아리 「다시봄」</p>
+    <h1>역경 앞에서 나는?</h1>
+    <p class="sub">시나리오로 알아보는 나의 반응 — 회피형 · 버티기형 · 회복형</p>
+  </div>
+
+  <div class="id-card">
+    <div class="id-row">
+      <div class="id-field">
+        <label for="grpNo">모둠 번호</label>
+        <input type="text" id="grpNo" inputmode="numeric" placeholder="예: 3">
+      </div>
+      <div class="id-field">
+        <label for="stuName">이름</label>
+        <input type="text" id="stuName" placeholder="이름 입력">
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    📝 아래 4가지 상황에서 <b>지금 나라면 가장 할 것 같은 행동</b>을 하나씩 골라주세요. 정답은 없어요, 솔직하게 체크하면 돼요.
+  </div>
+
+  <div class="edu-box">
+    <p class="edu-title">💡 알고 있었나요?</p>
+    심리학자들은 사람이 힘든 일 앞에서 크게 세 가지 태도를 보인다고 말해요 — <b>피하기(회피)</b>, <b>버티기</b>, <b>마주하기(회복)</b>. 셋 다 자연스러운 반응이고, 그때그때 다르게 나타나기도 해요. 오늘은 지금 나에게 제일 가까운 게 뭔지 살짝 알아볼게요.
+  </div>
+
+  <div class="q-list" id="qList"></div>
+
+  <div class="submit-zone">
+    <button class="submit" id="submitBtn" onclick="submitQuiz()">결과 보기</button>
+    <p class="error-msg" id="errorMsg"></p>
+  </div>
+</div>
+
+<div class="wrap done-screen" id="doneScreen">
+
+  <div class="rx-card" id="rxCard">
+    <p class="rx-eyebrow">다시봄 · 역경 반응 자가진단</p>
+    <div class="rx-emoji" id="rxEmoji">🌱</div>
+    <p class="rx-title" id="rxTitle">회복형</p>
+    <p class="rx-sub" id="rxSub">다시 일어서는 반응</p>
+    <p class="rx-desc" id="rxDesc"></p>
+  </div>
+
+  <div class="result-block">
+    <p class="result-title">📊 내 유형 순위</p>
+    <div id="rankList"></div>
+  </div>
+
+  <div class="fun-block">
+    <p class="fun-title">🎉 TMI</p>
+    <p class="fun-txt" id="funFact"></p>
+    <p class="fun-txt" style="margin-bottom:4px;">잘 맞는 짝꿍 유형</p>
+    <span class="pair-tag" id="pairTag"></span>
+  </div>
+
+  <div class="pick-box">
+    <span class="label">알아두면 좋은 것</span>
+    <p class="txt">세 유형 다 정상이에요. 오늘은 내가 어느 쪽에 가까운지 아는 것만으로 충분해요.</p>
+  </div>
+
+  <div class="pick-box" style="background:#12274D;">
+    <span class="label">🎯 미니 토론 미션</span>
+    <p class="txt">이제 <b>같은 유형인 친구들끼리</b> 모여보세요 (회피형 자리 / 버티기형 자리 / 회복형 자리).</p>
+    <p class="txt">모둠에서 다 같이 상상해보세요 —</p>
+    <p class="txt" style="background:rgba(255,255,255,0.14);border-radius:10px;padding:10px 12px;">"체육대회 예선에서 우리 반이 졌다. 다음 날 아침, 반 단톡방에 우리 유형이라면 뭐라고 메시지를 올릴까?"</p>
+    <p class="txt">모둠 대표 문장 <b>딱 한 줄</b>로 완성해서, 이따 다른 유형 모둠이랑 비교해볼 거예요. 분명 완전 다르게 나올걸요?</p>
+  </div>
+
+  <button class="restart-btn" onclick="location.reload()">처음부터 다시하기</button>
+</div>
+
+<script>
+  const QUESTIONS = [
+    {
+      situation: "① 시험 성적이 기대보다 많이 안 나왔다",
+      options: {
+        A: "성적표를 아예 안 보거나 바로 치워버린다",
+        B: "속상하지만 아무 말 없이 그냥 넘어간다",
+        C: "어디서 틀렸는지 확인하고 다음엔 어떻게 할지 생각해본다"
+      }
+    },
+    {
+      situation: "② 친구와 다퉈서 며칠째 서먹하다",
+      options: {
+        A: "그 친구를 최대한 안 마주치려고 피해다닌다",
+        B: "마주쳐도 아무 일 없는 척 버틴다",
+        C: "먼저 다가가서 짧게라도 이야기를 해본다"
+      }
+    },
+    {
+      situation: "③ 발표를 망쳐서 창피했다",
+      options: {
+        A: "그 이후로 발표할 기회를 최대한 피한다",
+        B: "창피함을 억누르고 티 안 내려 애쓴다",
+        C: "왜 떨렸는지 생각해보고 다음엔 연습을 더 해본다"
+      }
+    },
+    {
+      situation: "④ 갑자기 힘든 일이 생겨서 스트레스를 받는다",
+      options: {
+        A: "딴 생각하거나 다른 걸 하며 잊으려 한다",
+        B: "힘들어도 티 안 내고 그냥 참고 지나간다",
+        C: "믿을 만한 사람에게 이야기하거나 나름의 방법으로 풀어본다"
+      }
+    }
+  ];
+
+  const TYPES = {
+    A: { key:"A", name:"회피형", sub:"피하고 싶어지는 반응", emoji:"🙈",
+         color1:"#94A3B8", color2:"#64748B",
+         desc:"힘든 상황 자체를 벗어나거나 안 보려고 하는 편이에요. 잠깐은 편할 수 있지만, 문제는 그대로 남아있을 때가 많아요. 오늘부터 조금씩 '살짝만 마주해보기' 연습을 해봐도 좋아요.",
+         fact:"회피형은 사실 눈치가 빠른 편이에요. 위험을 미리 감지하는 감각이 좋아서, 정작 진짜 위기 상황에서는 누구보다 빠르게 대처해요.",
+         pair:"🌱 회복형", pairKey:"C" },
+    B: { key:"B", name:"버티기형", sub:"티 안 내고 참는 반응", emoji:"🛡️",
+         color1:"#FFB627", color2:"#D97706",
+         desc:"힘들어도 겉으로 티 내지 않고 묵묵히 버티는 편이에요. 강해 보이지만, 티가 안 나서 주변에서 도와주기 어려울 때도 있어요. 가끔은 힘들다고 말해보는 것도 용기예요.",
+         fact:"버티기형은 책임감이 남다른 편이에요. 힘들어도 맡은 일은 끝까지 해내는 편이라, 주변에서 은근히 믿고 의지하는 사람일 때가 많아요.",
+         pair:"🙈 회피형", pairKey:"A" },
+    C: { key:"C", name:"회복형", sub:"다시 일어서는 반응", emoji:"🌱",
+         color1:"#02C39A", color2:"#028090",
+         desc:"상황을 마주하고 다음 행동을 찾아가는 편이에요. 이미 회복탄력성이 꽤 단단한 편이에요! 이 방식을 계속 연습하면 더 큰 역경에도 잘 대처할 수 있어요.",
+         fact:"회복형은 주변 친구들의 '상담사' 역할을 자주 맡아요. 문제를 정리해서 보는 힘이 있어서, 힘든 친구들이 은근히 많이 찾아와요.",
+         pair:"🛡️ 버티기형", pairKey:"B" }
+  };
+
+  const answers = {};
+
+  function renderQuestions(){
+    const qList = document.getElementById('qList');
+    QUESTIONS.forEach((q, i) => {
+      const n = i + 1;
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      card.innerHTML = `
+        <p class="q-text">${q.situation}</p>
+        <div id="opts-${n}">
+          ${['A','B','C'].map(k => `
+            <button type="button" class="opt-btn" id="opt-${n}-${k}" onclick="selectOpt(${n}, '${k}')">${q.options[k]}</button>
+          `).join('')}
+        </div>
+      `;
+      qList.appendChild(card);
+    });
+  }
+
+  function selectOpt(n, key){
+    answers[n] = key;
+    ['A','B','C'].forEach(k => {
+      document.getElementById(`opt-${n}-${k}`).classList.toggle('selected', k === key);
+    });
+  }
+
+  function submitQuiz(){
+    const stuName = document.getElementById('stuName').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+    const missing = [];
+    for (let i = 1; i <= QUESTIONS.length; i++) {
+      if (!answers[i]) missing.push(i);
+    }
+    if (!stuName || missing.length > 0) {
+      errorMsg.textContent = !stuName ? "이름을 입력해주세요." : `아직 답하지 않은 문항이 있어요 (${missing.join(', ')}번)`;
+      errorMsg.style.display = "block";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    errorMsg.style.display = "none";
+    showResult();
+  }
+
+  function showResult(){
+    const counts = { A:0, B:0, C:0 };
+    Object.values(answers).forEach(k => counts[k]++);
+
+    let topKey = "C", topVal = -1;
+    ['A','B','C'].forEach(k => {
+      if (counts[k] > topVal) { topVal = counts[k]; topKey = k; }
+    });
+    // 동률 체크
+    const tied = ['A','B','C'].filter(k => counts[k] === topVal);
+
+    document.getElementById('formWrap').classList.add('hidden');
+
+    const t = TYPES[topKey];
+    const rxCard = document.getElementById('rxCard');
+    rxCard.style.background = `linear-gradient(135deg, ${t.color1}, ${t.color2})`;
+    document.getElementById('rxEmoji').textContent = t.emoji;
+
+    if (tied.length > 1) {
+      const names = tied.map(k => TYPES[k].name).join(' & ');
+      document.getElementById('rxTitle').textContent = names;
+      document.getElementById('rxSub').textContent = "두 가지 성향이 비슷하게 나타났어요";
+      document.getElementById('rxDesc').textContent = tied.map(k => TYPES[k].desc).join(' ');
+    } else {
+      document.getElementById('rxTitle').textContent = t.name;
+      document.getElementById('rxSub').textContent = t.sub;
+      document.getElementById('rxDesc').textContent = t.desc;
+    }
+
+    // 순위 리스트 (1위/2위/3위)
+    const medals = ['🥇','🥈','🥉'];
+    const ranked = ['A','B','C']
+      .map(k => ({ key:k, count:counts[k] }))
+      .sort((a,b) => b.count - a.count);
+
+    const total = counts.A + counts.B + counts.C;
+    const rankList = document.getElementById('rankList');
+    rankList.innerHTML = '';
+    ranked.forEach((r, i) => {
+      const ty = TYPES[r.key];
+      const pct = total ? Math.round(r.count / total * 100) : 0;
+      const row = document.createElement('div');
+      row.className = 'rank-row' + (i === 0 ? ' top' : '');
+      row.innerHTML = `
+        <div class="rank-medal">${medals[i]}</div>
+        <div class="rank-info">
+          <div class="rn">${ty.emoji} ${ty.name} <span class="rc">${r.count}개 선택</span></div>
+          <div class="rank-bar-track"><div class="rank-bar-fill" style="width:${pct}%;background:linear-gradient(90deg, ${ty.color1}, ${ty.color2})"></div></div>
+        </div>
+        <div class="rank-count">${r.count}</div>
+      `;
+      rankList.appendChild(row);
+    });
+
+    // 재미 요소 — TMI & 궁합
+    document.getElementById('funFact').textContent = t.fact;
+    const pairType = TYPES[t.pairKey];
+    document.getElementById('pairTag').textContent = `${pairType.emoji} ${pairType.name}`;
+
+    document.getElementById('doneScreen').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  renderQuestions();
+</script>
+
+</body>
+</html>
