@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>감정 단어 카드 — 다시봄</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;overscroll-behavior:none;}
+
+  .wrap{max-width:480px;margin:0 auto;padding:0 0 40px;min-height:100vh;}
+  .wrap.hidden{display:none;}
+
+  .hero{padding:24px 20px 16px;text-align:center;background:var(--navy);}
+  .hero .eyebrow{color:var(--mint);font-weight:700;font-size:12px;letter-spacing:.08em;margin:0 0 6px;}
+  .hero h1{font-size:21px;margin:0 0 4px;color:#fff;}
+  .hero .sub{color:#B9C6E0;font-size:12.5px;margin:0;}
+
+  .progress-bar{padding:10px 20px;background:#fff;border-bottom:1px solid var(--line);}
+  .progress-track{background:#EEF0F3;border-radius:999px;height:8px;overflow:hidden;}
+  .progress-fill{background:var(--mint);height:100%;width:0%;transition:width .25s;}
+  .progress-label{text-align:center;font-size:11.5px;color:var(--muted);font-weight:700;margin-top:6px;}
+
+  .id-card{padding:14px 16px 0;}
+  .id-row{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;}
+  .id-field{flex:1;}
+  .id-field label{display:block;font-size:11.5px;font-weight:700;color:#374151;margin-bottom:4px;}
+  .id-field input{width:100%;border:1.6px solid #d8dce4;border-radius:8px;padding:8px 10px;font-size:13.5px;font-family:inherit;}
+
+  .rule-box{
+    margin:14px 16px 0;background:#EAF3FB;border-radius:12px;padding:12px 14px;
+    font-size:12.5px;color:#2b3b52;line-height:1.6;
+  }
+
+  .stage{
+    position:relative;
+    padding:24px 20px 10px;
+    min-height:340px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .card{
+    position:absolute;
+    width:calc(100% - 60px);
+    max-width:320px;
+    height:220px;
+    background:#fff;
+    border-radius:22px;
+    box-shadow:0 10px 30px rgba(27,54,107,0.16);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+    cursor:grab;
+    touch-action:pan-y;
+    user-select:none;
+    will-change:transform;
+    transition:transform .25s ease, opacity .25s ease;
+  }
+  .card:active{cursor:grabbing;}
+  .card .word{
+    font-family:'Black Han Sans', sans-serif;
+    font-size:34px;
+    color:var(--ink);
+  }
+  .card .stamp{
+    position:absolute;
+    top:18px;
+    font-family:'Black Han Sans', sans-serif;
+    font-size:20px;
+    padding:6px 14px;
+    border-radius:8px;
+    border:3px solid;
+    opacity:0;
+    transform:rotate(-12deg);
+  }
+  .card .stamp.left{ left:14px; color:var(--muted); border-color:var(--muted); }
+  .card .stamp.right{ right:14px; color:var(--coral); border-color:var(--coral); transform:rotate(12deg); }
+
+  .hint-row{
+    display:flex;justify-content:space-between;padding:0 22px;margin-top:6px;
+    font-size:11.5px;color:var(--muted);font-weight:700;
+  }
+
+  .btn-row{
+    display:flex;gap:12px;padding:14px 20px 4px;
+  }
+  .swipe-btn{
+    flex:1;
+    border:none;
+    border-radius:14px;
+    padding:15px 8px;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+  }
+  .swipe-btn .emoji{font-size:22px;}
+  .swipe-btn.left-btn{ background:#EEF0F3; color:#4b5563; }
+  .swipe-btn.right-btn{ background:#FFE7DE; color:#c2410c; }
+  .swipe-btn:active{ transform:scale(0.96); }
+
+  /* ---- 문장완성 화면 ---- */
+  .reflect-head{padding:26px 20px 6px;text-align:center;}
+  .reflect-head .emoji-big{font-size:38px;margin-bottom:8px;}
+  .reflect-head h2{font-size:18px;margin:0 0 4px;color:var(--navy);}
+  .reflect-head p{font-size:12.5px;color:var(--muted);margin:0;}
+
+  .q-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 16px 0;}
+  .q-card .q-label{font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 10px;line-height:1.5;}
+  .q-card textarea{
+    width:100%;min-height:64px;border:1.6px solid #d8dce4;border-radius:10px;padding:10px 12px;
+    font-size:14px;font-family:inherit;resize:vertical;background:#fbfbfa;
+  }
+
+  .reflect-submit{margin:18px 16px 0;}
+
+  /* ---- 처방전(결과) 화면 ---- */
+  .done-screen{display:none;padding:22px 18px 40px;}
+  .done-screen.show{display:block;}
+
+  .rx-card{
+    border-radius:20px;
+    padding:24px 22px 22px;
+    color:#fff;
+    margin-bottom:16px;
+    box-shadow:0 10px 30px rgba(27,54,107,0.18);
+  }
+  .rx-eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.06em;opacity:.85;margin:0 0 6px;}
+  .rx-emoji{font-size:38px;margin-bottom:6px;}
+  .rx-title{font-family:'Black Han Sans', sans-serif;font-size:24px;margin:0 0 4px;}
+  .rx-sub{font-size:12.5px;opacity:.9;margin:0 0 14px;}
+  .rx-desc{font-size:13.5px;line-height:1.65;background:rgba(255,255,255,0.16);border-radius:12px;padding:12px 14px;}
+
+  .quote-block{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+  .quote-block .q-tag{font-size:11.5px;font-weight:800;color:var(--muted);margin:0 0 6px;}
+  .quote-block .q-said{font-size:14px;color:var(--ink);font-weight:600;line-height:1.6;padding-left:10px;border-left:3px solid var(--coral);margin:0 0 12px;}
+  .quote-block .q-said:last-child{margin-bottom:0;}
+
+  .result-block{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+  .result-title{font-size:13.5px;font-weight:900;margin:0 0 10px;display:flex;align-items:center;gap:6px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .chip{
+    background:#F5F6F8;border-radius:999px;padding:5px 12px;font-size:12.5px;color:#374151;font-weight:600;
+  }
+  .chip.rare{ background:#FFE7DE; color:#c2410c; }
+
+  details.detail-toggle{margin-bottom:14px;}
+  details.detail-toggle summary{
+    cursor:pointer;font-size:12.5px;font-weight:700;color:var(--muted);padding:6px 2px;list-style:none;
+    display:flex;align-items:center;gap:4px;
+  }
+  details.detail-toggle summary::-webkit-details-marker{display:none;}
+  details.detail-toggle summary::before{content:'▸';font-size:10px;}
+  details.detail-toggle[open] summary::before{content:'▾';}
+
+  .pick-box{
+    background:var(--navy); color:#fff; border-radius:14px; padding:18px 18px 20px; margin-top:6px;
+  }
+  .pick-box .label{color:var(--mint);font-weight:900;font-size:12px;letter-spacing:.04em;margin-bottom:8px;display:block;}
+  .pick-box .txt{font-size:13.5px;line-height:1.6;color:#e6ecf6;margin-bottom:6px;}
+  .pick-box .txt b{color:#fff;}
+
+  .restart-btn{
+    width:100%;margin-top:18px;background:transparent;border:1.6px solid var(--line);
+    color:var(--muted);border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;
+  }
+
+  .error-msg{color:#b91c1c;font-size:12.5px;font-weight:700;text-align:center;margin:8px 16px 0;display:none;}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="startWrap">
+  <div class="hero">
+    <p class="eyebrow">회복탄력성 동아리 「다시봄」</p>
+    <h1>감정 단어 카드</h1>
+    <p class="sub">내 감정에도 이름이 있어요</p>
+  </div>
+  <div class="id-card">
+    <div class="id-row">
+      <div class="id-field">
+        <label for="grpNo">모둠 번호</label>
+        <input type="text" id="grpNo" inputmode="numeric" placeholder="예: 3">
+      </div>
+      <div class="id-field">
+        <label for="stuName">이름</label>
+        <input type="text" id="stuName" placeholder="이름 입력">
+      </div>
+    </div>
+  </div>
+  <div class="rule-box">
+    🃏 카드에 적힌 감정 단어를 보고, <b>내가 평소에 자주 느끼는 감정</b>인지 <b>잘 안 써본 감정</b>인지 골라보세요.<br><br>
+    정답은 없어요 — 카드를 옆으로 밀거나, 아래 버튼을 눌러서 골라주세요. 60장 다 넘기면, 짧은 질문 두 개에 답하고 <b>나만의 감정 처방전</b>을 받아요.
+  </div>
+  <p class="error-msg" id="startError">이름을 입력해주세요.</p>
+  <div style="padding:16px 16px 0;">
+    <button class="swipe-btn right-btn" style="width:100%;" onclick="startGame()">시작하기</button>
+  </div>
+</div>
+
+<div class="wrap hidden" id="gameWrap">
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <p class="progress-label" id="progressLabel">0 / 60</p>
+  </div>
+
+  <div class="stage" id="stage">
+    <!-- 카드가 JS로 렌더링됨 -->
+  </div>
+  <div class="hint-row">
+    <span>← 잘 안 써본 감정</span>
+    <span>자주 느끼는 감정 →</span>
+  </div>
+  <div class="btn-row">
+    <button class="swipe-btn left-btn" onclick="choose('rare')">
+      <span class="emoji">🤔</span>잘 안 써본 감정
+    </button>
+    <button class="swipe-btn right-btn" onclick="choose('often')">
+      <span class="emoji">💬</span>자주 느끼는 감정
+    </button>
+  </div>
+</div>
+
+<div class="wrap hidden" id="reflectWrap">
+  <div class="reflect-head">
+    <div class="emoji-big" id="reflectEmoji">🃏</div>
+    <h2>카드 다 넘겼어요!</h2>
+    <p>처방전을 받기 전에, 짧게 두 가지만 적어볼게요</p>
+  </div>
+
+  <div class="q-card">
+    <p class="q-label" id="q1Label">나는 <span id="q1TypeWord">이 감정</span>을<br>______________ 할 때 가장 많이 느껴요.</p>
+    <textarea id="answer1" placeholder="편하게, 짧게 적어도 괜찮아요"></textarea>
+  </div>
+
+  <div class="q-card">
+    <p class="q-label">이 감정이 들 때, 나는 보통<br>______________ (하는 편이에요).</p>
+    <textarea id="answer2" placeholder="예: 그냥 참는다 / 노래를 듣는다 / 친구한테 말한다 등"></textarea>
+  </div>
+
+  <div class="reflect-submit">
+    <button class="swipe-btn right-btn" style="width:100%;" onclick="showResult()">나의 감정 처방전 보기</button>
+  </div>
+</div>
+
+<div class="wrap done-screen" id="doneScreen">
+
+  <div class="rx-card" id="rxCard">
+    <p class="rx-eyebrow">다시봄 · 감정 처방전</p>
+    <div class="rx-emoji" id="rxEmoji">✨</div>
+    <p class="rx-title" id="rxTitle">반짝이는 감정 타입</p>
+    <p class="rx-sub" id="rxSub">기쁨·설렘 계열</p>
+    <p class="rx-desc" id="rxDesc"></p>
+  </div>
+
+  <div class="quote-block">
+    <p class="q-tag">💬 내가 적은 말</p>
+    <p class="q-said" id="quote1"></p>
+    <p class="q-said" id="quote2"></p>
+  </div>
+
+  <div class="result-block">
+    <p class="result-title">🌱 다음에 써볼 감정 계열</p>
+    <p style="font-weight:800;color:var(--ink);font-size:14.5px;margin:-4px 0 10px;" id="growthLabel"></p>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 10px;">이 계열 단어는 오늘 유독 적게 골랐어요. 다음에 이런 마음이 들 때 한번 써봐도 좋아요.</p>
+    <div class="chip-row" id="growthChips"></div>
+  </div>
+
+  <div class="pick-box">
+    <span class="label" id="tipLabel">회복탄력성 처방</span>
+    <p class="txt" id="tipText"></p>
+  </div>
+
+  <details class="detail-toggle">
+    <summary>전체 카드 목록 보기</summary>
+    <div class="result-block" style="margin-top:10px;">
+      <p class="result-title">💬 자주 느끼는 감정 (<span id="oftenCount">0</span>개)</p>
+      <div class="chip-row" id="oftenChips"></div>
+    </div>
+    <div class="result-block">
+      <p class="result-title">🤔 잘 안 써본 감정 (<span id="rareCount">0</span>개)</p>
+      <div class="chip-row" id="rareChips"></div>
+    </div>
+  </details>
+
+  <div class="pick-box" style="background:#12274D;">
+    <span class="label">오늘의 미션</span>
+    <p class="txt">위 단어 중에서 <b>오늘 나에게 딱 맞는 단어 하나</b>를 골라보세요.</p>
+    <p class="txt">이따가 감정 온도계에 한 줄 성찰 쓸 때, 그 단어를 넣어서 써보면 훨씬 더 좋아요!</p>
+  </div>
+
+  <button class="restart-btn" onclick="location.reload()">처음부터 다시하기</button>
+</div>
+
+<script>
+  const CATS = {
+    A: { label:"반짝이는 감정", sub:"기쁨·설렘 계열", emoji:"✨", color1:"#FFB627", color2:"#FF6B4A",
+         desc:"오늘 마음에 반짝이는 순간이 많았나봐요. 좋은 일이 있었거나, 스스로 뿌듯함을 잘 느끼는 편이에요.",
+         tip:"긍정성", tipText:"좋았던 순간을 그냥 흘려보내지 말고, 오늘 뭐가 좋았는지 한 줄로 적어두면 그 기분이 훨씬 오래 남아요." },
+    B: { label:"단단한 감정", sub:"편안·안정 계열", emoji:"🌿", color1:"#02C39A", color2:"#028090",
+         desc:"마음이 꽤 안정적이고 든든했나봐요. 사람들과의 관계 속에서 편안함을 잘 느끼는 편이에요.",
+         tip:"대인관계력", tipText:"나에게 편안함을 주는 사람이나 순간을 떠올려보세요 — 그게 바로 나를 지지해주는 든든한 자원이에요." },
+    C: { label:"가라앉는 감정", sub:"슬픔·그리움 계열", emoji:"🌧", color1:"#3B82F6", color2:"#1B3A6B",
+         desc:"요즘 마음이 조금 가라앉아 있었나봐요. 이런 감정을 스스로 알아차린다는 것 자체가 이미 큰 힘이에요.",
+         tip:"자기조절력", tipText:"가라앉는 감정이 들 땐 억지로 밀어내지 말고, '아, 나 지금 이런 감정이구나' 하고 그냥 인정해주는 것부터 시작해보세요." },
+    D: { label:"뾰족한 감정", sub:"화남·억울함 계열", emoji:"🔥", color1:"#FF6B4A", color2:"#C2410C",
+         desc:"요즘 마음에 뾰족한 게 좀 있었나봐요. 화나거나 억울한 감정을 알아차리는 것도 회복탄력성의 시작이에요.",
+         tip:"자기조절력", tipText:"화가 날 땐 그 감정을 없애려 하기보다, 잠깐 숨을 고르고 '지금 내가 왜 이런 기분이지?' 물어보는 연습이 도움 돼요." },
+    E: { label:"조마조마한 감정", sub:"불안·긴장 계열", emoji:"🌬", color1:"#A855F7", color2:"#6D28D9",
+         desc:"긴장되고 조마조마한 순간이 많았나봐요. 몸과 마음이 계속 경계 태세였을 수도 있어요.",
+         tip:"자기조절력", tipText:"불안할 땐 몸부터 진정시키는 게 먼저예요 — 숨을 크게 들이쉬고 천천히 내쉬는 것만으로도 마음이 조금씩 가라앉아요." },
+    F: { label:"미묘한 감정", sub:"관계 속 감정 계열", emoji:"💭", color1:"#6366F1", color2:"#4338CA",
+         desc:"사람들과의 관계 속에서 복잡미묘한 감정을 많이 느끼는 편이네요. 관계에 예민한 만큼 배려심도 깊다는 뜻이에요.",
+         tip:"대인관계력", tipText:"애매하고 복잡한 감정일수록 혼자 끙끙대지 말고, 믿을 만한 사람에게 말로 풀어보면 훨씬 정리가 잘 돼요." }
+  };
+
+  const WORD_CAT = {
+    "기쁘다":"A","설레다":"A","신나다":"A","산뜻하다":"A","통쾌하다":"A","흐뭇하다":"A","자랑스럽다":"A","자신있다":"A","감격스럽다":"A","뿌듯하다":"A",
+    "편안하다":"B","안도하다":"B","든든하다":"B","후련하다":"B","홀가분하다":"B","씩씩하다":"B","고맙다":"B","사랑스럽다":"B","애틋하다":"B","뭉클하다":"B",
+    "슬프다":"C","서럽다":"C","외롭다":"C","쓸쓸하다":"C","그립다":"C","서글프다":"C","허탈하다":"C","우울하다":"C","무기력하다":"C","후회스럽다":"C",
+    "화나다":"D","짜증나다":"D","억울하다":"D","얄밉다":"D","답답하다":"D","씁쓸하다":"D","지겹다":"D","귀찮다":"D","실망스럽다":"D","서운하다":"D",
+    "무섭다":"E","불안하다":"E","초조하다":"E","조마조마하다":"E","걱정스럽다":"E","긴장되다":"E","막막하다":"E","지치다":"E","벅차다":"E","찜찜하다":"E",
+    "놀랍다":"F","부끄럽다":"F","섭섭하다":"F","민망하다":"F","어색하다":"F","얼떨떨하다":"F","당황스럽다":"F","심심하다":"F","부럽다":"F","미안하다":"F"
+  };
+
+  const WORDS = Object.keys(WORD_CAT);
+
+  let order = [];
+  let idx = 0;
+  const results = { often: [], rare: [] };
+  let startX = 0, curX = 0, dragging = false;
+  let typeKey = "A", growthKey = "C";
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function startGame(){
+    const stuName = document.getElementById('stuName').value.trim();
+    const err = document.getElementById('startError');
+    if(!stuName){
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    order = shuffle(WORDS);
+    idx = 0;
+    document.getElementById('startWrap').classList.add('hidden');
+    document.getElementById('gameWrap').classList.remove('hidden');
+    renderCard();
+  }
+
+  function renderCard(){
+    const stage = document.getElementById('stage');
+    stage.innerHTML = '';
+    if (idx >= order.length) { goToReflect(); return; }
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'activeCard';
+    card.innerHTML = `
+      <div class="stamp left" id="stampLeft">PASS</div>
+      <div class="word">${order[idx]}</div>
+      <div class="stamp right" id="stampRight">OK</div>
+    `;
+    stage.appendChild(card);
+    updateProgress();
+    attachDrag(card);
+  }
+
+  function updateProgress(){
+    document.getElementById('progressFill').style.width = (idx / order.length * 100) + '%';
+    document.getElementById('progressLabel').textContent = `${idx} / ${order.length}`;
+  }
+
+  function attachDrag(card){
+    const onDown = (x) => { dragging = true; startX = x; curX = x; card.style.transition = 'none'; };
+    const onMove = (x) => {
+      if (!dragging) return;
+      curX = x;
+      const dx = curX - startX;
+      card.style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`;
+      const leftStamp = document.getElementById('stampLeft');
+      const rightStamp = document.getElementById('stampRight');
+      leftStamp.style.opacity = dx < -20 ? Math.min(1, -dx / 100) : 0;
+      rightStamp.style.opacity = dx > 20 ? Math.min(1, dx / 100) : 0;
+    };
+    const onUp = () => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = curX - startX;
+      card.style.transition = 'transform .25s ease, opacity .25s ease';
+      if (dx > 90) {
+        choose('often');
+      } else if (dx < -90) {
+        choose('rare');
+      } else {
+        card.style.transform = 'translateX(0) rotate(0)';
+        document.getElementById('stampLeft').style.opacity = 0;
+        document.getElementById('stampRight').style.opacity = 0;
+      }
+    };
+
+    card.addEventListener('pointerdown', (e) => { card.setPointerCapture(e.pointerId); onDown(e.clientX); });
+    card.addEventListener('pointermove', (e) => onMove(e.clientX));
+    card.addEventListener('pointerup', onUp);
+    card.addEventListener('pointercancel', onUp);
+  }
+
+  function choose(type){
+    const card = document.getElementById('activeCard');
+    if (!card) return;
+    const word = order[idx];
+    results[type].push(word);
+
+    const flyX = type === 'often' ? 500 : -500;
+    card.style.transform = `translateX(${flyX}px) rotate(${flyX / 18}deg)`;
+    card.style.opacity = '0';
+
+    idx++;
+    setTimeout(renderCard, 180);
+  }
+
+  function countByCat(list){
+    const c = { A:0,B:0,C:0,D:0,E:0,F:0 };
+    list.forEach(w => { c[WORD_CAT[w]]++; });
+    return c;
+  }
+
+  function topCat(counts){
+    let best = "A", bestVal = -1;
+    Object.keys(counts).forEach(k => {
+      if (counts[k] > bestVal) { bestVal = counts[k]; best = k; }
+    });
+    return best;
+  }
+
+  function goToReflect(){
+    document.getElementById('gameWrap').classList.add('hidden');
+
+    const oftenCounts = countByCat(results.often);
+    const rareCounts = countByCat(results.rare);
+    typeKey = topCat(oftenCounts);
+    // 성장 계열: rare 더미에서 제일 많이 나온 계열 (없으면 often에서 가장 적은 계열)
+    if (results.rare.length > 0) {
+      growthKey = topCat(rareCounts);
+    } else {
+      growthKey = topCat(Object.fromEntries(Object.keys(oftenCounts).map(k => [k, -oftenCounts[k]])));
+    }
+
+    document.getElementById('reflectEmoji').textContent = CATS[typeKey].emoji;
+    document.getElementById('q1TypeWord').textContent = "'" + CATS[typeKey].label + "'";
+
+    document.getElementById('reflectWrap').classList.remove('hidden');
+  }
+
+  function showResult(){
+    const a1 = document.getElementById('answer1').value.trim();
+    const a2 = document.getElementById('answer2').value.trim();
+    document.getElementById('reflectWrap').classList.add('hidden');
+
+    const t = CATS[typeKey];
+    const g = CATS[growthKey];
+
+    const rxCard = document.getElementById('rxCard');
+    rxCard.style.background = `linear-gradient(135deg, ${t.color1}, ${t.color2})`;
+    document.getElementById('rxEmoji').textContent = t.emoji;
+    document.getElementById('rxTitle').textContent = t.label + " 타입";
+    document.getElementById('rxSub').textContent = t.sub;
+    document.getElementById('rxDesc').textContent = t.desc;
+
+    document.getElementById('quote1').textContent = a1 ? `“나는 ${a1} 할 때 이 감정을 가장 많이 느껴요.”` : "“(적지 않았어요)”";
+    document.getElementById('quote2').textContent = a2 ? `“이 감정이 들 때, 나는 보통 ${a2}.”` : "“(적지 않았어요)”";
+
+    document.getElementById('growthLabel').textContent = g.label + " (" + g.sub + ")";
+    document.getElementById('tipLabel').textContent = t.tip + " 처방";
+    document.getElementById('tipText').textContent = t.tipText;
+
+    document.getElementById('oftenCount').textContent = results.often.length;
+    document.getElementById('rareCount').textContent = results.rare.length;
+
+    const oftenChips = document.getElementById('oftenChips');
+    oftenChips.innerHTML = '';
+    results.often.forEach(w => {
+      const c = document.createElement('span');
+      c.className = 'chip';
+      c.textContent = w;
+      oftenChips.appendChild(c);
+    });
+
+    const rareChips = document.getElementById('rareChips');
+    rareChips.innerHTML = '';
+    results.rare.forEach(w => {
+      const c = document.createElement('span');
+      c.className = 'chip rare';
+      c.textContent = w;
+      rareChips.appendChild(c);
+    });
+
+    const growthChips = document.getElementById('growthChips');
+    growthChips.innerHTML = '';
+    const growthWords = Object.keys(WORD_CAT).filter(w => WORD_CAT[w] === growthKey);
+    growthWords.forEach(w => {
+      const c = document.createElement('span');
+      c.className = 'chip rare';
+      c.textContent = w;
+      growthChips.appendChild(c);
+    });
+
+    document.getElementById('doneScreen').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
