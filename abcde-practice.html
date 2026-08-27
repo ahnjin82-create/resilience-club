@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABCDE 마음 훈련 — 다시봄</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:40px;}
+
+  .wrap{max-width:480px;margin:0 auto;}
+  .wrap.hidden{display:none;}
+
+  .hero{padding:24px 20px 16px;text-align:center;background:var(--navy);}
+  .hero .eyebrow{color:var(--mint);font-weight:700;font-size:12px;letter-spacing:.08em;margin:0 0 6px;}
+  .hero h1{font-size:21px;margin:0 0 4px;color:#fff;}
+  .hero .sub{color:#B9C6E0;font-size:12.5px;margin:0;}
+
+  .id-card{padding:14px 16px 0;}
+  .id-row{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;}
+  .id-field{flex:1;}
+  .id-field label{display:block;font-size:11.5px;font-weight:700;color:#374151;margin-bottom:4px;}
+  .id-field input{width:100%;border:1.6px solid #d8dce4;border-radius:8px;padding:8px 10px;font-size:13.5px;font-family:inherit;}
+
+  .rule-box{
+    margin:14px 16px 0;background:#EAF3FB;border-radius:12px;padding:12px 14px;
+    font-size:12.5px;color:#2b3b52;line-height:1.7;
+  }
+  .abcde-mini{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+  .abcde-mini span{font-size:11px;font-weight:800;color:#fff;padding:3px 9px;border-radius:999px;}
+
+  .error-msg{color:#b91c1c;font-size:12.5px;font-weight:700;text-align:center;margin:8px 16px 0;display:none;}
+
+  .progress-bar{padding:10px 20px;background:#fff;border-bottom:1px solid var(--line);}
+  .progress-track{background:#EEF0F3;border-radius:999px;height:8px;overflow:hidden;}
+  .progress-fill{height:100%;transition:width .3s;}
+  .progress-label{text-align:center;font-size:11.5px;color:var(--muted);font-weight:700;margin-top:6px;}
+
+  .step-card{padding:26px 20px 10px;}
+  .step-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .step-letter{
+    width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:'Black Han Sans', sans-serif;font-size:26px;color:#fff;flex:0 0 52px;
+  }
+  .step-title{font-size:18px;font-weight:900;color:var(--ink);margin:0;}
+  .step-sub{font-size:12.5px;color:var(--muted);margin:2px 0 0;}
+
+  .step-prompt{
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;
+  }
+  .step-prompt p{margin:0;font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.6;}
+  .step-prompt textarea{
+    width:100%;min-height:110px;border:1.6px solid #d8dce4;border-radius:10px;padding:12px 14px;
+    font-size:14px;font-family:inherit;resize:vertical;margin-top:12px;background:#fbfbfa;
+  }
+
+  .hint-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .hint-chip{
+    background:#fff;border:1.4px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12.5px;
+    color:#374151;cursor:default;
+  }
+
+  .guide-box{
+    background:#FDF3E3;border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;color:#5a4321;line-height:1.6;
+  }
+  .guide-box .g-title{font-weight:900;color:#8a5a1f;margin:0 0 8px;display:block;}
+  .guide-box ul{margin:0;padding-left:18px;}
+  .guide-box li{margin-bottom:5px;}
+
+  .btn-row{display:flex;gap:10px;padding:6px 20px 0;}
+  .btn{
+    flex:1;border:none;border-radius:14px;padding:15px 8px;font-size:15px;font-weight:900;cursor:pointer;
+  }
+  .btn.primary{ background:var(--coral); color:#fff; }
+  .btn.ghost{ background:#EEF0F3; color:#4b5563; flex:0 0 90px; }
+
+  .done-screen{display:none;padding:24px 18px 10px;}
+  .done-screen.show{display:block;}
+  .done-head{text-align:center;margin-bottom:18px;}
+  .done-badge{
+    width:76px;height:76px;border-radius:50%;background:var(--mint);margin:0 auto 12px;
+    display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff;
+  }
+  .done-title{font-size:20px;font-weight:900;color:var(--navy);margin:0 0 6px;}
+  .done-sub{font-size:13px;color:var(--muted);}
+
+  .timeline-item{display:flex;gap:12px;margin-bottom:14px;}
+  .tl-badge{
+    width:38px;height:38px;border-radius:50%;flex:0 0 38px;display:flex;align-items:center;justify-content:center;
+    font-family:'Black Han Sans', sans-serif;font-size:16px;color:#fff;
+  }
+  .tl-body{flex:1;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;}
+  .tl-body .tl-label{font-size:11px;font-weight:800;color:var(--muted);margin:0 0 3px;}
+  .tl-body .tl-text{font-size:13.5px;color:var(--ink);margin:0;line-height:1.5;white-space:pre-wrap;}
+
+  .pick-box{background:var(--navy); color:#fff; border-radius:14px; padding:18px 18px 20px; margin-top:6px;}
+  .pick-box .label{color:var(--mint);font-weight:900;font-size:12px;letter-spacing:.04em;margin-bottom:8px;display:block;}
+  .pick-box .txt{font-size:13.5px;line-height:1.6;color:#e6ecf6;margin-bottom:0;}
+
+  .restart-btn{
+    width:100%;margin-top:18px;background:transparent;border:1.6px solid var(--line);
+    color:var(--muted);border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="startWrap">
+  <div class="hero">
+    <p class="eyebrow">회복탄력성 저자 직강 · 실습</p>
+    <h1>ABCDE 마음 훈련</h1>
+    <p class="sub">내 생각을 다시 써보는 5단계</p>
+  </div>
+  <div class="id-card">
+    <div class="id-row">
+      <div class="id-field">
+        <label for="grpNo">모둠 번호</label>
+        <input type="text" id="grpNo" inputmode="numeric" placeholder="예: 3">
+      </div>
+      <div class="id-field">
+        <label for="stuName">이름</label>
+        <input type="text" id="stuName" placeholder="이름 입력">
+      </div>
+    </div>
+  </div>
+  <div class="rule-box">
+    최근에 있었던 <b>안 좋았던 일 하나</b>를 떠올려서, 5단계를 하나씩 따라가며 다시 써봐요. 정답은 없어요 — 솔직하게 적으면 돼요.
+    <div class="abcde-mini">
+      <span style="background:#94A3B8;">A 사건</span>
+      <span style="background:#FF6B4A;">B 믿음</span>
+      <span style="background:#FFB627;">C 결과</span>
+      <span style="background:#028090;">D 반박</span>
+      <span style="background:#02C39A;">E 효과</span>
+    </div>
+  </div>
+  <p class="error-msg" id="startError">이름을 입력해주세요.</p>
+  <div style="padding:16px 16px 0;">
+    <button class="btn primary" style="width:100%;" onclick="startPractice()">시작하기</button>
+  </div>
+</div>
+
+<div class="wrap hidden" id="practiceWrap">
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <p class="progress-label" id="progressLabel">1 / 5</p>
+  </div>
+  <div id="stepStage"></div>
+</div>
+
+<div class="wrap done-screen" id="doneScreen">
+  <div class="done-head">
+    <div class="done-badge">✓</div>
+    <p class="done-title">5단계 완성!</p>
+    <p class="done-sub">내가 쓴 이야기를 A→E 순서로 다시 볼까요</p>
+  </div>
+  <div id="timeline"></div>
+  <div class="pick-box">
+    <span class="label">오늘의 한 마디</span>
+    <p class="txt">부정적인 생각도 '항상, 전부'가 아니라 '이번 한 번, 이 상황만'으로 바라보면 훨씬 가벼워져요. 오늘 한 것처럼, 힘든 일이 생길 때마다 이 5단계를 떠올려보세요.</p>
+  </div>
+  <button class="restart-btn" onclick="location.reload()">처음부터 다시하기</button>
+</div>
+
+<script>
+  const STEPS = [
+    {
+      key: "A", title: "사건 (Adversity)", color: "94A3B8",
+      prompt: "최근에 있었던 안 좋았던 일을 적어보세요.",
+      placeholder: "예: 시험을 망쳤다 / 친구와 다퉜다 / 발표를 망쳤다 등",
+    },
+    {
+      key: "B", title: "믿음 (Belief)", color: "FF6B4A",
+      prompt: "그 사건에 대해, 그 순간 어떤 생각이 들었나요?",
+      placeholder: "예: 나는 항상 이런 식이야 / 나는 뭘 해도 안 돼",
+      hints: ["혹시 '항상 그래' 라고 생각했나요?", "혹시 '내 인생 전체의 문제' 처럼 느껴졌나요?"],
+    },
+    {
+      key: "C", title: "결과 (Consequence)", color: "FFB627",
+      prompt: "그 생각 때문에 어떤 감정이나 행동이 나타났나요?",
+      placeholder: "예: 하루 종일 기분이 안 좋았다 / 아무것도 하기 싫어졌다",
+    },
+    {
+      key: "D", title: "반박 (Disputation)", color: "028090",
+      prompt: "그 생각을 스스로 반박해본다면, 뭐라고 말할 수 있을까요?",
+      placeholder: "예: 사실 저번엔 잘했었잖아 / 이번 한 번일 뿐이야",
+      guide: ["이 생각이 정말 100% 사실일까요?", "다른 설명이나 이유는 없을까요?", "친한 친구가 똑같은 일을 겪었다면, 나는 뭐라고 말해줄까요?"],
+    },
+    {
+      key: "E", title: "효과 (Energization)", color: "02C39A",
+      prompt: "반박해보니, 지금 기분이 어떤가요?",
+      placeholder: "예: 조금 마음이 가벼워졌다 / 다시 해볼 수 있을 것 같다",
+    },
+  ];
+
+  const answers = {};
+  let idx = 0;
+
+  function startPractice(){
+    const stuName = document.getElementById('stuName').value.trim();
+    const err = document.getElementById('startError');
+    if(!stuName){
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    document.getElementById('startWrap').classList.add('hidden');
+    document.getElementById('practiceWrap').classList.remove('hidden');
+    idx = 0;
+    renderStep();
+  }
+
+  function renderStep(){
+    const stage = document.getElementById('stepStage');
+    const s = STEPS[idx];
+
+    document.getElementById('progressFill').style.width = ((idx) / STEPS.length * 100) + '%';
+    document.getElementById('progressFill').style.background = '#' + s.color;
+    document.getElementById('progressLabel').textContent = `${idx+1} / ${STEPS.length}`;
+
+    let hintsHtml = '';
+    if (s.hints) {
+      hintsHtml = '<div class="hint-chips">' + s.hints.map(h => `<div class="hint-chip">💭 ${h}</div>`).join('') + '</div>';
+    }
+    let guideHtml = '';
+    if (s.guide) {
+      guideHtml = `
+        <div class="guide-box">
+          <span class="g-title">🧭 이렇게 생각해보면 도움이 돼요</span>
+          <ul>${s.guide.map(g => `<li>${g}</li>`).join('')}</ul>
+        </div>`;
+    }
+
+    stage.innerHTML = `
+      <div class="step-card">
+        <div class="step-head">
+          <div class="step-letter" style="background:#${s.color}">${s.key}</div>
+          <div>
+            <p class="step-title">${s.title}</p>
+            <p class="step-sub">${idx+1}단계 / ${STEPS.length}단계</p>
+          </div>
+        </div>
+        ${hintsHtml}
+        ${guideHtml}
+        <div class="step-prompt">
+          <p>${s.prompt}</p>
+          <textarea id="answerInput" placeholder="${s.placeholder}">${answers[s.key] || ''}</textarea>
+        </div>
+        <p class="error-msg" id="stepError">내용을 적어주세요.</p>
+      </div>
+      <div class="btn-row">
+        ${idx > 0 ? '<button class="btn ghost" onclick="goBack()">이전</button>' : ''}
+        <button class="btn primary" style="background:#${s.color}" onclick="goNext()">${idx === STEPS.length - 1 ? '완성하기' : '다음'}</button>
+      </div>
+    `;
+  }
+
+  function goBack(){
+    const s = STEPS[idx];
+    answers[s.key] = document.getElementById('answerInput').value;
+    idx--;
+    renderStep();
+  }
+
+  function goNext(){
+    const s = STEPS[idx];
+    const val = document.getElementById('answerInput').value.trim();
+    const err = document.getElementById('stepError');
+    if(!val){
+      err.style.display = 'block';
+      return;
+    }
+    answers[s.key] = val;
+    if (idx === STEPS.length - 1) {
+      finishPractice();
+    } else {
+      idx++;
+      renderStep();
+    }
+  }
+
+  function finishPractice(){
+    document.getElementById('practiceWrap').classList.add('hidden');
+    const timeline = document.getElementById('timeline');
+    timeline.innerHTML = '';
+    STEPS.forEach(s => {
+      const item = document.createElement('div');
+      item.className = 'timeline-item';
+      item.innerHTML = `
+        <div class="tl-badge" style="background:#${s.color}">${s.key}</div>
+        <div class="tl-body">
+          <p class="tl-label">${s.title}</p>
+          <p class="tl-text">${answers[s.key]}</p>
+        </div>
+      `;
+      timeline.appendChild(item);
+    });
+    document.getElementById('doneScreen').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
