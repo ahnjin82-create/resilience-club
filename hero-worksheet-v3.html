@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 안의 회복탄력성 슈퍼히어로</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+  :root{
+    --navy:#122A52; --navy-deep:#0C1E3D; --coral:#FF6B4A; --amber:#FFB627;
+    --mint:#02C39A; --teal:#028090; --sky:#EAF3FB; --ink:#1B2436; --muted:#6b7280;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Noto Sans KR', sans-serif; background:var(--navy-deep);
+    color:var(--ink); min-height:100vh; padding:24px 16px 60px;
+  }
+
+  .wrap{max-width:520px;margin:0 auto;}
+  .wrap.hidden{display:none;}
+
+  .card{background:#fff;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,0.25);padding:22px 22px 24px;margin-bottom:18px;}
+
+  .header-card{position:relative;overflow:hidden;padding-top:26px;}
+  .header-blob{position:absolute;top:-30px;right:-30px;width:110px;height:110px;border-radius:50%;background:#FBE3C4;opacity:.9;}
+  .header-top{position:relative;display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
+  .header-icon{flex:0 0 52px;width:52px;height:52px;border-radius:50%;background:var(--sky);display:flex;align-items:center;justify-content:center;font-size:26px;}
+  h1{position:relative;font-family:'Black Han Sans', sans-serif;font-size:23px;line-height:1.35;margin:2px 0 0;color:var(--ink);}
+  h1 .accent{color:var(--coral);}
+  .intro-box{position:relative;background:var(--sky);border-radius:14px;padding:14px 16px;font-size:13.5px;line-height:1.6;color:#2b3b52;}
+
+  .step-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .step-num{flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;}
+  .step-title{font-weight:700;font-size:16.5px;color:var(--ink);}
+  .req{color:var(--coral);}
+
+  .elem-tag{
+    display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;color:#fff;
+    padding:3px 10px;border-radius:999px;margin:0 0 12px 38px;
+  }
+  .elem-tag.self{background:#028090;}
+  .elem-tag.social{background:#8B5CF6;}
+  .elem-tag.positive{background:#FFB627;}
+
+  .field-row{display:flex;gap:12px;}
+  .field{flex:1;}
+  .field label{display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;}
+  input[type=text], input[type=number], textarea{
+    width:100%;border:1.6px solid #cdd5e0;border-radius:10px;padding:11px 13px;font-size:14.5px;
+    font-family:inherit;background:#fff;transition:border-color .15s;
+  }
+  input:focus, textarea:focus{outline:none;border-color:var(--navy);}
+  textarea{min-height:70px;resize:vertical;}
+
+  .hint{font-size:12.5px;color:var(--muted);margin:8px 0 10px;line-height:1.5;}
+  .info-box{background:var(--sky);border-radius:12px;padding:11px 14px;font-size:13px;color:#25415f;font-weight:700;margin-bottom:12px;}
+
+  .item-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .item-tag{flex:0 0 62px;background:var(--navy);color:#fff;font-size:12px;font-weight:700;text-align:center;padding:9px 4px;border-radius:8px;}
+  .item-row input{margin:0;flex:1;}
+
+  .swatch-row{display:flex;gap:12px;}
+  .swatch{width:44px;height:44px;border-radius:50%;border:3px solid transparent;cursor:pointer;padding:0;transition:transform .12s, border-color .12s;}
+  .swatch:hover{transform:scale(1.08);}
+  .swatch.selected{border-color:var(--ink);transform:scale(1.1);}
+
+  .gender-btn{
+    flex:1;min-width:100px;background:#F5F6F8;border:1.8px solid #e5e7eb;border-radius:10px;
+    padding:10px 8px;font-size:13px;font-weight:700;color:#374151;cursor:pointer;
+  }
+  .gender-btn.selected{background:var(--navy);border-color:var(--navy);color:#fff;}
+
+  .temp-display{text-align:center;padding:10px 0 6px;}
+  .temp-face{font-size:40px;line-height:1;margin-bottom:6px;}
+  .temp-badge{display:inline-block;background:var(--coral);color:#fff;font-weight:900;font-size:17px;padding:5px 16px;border-radius:999px;margin-bottom:6px;}
+  .temp-desc{font-size:13px;color:#374151;font-weight:700;margin-bottom:14px;}
+  input[type=range]{width:100%;accent-color:var(--coral);height:6px;margin:6px 0 8px;}
+  .temp-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);}
+
+  .submit-zone{padding:4px 4px 0;}
+  button.submit{
+    width:100%;background:var(--coral);color:#fff;border:none;border-radius:14px;padding:17px;
+    font-family:'Black Han Sans', sans-serif;font-size:19px;letter-spacing:.02em;cursor:pointer;
+    box-shadow:0 6px 18px rgba(255,107,74,0.4);
+  }
+  button.submit:disabled{opacity:.6;cursor:not-allowed;}
+  .error-msg{color:#fca5a5;font-size:13px;font-weight:700;margin-top:10px;text-align:center;display:none;}
+
+  /* ---- 리빌 카드 ---- */
+  .reveal-screen{display:none;padding:10px 2px 0;}
+  .reveal-screen.show{display:block;}
+  .reveal-head{text-align:center;margin-bottom:16px;}
+  .reveal-head .flash{font-size:13px;font-weight:900;color:var(--mint);letter-spacing:.06em;margin-bottom:6px;}
+  .reveal-head h2{font-family:'Black Han Sans', sans-serif;font-size:22px;color:#fff;margin:0;}
+
+  .hero-card{
+    border-radius:22px; padding:0; overflow:hidden; margin-bottom:18px;
+    box-shadow:0 14px 40px rgba(0,0,0,0.35);
+  }
+  .hero-card-top{padding:26px 22px 20px; text-align:center; position:relative;}
+  .hero-card-top .brand{font-size:10.5px;font-weight:900;letter-spacing:.1em;color:rgba(255,255,255,0.85);margin:0 0 10px;}
+  .hero-card-top .hname{font-family:'Black Han Sans', sans-serif;font-size:28px;color:#fff;margin:0 0 4px;line-height:1.25;}
+  .hero-card-top .sname{font-size:13px;color:rgba(255,255,255,0.85);font-weight:700;}
+  .hero-card-bottom{background:#fff;padding:20px 22px 22px;}
+  .stat-block{margin-bottom:16px;}
+  .stat-block:last-child{margin-bottom:0;}
+  .stat-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .stat-tag{font-size:10.5px;font-weight:900;color:#fff;padding:3px 9px;border-radius:999px;}
+  .stat-name{font-size:13.5px;font-weight:900;color:var(--ink);}
+  .stat-body{font-size:13.5px;color:#374151;line-height:1.55;padding-left:2px;}
+  .stat-items{display:flex;flex-direction:column;gap:6px;}
+  .stat-item-line{background:#F5F6F8;border-radius:8px;padding:8px 12px;font-size:13px;color:#374151;}
+
+  .reveal-note{
+    background:rgba(255,255,255,0.08); border:1px dashed rgba(255,255,255,0.3); border-radius:14px;
+    padding:14px 16px; font-size:13px; color:#cfd8ea; line-height:1.6; text-align:center; margin-bottom:16px;
+  }
+
+  .prompt-card{
+    background:#fff; border-radius:16px; padding:16px 18px 18px; margin-bottom:16px;
+  }
+  .prompt-card .p-title{font-size:13.5px;font-weight:900;color:var(--ink);margin:0 0 4px;}
+  .prompt-card .p-sub{font-size:11.5px;color:var(--muted);margin:0 0 10px;line-height:1.5;}
+  .prompt-box{
+    background:#F5F6F8;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#374151;
+    line-height:1.6;margin-bottom:10px;white-space:pre-wrap;
+  }
+  .copy-btn{
+    width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:11px;
+    font-size:13.5px;font-weight:700;cursor:pointer;
+  }
+  .copy-btn.copied{background:var(--mint);}
+
+  .restart-btn{
+    width:100%;background:transparent;border:1.6px solid rgba(255,255,255,0.3);color:#cfd8ea;
+    border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="formWrap">
+
+  <div class="card header-card">
+    <div class="header-blob"></div>
+    <div class="header-top">
+      <div class="header-icon">🦸</div>
+      <h1>내 안의 회복탄력성<br><span class="accent">슈퍼히어로</span> 만들기!</h1>
+    </div>
+    <div class="intro-box">
+      ⚡ 역경을 튕겨내는 탄성! 힘들고 지칠 때 나를 다시 일어서게 만드는 나만의 히어로 캐릭터를 완성해 봅시다. 오늘 만든 히어로는 회복탄력성 3요소(자기조절력·대인관계력·긍정성)로 이루어져 있어요.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">1</div><div class="step-title">대원 기본 정보</div></div>
+    <div class="field-row">
+      <div class="field">
+        <label for="grpNo">모둠 번호</label>
+        <input type="text" id="grpNo" inputmode="numeric" placeholder="예: 3">
+      </div>
+      <div class="field">
+        <label for="stuName">이름 <span class="req">*</span></label>
+        <input type="text" id="stuName" placeholder="홍길동">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">2</div><div class="step-title">히어로 이름 <span class="req">*</span></div></div>
+    <input type="text" id="heroName" placeholder="예: 회복력 만렙 스프링맨">
+    <p class="hint">💡 나의 회복탄력성 특징이 잘 드러나는 멋진 이름을 지어주세요!</p>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">3</div><div class="step-title">테마 컬러 고르기</div></div>
+    <p class="hint" style="margin-top:0">🎨 내 히어로 카드를 대표할 색을 골라주세요</p>
+    <div class="swatch-row" id="swatchRow">
+      <button type="button" class="swatch" data-color="#FF6B4A" data-color2="#C2410C" style="background:#FF6B4A" onclick="pickTheme(this)" aria-label="코랄"></button>
+      <button type="button" class="swatch" data-color="#02C39A" data-color2="#028090" style="background:#02C39A" onclick="pickTheme(this)" aria-label="민트"></button>
+      <button type="button" class="swatch" data-color="#FFB627" data-color2="#D97706" style="background:#FFB627" onclick="pickTheme(this)" aria-label="앰버"></button>
+      <button type="button" class="swatch" data-color="#3B82F6" data-color2="#1D4ED8" style="background:#3B82F6" onclick="pickTheme(this)" aria-label="블루"></button>
+      <button type="button" class="swatch" data-color="#A855F7" data-color2="#6D28D9" style="background:#A855F7" onclick="pickTheme(this)" aria-label="퍼플"></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">3-2</div><div class="step-title">히어로 캐릭터 모습</div></div>
+    <p class="hint" style="margin-top:0">🦸 그림으로 만들 때, 내 히어로 캐릭터는 어떤 모습이면 좋을까요? (내 성별과 달라도 괜찮아요, 자유롭게!)</p>
+    <div class="swatch-row" id="genderRow" style="flex-wrap:wrap;gap:8px;">
+      <button type="button" class="gender-btn" data-val="남성형" onclick="pickGender(this)">남성형</button>
+      <button type="button" class="gender-btn" data-val="여성형" onclick="pickGender(this)">여성형</button>
+      <button type="button" class="gender-btn" data-val="성중립적" onclick="pickGender(this)">성중립적</button>
+      <button type="button" class="gender-btn selected" data-val="" onclick="pickGender(this)">AI에게 맡기기</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">3-3</div><div class="step-title">배경 선택</div></div>
+    <p class="hint" style="margin-top:0">🏞️ 내 히어로가 서 있을 배경은 어디가 좋을까요?</p>
+    <div class="swatch-row" id="bgRow" style="flex-wrap:wrap;gap:8px;">
+      <button type="button" class="gender-btn" data-val="미래 도시의 높은 빌딩 옥상, 화려한 도시 야경" onclick="pickBg(this)">미래 도시</button>
+      <button type="button" class="gender-btn" data-val="학교 운동장이나 교실 창가, 익숙한 학교 배경" onclick="pickBg(this)">학교</button>
+      <button type="button" class="gender-btn" data-val="신비로운 판타지 숲, 반짝이는 빛과 식물들" onclick="pickBg(this)">판타지 숲</button>
+      <button type="button" class="gender-btn" data-val="우주 은하 배경, 별과 행성이 떠 있는 공간" onclick="pickBg(this)">우주/은하</button>
+      <button type="button" class="gender-btn" data-val="폭풍우가 걷히고 무지개가 뜨는 하늘, 역경을 지나 맑아지는 분위기" onclick="pickBg(this)">폭풍 뒤 하늘</button>
+      <button type="button" class="gender-btn selected" data-val="" onclick="pickBg(this)">AI에게 맡기기</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">4</div><div class="step-title">특수 능력 <span class="req">*</span></div></div>
+    <span class="elem-tag self">🧠 자기조절력</span>
+    <p class="hint" style="margin-top:0">✨ 역경 앞에서 발휘되는 나만의 슈퍼 능력 — 감정을 다스리는 힘이에요</p>
+    <textarea id="heroPower" placeholder="예: 실수하거나 억울한 일을 당해도 3초 만에 툭툭 털어버리는 강력한 긍정 방패 능력!"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">5</div><div class="step-title">회복 아이템 3가지 <span class="req">*</span></div></div>
+    <span class="elem-tag social">🤝 대인관계력</span>
+    <p class="hint" style="margin-top:0">🎈 힘든 순간 나를 다시 일으켜 세워주는 사람·순간·소중한 것 3가지는?</p>
+    <div class="item-row"><div class="item-tag">아이템1</div><input type="text" id="item1" placeholder="예: 좋아하는 신나는 음악 듣기"></div>
+    <div class="item-row"><div class="item-tag">아이템2</div><input type="text" id="item2" placeholder="예: 떡볶이 먹으며 친구와 수다 떨기"></div>
+    <div class="item-row"><div class="item-tag">아이템3</div><input type="text" id="item3" placeholder="예: 따뜻한 이불 속에서 푹 자고 일어나기"></div>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">6</div><div class="step-title">히어로의 약점 <span class="req">*</span></div></div>
+    <span class="elem-tag positive">✨ 긍정성</span>
+    <div class="info-box">💬 나의 약점을 솔직히 인정하는 것 자체가 큰 용기입니다! 어둠 속에서도 빛을 찾는 눈이 긍정성이에요.</div>
+    <textarea id="heroWeak" placeholder="예: 시험 망쳤을 때 혼자 깊게 침울해지거나 남의 눈치를 지나치게 봄"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="step-head"><div class="step-num">7</div><div class="step-title">오늘의 마음 온도</div></div>
+    <p class="hint" style="margin-top:0">🌡 오늘 지금 이 순간, 나의 마음 상태 온도는 몇 도인가요? (1~10)</p>
+    <div class="temp-display">
+      <div class="temp-face" id="tempFace">😊</div>
+      <div class="temp-badge" id="tempBadge">7도</div>
+      <div class="temp-desc" id="tempDesc">따뜻하고 마음이 안정되어 있어요</div>
+    </div>
+    <input type="range" id="feelTemp" min="1" max="10" value="7" oninput="updateTemp(this.value)">
+    <div class="temp-scale">
+      <span>1 (차가움/우울)</span><span>5 (보통/평온)</span><span>10 (열정/최상)</span>
+    </div>
+  </div>
+
+  <div class="submit-zone">
+    <button class="submit" id="submitBtn" onclick="submitHero()">완성해서 제출하기</button>
+    <p class="error-msg" id="errorMsg"></p>
+  </div>
+</div>
+
+<div class="wrap reveal-screen" id="revealScreen">
+  <div class="reveal-head">
+    <p class="flash">⚡ 히어로 탄생 ⚡</p>
+    <h2>나만의 회복탄력성 히어로 완성!</h2>
+  </div>
+
+  <div class="hero-card" id="heroCard">
+    <div class="hero-card-top" id="heroCardTop">
+      <p class="brand">POGOK WELL+ · 다시봄</p>
+      <p class="hname" id="revealHeroName">히어로 이름</p>
+      <p class="sname" id="revealStuName">이름</p>
+    </div>
+    <div class="hero-card-bottom">
+      <div class="stat-block">
+        <div class="stat-head">
+          <span class="stat-tag" style="background:#028090;">🧠 자기조절력</span>
+          <span class="stat-name">특수 능력</span>
+        </div>
+        <p class="stat-body" id="revealPower"></p>
+      </div>
+      <div class="stat-block">
+        <div class="stat-head">
+          <span class="stat-tag" style="background:#8B5CF6;">🤝 대인관계력</span>
+          <span class="stat-name">회복 아이템</span>
+        </div>
+        <div class="stat-items" id="revealItems"></div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-head">
+          <span class="stat-tag" style="background:#FFB627;">✨ 긍정성</span>
+          <span class="stat-name">나의 약점 (인정할 용기)</span>
+        </div>
+        <p class="stat-body" id="revealWeak"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal-note">
+    🖥️ 너의 히어로가 우리 반 갤러리에 지금 막 추가됐어요!<br>프로젝터 화면에서 우리 반 모두의 히어로를 함께 확인해봐요.
+  </div>
+
+  <div class="prompt-card">
+    <p class="p-title">🎨 이 히어로, 진짜 그림으로 보고 싶다면?</p>
+    <p class="p-sub">아래 문장을 복사해서 Gemini(또는 다른 이미지 생성 AI)에 붙여넣어 보세요. 방금 적은 내용 그대로 반영된 그림이 나와요.</p>
+    <div class="prompt-box" id="promptBox"></div>
+    <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">📋 프롬프트 복사하기</button>
+  </div>
+
+  <button class="restart-btn" onclick="location.reload()">처음부터 다시하기</button>
+</div>
+
+<script>
+  // ⚠️ 아래 URL을 본인의 Google Apps Script 웹앱 배포 URL로 교체하세요.
+  // (연습용 시트와 실제용 시트, 두 개의 URL을 상황에 맞게 바꿔가며 사용)
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/여기에_배포된_스크립트_ID/exec";
+
+  let selectedTheme = "#FF6B4A";
+  let selectedTheme2 = "#C2410C";
+  let selectedGender = "";
+  let selectedBg = "";
+
+  function pickGender(btn){
+    selectedGender = btn.dataset.val;
+    document.querySelectorAll('#genderRow .gender-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  function pickBg(btn){
+    selectedBg = btn.dataset.val;
+    document.querySelectorAll('#bgRow .gender-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  function pickTheme(btn){
+    selectedTheme = btn.dataset.color;
+    selectedTheme2 = btn.dataset.color2;
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.querySelector('.accent').style.color = selectedTheme;
+    document.getElementById('submitBtn').style.background = selectedTheme;
+    document.getElementById('submitBtn').style.boxShadow = "0 6px 18px " + selectedTheme + "66";
+  }
+
+  function updateTemp(v){
+    v = parseInt(v, 10);
+    const face = document.getElementById('tempFace');
+    const badge = document.getElementById('tempBadge');
+    const desc = document.getElementById('tempDesc');
+    badge.textContent = v + "도";
+
+    if(v <= 3){
+      face.textContent = "😢"; desc.textContent = "차갑고 조금 우울한 하루예요"; badge.style.background = "#3B82F6";
+    } else if(v <= 5){
+      face.textContent = "😐"; desc.textContent = "그저 그런, 평온한 하루예요"; badge.style.background = "#94A3B8";
+    } else if(v <= 8){
+      face.textContent = "😊"; desc.textContent = "따뜻하고 마음이 안정되어 있어요"; badge.style.background = "#FF6B4A";
+    } else {
+      face.textContent = "🤩"; desc.textContent = "열정 가득, 최고로 좋은 하루예요!"; badge.style.background = "#02C39A";
+    }
+  }
+
+  function submitHero(){
+    const grpNo = document.getElementById('grpNo').value.trim();
+    const stuName = document.getElementById('stuName').value.trim();
+    const heroName = document.getElementById('heroName').value.trim();
+    const heroPower = document.getElementById('heroPower').value.trim();
+    const heroWeak = document.getElementById('heroWeak').value.trim();
+    const item1 = document.getElementById('item1').value.trim();
+    const item2 = document.getElementById('item2').value.trim();
+    const item3 = document.getElementById('item3').value.trim();
+    const feelTemp = document.getElementById('feelTemp').value;
+    const errorMsg = document.getElementById('errorMsg');
+
+    if(!stuName || !heroName || !heroPower || !heroWeak || !item1 || !item2 || !item3){
+      errorMsg.textContent = "이름과 필수 항목(*)을 모두 입력해주세요.";
+      errorMsg.style.display = "block";
+      return;
+    }
+    errorMsg.style.display = "none";
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = "저장 중...";
+
+    const params = new URLSearchParams({
+      timestamp: new Date().toISOString(),
+      group: grpNo,
+      name: stuName,
+      heroName: heroName,
+      power: heroPower,
+      weakness: heroWeak,
+      item1: item1,
+      item2: item2,
+      item3: item3,
+      feelTemp: feelTemp,
+      theme: selectedTheme
+    });
+
+    fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
+      .then(() => {
+        showReveal({ stuName, heroName, heroPower, heroWeak, item1, item2, item3 });
+      })
+      .catch(() => {
+        errorMsg.textContent = "저장에 실패했어요. 다시 시도해주세요.";
+        errorMsg.style.display = "block";
+        btn.disabled = false;
+        btn.textContent = "완성해서 제출하기";
+      });
+  }
+
+  const THEME_NAMES = {
+    "#FF6B4A": "따뜻한 코랄/주황",
+    "#02C39A": "시원한 민트/청록",
+    "#FFB627": "밝은 앰버/골드",
+    "#3B82F6": "선명한 블루",
+    "#A855F7": "신비로운 퍼플",
+  };
+
+  function buildPrompt(d){
+    const colorName = THEME_NAMES[selectedTheme] || "밝고 강렬한 색";
+    const genderLine = selectedGender ? `히어로 캐릭터의 외모: ${selectedGender}으로 그려줘.\n` : "";
+    const bgLine = selectedBg ? `배경: ${selectedBg}.\n` : "";
+    return `중학생을 위한 밝고 긍정적인 슈퍼히어로 캐릭터 일러스트를 그려줘.\n`
+      + `인물: 한국 중학생, 동양인 외모로 그려줘.\n`
+      + `이름: "${d.heroName}"\n`
+      + genderLine
+      + `테마 컬러: ${colorName} 계열 의상과 망토\n`
+      + `특수 능력을 표현하는 포즈: ${d.heroPower}\n`
+      + `아이템 3가지를 히어로 장비/소품으로 함께 그려줘: ${d.item1}, ${d.item2}, ${d.item3}\n`
+      + bgLine
+      + `분위기: 역경을 이겨내고 당당하게 서 있는 밝고 희망찬 모습.\n`
+      + `화질/스타일: 3D CGI, 초고화질, 애니메이션 영화 같은 퀄리티로 그려줘.\n`
+      + `텍스트 표시: 히어로 머리 위쪽 공간에 전광판(네온사인)처럼 특수 능력 문구를 한글로 "${d.heroPower}"라고 표시해줘. 아이템 3개 옆에도 각각 아이템 이름을 한글로 라벨링해줘. 이미지 안의 모든 글자는 반드시 한글로만 써줘, 영어 텍스트는 절대 넣지 마.`;
+  }
+
+  function copyPrompt(){
+    const text = document.getElementById('promptBox').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = "✅ 복사 완료!";
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = "📋 프롬프트 복사하기"; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function showReveal(d){
+    document.getElementById('formWrap').classList.add('hidden');
+
+    document.getElementById('heroCardTop').style.background =
+      `linear-gradient(135deg, ${selectedTheme}, ${selectedTheme2})`;
+    document.getElementById('revealHeroName').textContent = d.heroName;
+    document.getElementById('revealStuName').textContent = d.stuName + " 님의 히어로";
+    document.getElementById('revealPower').textContent = d.heroPower;
+    document.getElementById('revealWeak').textContent = d.heroWeak;
+
+    const itemsBox = document.getElementById('revealItems');
+    itemsBox.innerHTML = '';
+    [d.item1, d.item2, d.item3].forEach((it, i) => {
+      const line = document.createElement('div');
+      line.className = 'stat-item-line';
+      line.textContent = `${i+1}. ${it}`;
+      itemsBox.appendChild(line);
+    });
+
+    document.getElementById('revealScreen').classList.add('show');
+    document.getElementById('promptBox').textContent = buildPrompt(d);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
