@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영화 《원더》 도전 퀴즈 — 다시봄</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A; --amber:#FFB627;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:40px;}
+
+  .wrap{max-width:480px;margin:0 auto;}
+  .wrap.hidden{display:none;}
+
+  .hero{padding:26px 20px 20px;text-align:center;background:var(--navy);}
+  .hero .eyebrow{color:var(--mint);font-weight:700;font-size:12px;letter-spacing:.08em;margin:0 0 6px;}
+  .hero h1{font-size:21px;margin:0 0 6px;color:#fff;}
+  .hero .sub{color:#B9C6E0;font-size:13px;margin:0;}
+
+  .id-card{max-width:480px;margin:16px auto 0;padding:0 16px;}
+  .id-row{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;}
+  .id-field{flex:1;}
+  .id-field label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:4px;}
+  .id-field input{width:100%;border:1.6px solid #d8dce4;border-radius:8px;padding:9px 10px;font-size:14px;font-family:inherit;}
+
+  .rule-box{
+    margin:14px 16px 0;background:#EAF3FB;border-radius:12px;padding:12px 14px;
+    font-size:12.5px;color:#2b3b52;line-height:1.6;
+  }
+  .prize-note{
+    margin:10px 16px 0;background:#FDF3E3;border-radius:12px;padding:11px 14px;
+    font-size:12.5px;color:#8a4a1f;font-weight:700;line-height:1.5;
+  }
+
+  .error-msg{color:#b91c1c;font-size:12.5px;font-weight:700;text-align:center;margin:8px 16px 0;display:none;}
+
+  .progress-bar{padding:10px 20px;background:#fff;border-bottom:1px solid var(--line);}
+  .progress-track{background:#EEF0F3;border-radius:999px;height:8px;overflow:hidden;}
+  .progress-fill{background:var(--coral);height:100%;transition:width .3s;}
+  .progress-label{text-align:center;font-size:11.5px;color:var(--muted);font-weight:700;margin-top:6px;}
+
+  .q-card{padding:22px 20px 10px;}
+  .q-num{display:inline-block;background:var(--navy);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px;}
+  .q-text{font-size:15.5px;font-weight:800;color:var(--ink);line-height:1.55;margin-bottom:16px;}
+
+  .opt-btn{
+    display:block;width:100%;text-align:left;background:#fff;border:1.8px solid #e5e7eb;
+    border-radius:12px;padding:13px 15px;margin-bottom:10px;font-size:13.5px;color:#374151;
+    font-family:inherit;cursor:pointer;line-height:1.5;
+  }
+  .opt-btn:last-child{margin-bottom:0;}
+  .opt-btn.selected{background:#FFF0EA;border-color:var(--coral);color:#7a2e18;font-weight:700;}
+
+  .btn-row{display:flex;gap:10px;padding:16px 20px 0;}
+  .btn{flex:1;border:none;border-radius:14px;padding:15px 8px;font-size:15px;font-weight:900;cursor:pointer;}
+  .btn.primary{background:var(--coral);color:#fff;}
+  .btn.ghost{background:#EEF0F3;color:#4b5563;flex:0 0 90px;}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  .done-screen{display:none;padding:26px 20px 10px;text-align:center;}
+  .done-screen.show{display:block;}
+  .score-badge{
+    width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--coral),#c2410c);
+    margin:0 auto 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;
+    box-shadow:0 10px 30px rgba(255,107,74,0.35);
+  }
+  .score-badge .n{font-family:'Black Han Sans', sans-serif;font-size:38px;line-height:1;}
+  .score-badge .d{font-size:12px;font-weight:700;margin-top:2px;}
+  .done-title{font-size:20px;font-weight:900;color:var(--navy);margin:0 0 8px;}
+  .done-sub{font-size:13px;color:var(--muted);margin:0 0 20px;}
+
+  .review-block{text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+  .review-block .rq{font-size:12.5px;font-weight:800;color:var(--ink);margin:0 0 6px;}
+  .review-block .ra{font-size:12px;margin:0;}
+  .review-block .ra.correct{color:var(--mint);font-weight:700;}
+  .review-block .ra.wrong{color:#b91c1c;font-weight:700;}
+  .review-block .exp{font-size:11.5px;color:var(--muted);margin-top:4px;}
+
+  .pick-box{background:var(--navy); color:#fff; border-radius:14px; padding:18px 18px 20px; margin-top:16px; text-align:left;}
+  .pick-box .label{color:var(--mint);font-weight:900;font-size:12px;letter-spacing:.04em;margin-bottom:8px;display:block;}
+  .pick-box .txt{font-size:13.5px;line-height:1.6;color:#e6ecf6;margin:0;}
+
+  .restart-btn{
+    width:100%;margin-top:16px;background:transparent;border:1.6px solid var(--line);
+    color:var(--muted);border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="startWrap">
+  <div class="hero">
+    <p class="eyebrow">회복탄력성 동아리 「다시봄」</p>
+    <h1>영화 《원더》 도전 퀴즈</h1>
+    <p class="sub">비합리적 신념, 영화 속에서 찾아보기</p>
+  </div>
+  <div class="id-card">
+    <div class="id-row">
+      <div class="id-field">
+        <label for="grpNo">모둠 번호</label>
+        <input type="text" id="grpNo" inputmode="numeric" placeholder="예: 3">
+      </div>
+      <div class="id-field">
+        <label for="stuName">이름</label>
+        <input type="text" id="stuName" placeholder="이름 입력">
+      </div>
+    </div>
+  </div>
+  <div class="rule-box">
+    🎬 영화 속 장면에서 인물이 그렇게 생각했다면, 어떤 비합리적 신념 패턴인지 골라보세요. 5문제 모두 우리가 배운 개념 그대로예요!
+  </div>
+  <div class="prize-note">
+    🏆 내 점수가 우리 모둠 점수에 그대로 합산돼요 — 다음 공개수업 때 우리 모둠이 얼마나 열심히 하느냐에 따라 선물이 걸려있어요!
+  </div>
+  <p class="error-msg" id="startError">이름을 입력해주세요.</p>
+  <div style="padding:16px 16px 0;">
+    <button class="btn primary" style="width:100%;" onclick="startQuiz()">시작하기</button>
+  </div>
+</div>
+
+<div class="wrap hidden" id="quizWrap">
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <p class="progress-label" id="progressLabel">1 / 5</p>
+  </div>
+  <div id="qStage"></div>
+</div>
+
+<div class="wrap done-screen" id="doneScreen">
+  <div class="score-badge">
+    <span class="n" id="scoreNum">0</span>
+    <span class="d">/ 5 정답</span>
+  </div>
+  <p class="done-title" id="doneTitle">수고했어요!</p>
+  <p class="done-sub" id="doneSub">우리 모둠 점수에 반영됐어요</p>
+
+  <div id="reviewList"></div>
+
+  <div class="pick-box">
+    <span class="label">🏆 모둠 파워 업!</span>
+    <p class="txt">이 점수가 우리 모둠 총점에 더해졌어요. 다음 공개수업 때 우리 모둠이 얼마나 협력하고 집중하느냐에 따라 선물이 정해져요 — 모둠 친구들한테도 알려주세요!</p>
+  </div>
+
+  <button class="restart-btn" onclick="location.reload()">처음부터 다시하기</button>
+</div>
+
+<script>
+  const QUESTIONS = [
+    {
+      prompt: "어기가 처음 학교에 가는 날, 복도에서 아이들이 자기를 쳐다보며 수군거리는 걸 느낍니다. 이때 어기가 '아무도 날 안 좋아할 거야, 오늘 하루가 완전히 망했어'라고 생각했다면?",
+      options: [
+        "파국화 — 상황을 실제보다 훨씬 심각한 재앙으로 확대",
+        "긍정 격하 — 잘된 일을 깎아내림",
+        "개인화 — 내 탓이 아닌 일까지 내 탓으로 돌림",
+        "정신적 필터 — 좋은 것만 무시하고 나쁜 것만 봄",
+      ],
+      correct: 0,
+      explanation: "아직 무슨 일이 벌어질지 모르는데 '완전히 망했다'고 미리 결론 내리는 건 파국화예요.",
+    },
+    {
+      prompt: "반 친구 줄리안이 어기를 놀리고 나쁜 소문을 냅니다. 이때 어기가 '나는 원래 이렇게 생겨서 평생 놀림받을 운명이야'라고 생각했다면?",
+      options: [
+        "과잉일반화 — 한두 번의 일을 '항상 그렇다'로 확장",
+        "낙인찍기 — 한 가지 사실로 나 전체에 부정적 이름표를 붙임",
+        "마인드 리딩 — 남의 생각을 확인 없이 단정",
+        "감정적 추론 — 느낌을 곧 사실로 받아들임",
+      ],
+      correct: 1,
+      explanation: "줄리안 한 명의 행동을 근거로 '평생 운명'까지 규정해버리는 건 낙인찍기예요.",
+    },
+    {
+      prompt: "어기의 누나 비아는 부모님이 온통 어기한테만 신경 쓰는 것 같다고 느낍니다. '부모님은 나한텐 관심도 없어, 항상 그래왔고 앞으로도 계속 그럴 거야'라고 생각했다면?",
+      options: [
+        "당위적 사고 — '반드시 이래야 한다'는 엄격한 기준",
+        "과잉일반화 — '항상', '앞으로도 계속'으로 시간을 확장",
+        "학습된 무기력 — 뭘 해도 소용없다고 느낌",
+        "긍정 격하 — 좋은 일도 깎아내림",
+      ],
+      correct: 1,
+      explanation: "지금 이 순간 서운한 감정을 '항상', '앞으로도 계속'으로 시간 전체에 확장하는 건 과잉일반화예요.",
+    },
+    {
+      prompt: "서머라는 친구가 먼저 다가와 어기 옆에 앉아줍니다. 이때 어기가 '쟤도 그냥 나를 불쌍하게 여겨서 앉아준 걸 거야, 진짜로 친구가 되고 싶은 건 아닐 거야'라고 생각했다면?",
+      options: [
+        "마인드 리딩 — 상대방 생각을 확인 없이 부정적으로 단정",
+        "이분법적 사고 — 전부 아니면 전무로 판단",
+        "개인화 — 내 탓으로 돌림",
+        "정신적 필터 — 나쁜 것만 봄",
+      ],
+      correct: 0,
+      explanation: "서머의 진짜 마음을 확인해본 적 없이 '불쌍해서 그런 걸 거야'라고 단정짓는 건 마인드 리딩이에요.",
+    },
+    {
+      prompt: "1년이 지나 어기가 학교에서 상을 받게 됩니다. 이때 어기가 '이건 내 실력 때문이 아니라 그냥 사람들이 날 불쌍하게 여겨서 준 걸 거야'라고 생각했다면?",
+      options: [
+        "긍정 격하 — 잘된 일이 있어도 '내 덕이 아니다'라며 깎아내림",
+        "파국화 — 상황을 실제보다 심각하게 봄",
+        "당위적 사고 — 반드시 그래야 한다는 기준",
+        "학습된 무기력 — 뭘 해도 안 될 것 같음",
+      ],
+      correct: 0,
+      explanation: "정말 잘된 일이 생겼는데도 '내 실력이 아니다'라고 스스로 깎아내리는 건 긍정 격하예요.",
+    },
+  ];
+
+  let idx = 0;
+  let selected = null;
+  const answers = [];
+  let stuNameG = "", grpNoG = "";
+
+  function startQuiz(){
+    stuNameG = document.getElementById('stuName').value.trim();
+    grpNoG = document.getElementById('grpNo').value.trim();
+    const err = document.getElementById('startError');
+    if(!stuNameG){
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    document.getElementById('startWrap').classList.add('hidden');
+    document.getElementById('quizWrap').classList.remove('hidden');
+    idx = 0;
+    renderQ();
+  }
+
+  function renderQ(){
+    const q = QUESTIONS[idx];
+    selected = null;
+    document.getElementById('progressFill').style.width = (idx / QUESTIONS.length * 100) + '%';
+    document.getElementById('progressLabel').textContent = `${idx+1} / ${QUESTIONS.length}`;
+
+    const stage = document.getElementById('qStage');
+    stage.innerHTML = `
+      <div class="q-card">
+        <span class="q-num">문제 ${idx+1}</span>
+        <p class="q-text">${q.prompt}</p>
+        <div id="optList">
+          ${q.options.map((o, i) => `<button type="button" class="opt-btn" data-i="${i}" onclick="selectOpt(${i})">${o}</button>`).join('')}
+        </div>
+      </div>
+      <div class="btn-row">
+        ${idx > 0 ? '<button class="btn ghost" onclick="goBack()">이전</button>' : ''}
+        <button class="btn primary" id="nextBtn" onclick="goNext()" disabled>${idx === QUESTIONS.length - 1 ? '제출하기' : '다음'}</button>
+      </div>
+    `;
+  }
+
+  function selectOpt(i){
+    selected = i;
+    document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelector(`.opt-btn[data-i="${i}"]`).classList.add('selected');
+    document.getElementById('nextBtn').disabled = false;
+  }
+
+  function goBack(){
+    idx--;
+    renderQ();
+    if (answers[idx] !== undefined) {
+      selectOpt(answers[idx]);
+    }
+  }
+
+  function goNext(){
+    answers[idx] = selected;
+    if (idx === QUESTIONS.length - 1) {
+      finishQuiz();
+    } else {
+      idx++;
+      renderQ();
+    }
+  }
+
+  function finishQuiz(){
+    document.getElementById('quizWrap').classList.add('hidden');
+    let score = 0;
+    QUESTIONS.forEach((q, i) => { if (answers[i] === q.correct) score++; });
+
+    document.getElementById('scoreNum').textContent = score;
+    const titles = ["다시 도전해봐요!", "조금만 더!", "잘했어요!", "훌륭해요!", "완벽해요! 🎉"];
+    document.getElementById('doneTitle').textContent = titles[score];
+
+    const reviewList = document.getElementById('reviewList');
+    reviewList.innerHTML = '';
+    QUESTIONS.forEach((q, i) => {
+      const isCorrect = answers[i] === q.correct;
+      const block = document.createElement('div');
+      block.className = 'review-block';
+      block.innerHTML = `
+        <p class="rq">문제 ${i+1}</p>
+        <p class="ra ${isCorrect ? 'correct' : 'wrong'}">${isCorrect ? '✓ 정답' : '✗ 오답'} — 정답: ${q.options[q.correct]}</p>
+        <p class="exp">${q.explanation}</p>
+      `;
+      reviewList.appendChild(block);
+    });
+
+    document.getElementById('doneScreen').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    submitScore(score);
+  }
+
+  function submitScore(score){
+    // ⚠️ 아래 URL을 본인의 Google Apps Script 웹앱 배포 URL로 교체하세요.
+    const SHEET_ENDPOINT = "https://script.google.com/macros/s/여기에_배포된_스크립트_ID/exec";
+    const params = new URLSearchParams({
+      timestamp: new Date().toISOString(),
+      group: grpNoG,
+      name: stuNameG,
+      score: score,
+    });
+    fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" }).catch(() => {});
+  }
+</script>
+
+</body>
+</html>

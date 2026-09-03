@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모둠 순위 — 원더 퀴즈 · POGOK WELL+</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A; --amber:#FFB627;
+    --ink:#1B2436; --muted:#6b7280;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:#0C1E3D;color:#fff;min-height:100vh;}
+
+  .toolbar{
+    text-align:center;padding:14px;background:#122A52;display:flex;gap:10px;justify-content:center;
+    position:sticky;top:0;z-index:10;
+  }
+  .toolbar button{background:#FF6B4A;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;}
+
+  .hero{padding:34px 20px 18px;text-align:center;}
+  .hero .eyebrow{color:var(--mint);font-weight:700;font-size:13px;letter-spacing:.1em;margin:0 0 10px;}
+  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:34px;margin:0 0 8px;}
+  .hero .sub{color:#B9C6E0;font-size:14px;margin:0;}
+
+  .prize-banner{
+    max-width:700px;margin:18px auto 0;background:linear-gradient(135deg,#FFB627,#FF6B4A);
+    border-radius:14px;padding:14px 20px;font-size:14px;font-weight:800;text-align:center;
+  }
+
+  .board{max-width:800px;margin:26px auto 0;padding:0 20px 60px;}
+
+  .rank-row{
+    display:flex;align-items:center;gap:16px;background:#122A52;border-radius:16px;
+    padding:16px 20px;margin-bottom:14px;animation:pop .4s ease;
+  }
+  @keyframes pop{ from{opacity:0;transform:translateX(-10px);} to{opacity:1;transform:translateX(0);} }
+  .rank-row.gold{background:linear-gradient(90deg,#3d3410,#122A52);border:2px solid var(--amber);}
+  .rank-medal{font-size:32px;flex:0 0 50px;text-align:center;}
+  .rank-info{flex:1;}
+  .rank-info .gname{font-family:'Black Han Sans',sans-serif;font-size:20px;margin:0 0 4px;}
+  .rank-bar-track{background:rgba(255,255,255,0.12);border-radius:999px;height:10px;overflow:hidden;}
+  .rank-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--mint),var(--teal));transition:width .6s;}
+  .rank-row.gold .rank-bar-fill{background:linear-gradient(90deg,var(--amber),var(--coral));}
+  .rank-score{flex:0 0 90px;text-align:right;}
+  .rank-score .n{font-family:'Black Han Sans',sans-serif;font-size:26px;}
+  .rank-score .d{font-size:10.5px;color:#B9C6E0;}
+
+  .loading{text-align:center;padding:80px 20px;color:#B9C6E0;font-size:15px;}
+  .footer{text-align:center;padding:24px;color:#7A8BAE;font-size:11.5px;}
+</style>
+</head>
+<body>
+
+<div class="toolbar"><button onclick="loadData()">🔄 새로고침</button></div>
+
+<div class="hero">
+  <p class="eyebrow">POGOK WELL+ · 회복탄력성 동아리 「다시봄」</p>
+  <h1>🏆 모둠 순위</h1>
+  <p class="sub">영화 《원더》 도전 퀴즈 — 실시간 집계</p>
+</div>
+
+<div class="prize-banner">🎁 다음 공개수업 때, 지금 1등 모둠에게만 특별한 게 기다리고 있어요!</div>
+
+<div class="board" id="board">
+  <div class="loading" id="loadingMsg">데이터를 불러오는 중...</div>
+</div>
+
+<div class="footer">포곡중학교 보건실 · POGOK WELL+</div>
+
+<script>
+  // ⚠️ wonder-quiz.html과 동일한 Apps Script 배포 URL로 설정하세요.
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/여기에_배포된_스크립트_ID/exec";
+
+  function loadData(){
+    document.getElementById('board').innerHTML = '<div class="loading">데이터를 불러오는 중...</div>';
+    const script = document.createElement('script');
+    script.src = SHEET_ENDPOINT + "?callback=renderBoard&t=" + Date.now();
+    script.onerror = showLoadError;
+    document.body.appendChild(script);
+
+    window._boardLoaded = false;
+    setTimeout(() => {
+      script.remove();
+      if (!window._boardLoaded) showLoadError();
+    }, 6000);
+  }
+
+  function showLoadError(){
+    document.getElementById('board').innerHTML =
+      '<div class="loading">⚠️ 데이터를 불러오지 못했어요.<br><br>Apps Script 배포 및 SHEET_ENDPOINT 주소를 확인한 뒤 새로고침을 눌러주세요.</div>';
+  }
+
+  function renderBoard(data){
+    window._boardLoaded = true;
+    const rows = data.rows || [];
+    if (rows.length === 0) {
+      document.getElementById('board').innerHTML = '<div class="loading">아직 제출된 점수가 없어요. 학생들이 퀴즈를 풀면 여기 자동으로 나타나요!</div>';
+      return;
+    }
+
+    // 모둠별 합산
+    const groups = {};
+    rows.forEach(r => {
+      const g = r.group || '미지정';
+      const s = parseInt(r.score, 10) || 0;
+      if (!groups[g]) groups[g] = { total: 0, count: 0 };
+      groups[g].total += s;
+      groups[g].count += 1;
+    });
+
+    const ranked = Object.keys(groups).map(g => ({
+      group: g, total: groups[g].total, count: groups[g].count,
+    })).sort((a, b) => b.total - a.total);
+
+    const maxTotal = ranked[0].total || 1;
+    const medals = ['🥇','🥈','🥉'];
+
+    const board = document.getElementById('board');
+    board.innerHTML = '';
+    ranked.forEach((r, i) => {
+      const pct = Math.round(r.total / maxTotal * 100);
+      const row = document.createElement('div');
+      row.className = 'rank-row' + (i === 0 ? ' gold' : '');
+      row.innerHTML = `
+        <div class="rank-medal">${medals[i] || (i+1) + '위'}</div>
+        <div class="rank-info">
+          <p class="gname">${escapeHtml(r.group)}모둠</p>
+          <div class="rank-bar-track"><div class="rank-bar-fill" style="width:${pct}%"></div></div>
+        </div>
+        <div class="rank-score">
+          <div class="n">${r.total}</div>
+          <div class="d">총점 · ${r.count}명 참여</div>
+        </div>
+      `;
+      board.appendChild(row);
+    });
+  }
+
+  function escapeHtml(s){
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  window.onload = loadData;
+</script>
+
+</body>
+</html>
