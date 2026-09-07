@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마인드 디버깅 센터 — 다시봄</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A; --amber:#FFB627;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:40px;}
+
+  .wrap{max-width:480px;margin:0 auto;}
+  .hidden{display:none !important;}
+
+  .hero{padding:22px 20px 16px;text-align:center;background:var(--navy);}
+  .hero .eyebrow{color:var(--mint);font-weight:700;font-size:12px;letter-spacing:.08em;margin:0 0 6px;}
+  .hero h1{font-size:20px;margin:0 0 4px;color:#fff;}
+  .hero .sub{color:#B9C6E0;font-size:12.5px;margin:0;}
+
+  .tabbar{display:flex;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;}
+  .tab{flex:1;text-align:center;padding:13px 4px;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;}
+  .tab.active{color:var(--coral);border-bottom-color:var(--coral);}
+
+  .screen{display:none;padding:16px;}
+  .screen.active{display:block;}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+  .card label{display:block;font-size:12.5px;font-weight:700;color:#374151;margin-bottom:6px;}
+  .id-row{display:flex;gap:10px;}
+  .id-field{flex:1;}
+  input[type=text], textarea{
+    width:100%;border:1.6px solid #d8dce4;border-radius:10px;padding:10px 12px;font-size:14px;
+    font-family:inherit;background:#fbfbfa;
+  }
+  textarea{min-height:60px;resize:vertical;}
+
+  .field-block{margin-bottom:14px;}
+  .field-block:last-child{margin-bottom:0;}
+  .field-tag{display:inline-block;font-size:11px;font-weight:900;color:#fff;padding:3px 9px;border-radius:6px;margin-bottom:6px;}
+
+  .pattern-opt{
+    display:block;width:100%;text-align:left;background:#fff;border:1.8px solid #e5e7eb;border-radius:10px;
+    padding:10px 12px;margin-bottom:8px;font-size:13px;color:#374151;cursor:pointer;font-family:inherit;
+  }
+  .pattern-opt.selected{background:#FFF0EA;border-color:var(--coral);color:#7a2e18;font-weight:700;}
+
+  .btn{width:100%;border:none;border-radius:14px;padding:15px 8px;font-size:15px;font-weight:900;cursor:pointer;color:#fff;}
+  .btn.coral{background:var(--coral);}
+  .btn.teal{background:var(--teal);}
+  .btn.navy{background:var(--navy);}
+  .btn.small{padding:11px;font-size:13px;background:#EEF0F3;color:#4b5563;margin-bottom:12px;}
+
+  .error-msg, .info-msg{font-size:12.5px;font-weight:700;text-align:center;margin:8px 4px 0;display:none;}
+  .error-msg{color:#b91c1c;}
+  .info-msg{color:var(--teal);}
+
+  .done-box{background:#EAF3FB;border-radius:12px;padding:16px;text-align:center;font-size:13.5px;color:#2b3b52;}
+
+  .assign-note{background:#FDF3E3;border-radius:12px;padding:12px 14px;font-size:12.5px;color:#8a4a1f;font-weight:700;margin-bottom:14px;text-align:center;}
+
+  .help-card{background:#fff;border:1.6px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
+  .help-card .hn{font-size:12px;font-weight:800;color:var(--muted);margin:0 0 8px;}
+  .help-card .ca{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 6px;}
+  .help-card .cb{font-size:12.5px;color:#374151;margin:0 0 4px;}
+  .help-card .cbp{display:inline-block;background:#FFE7DE;color:var(--coral);font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;margin-bottom:10px;}
+
+  .result-block{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;}
+  .result-block .rl{font-size:11px;font-weight:900;color:var(--muted);margin:0 0 4px;text-transform:uppercase;}
+  .result-block .rv{font-size:13.5px;color:var(--ink);margin:0;}
+  .d-item{background:#F5F6F8;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px;color:#374151;}
+  .d-item .dby{font-size:11px;color:var(--muted);font-weight:700;margin-top:4px;}
+
+  .loading{text-align:center;padding:40px 20px;color:var(--muted);font-size:13.5px;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <p class="eyebrow">회복탄력성 동아리 「다시봄」</p>
+  <h1>🖥️ 마인드 디버깅 센터</h1>
+  <p class="sub">내 마음속 버그를 신고하고, 친구들에게 패치를 받아보세요</p>
+</div>
+
+<div class="tabbar">
+  <div class="tab active" data-tab="submit" onclick="switchTab('submit')">① 버그 신고</div>
+  <div class="tab" data-tab="help" onclick="switchTab('help')">② 버그 수정하기</div>
+  <div class="tab" data-tab="result" onclick="switchTab('result')">③ 패치 확인</div>
+</div>
+
+<!-- ① 내 고민 등록 -->
+<div class="screen active" id="screen-submit">
+  <div class="card">
+    <div class="id-row" style="margin-bottom:14px;">
+      <div class="id-field"><label>모둠 번호</label><input type="text" id="s_group" inputmode="numeric" placeholder="1~5"></div>
+      <div class="id-field"><label>내 좌석번호</label><input type="text" id="s_seat" inputmode="numeric" placeholder="예: 3"></div>
+    </div>
+    <div class="id-field" style="margin-bottom:14px;"><label>이름 (선택)</label><input type="text" id="s_name" placeholder="이름 입력"></div>
+
+    <div class="field-block">
+      <span class="field-tag" style="background:#94A3B8;">🐛 버그 발생 상황 (A)</span>
+      <textarea id="s_a" placeholder="최근 있었던 가벼운 고민 (시험, 친구, 게임 정도로!)"></textarea>
+    </div>
+    <div class="field-block">
+      <span class="field-tag" style="background:#FF6B4A;">⚠️ 에러 메시지 (B) — 자유롭게</span>
+      <textarea id="s_b" placeholder="그때 머릿속에 스친 생각을 그대로 적어보세요"></textarea>
+    </div>
+    <div class="field-block">
+      <span class="field-tag" style="background:#FF6B4A;">⚠️ 에러 코드 분류 (B) — 제일 비슷한 걸 고르기</span>
+      <div id="patternOpts">
+        <button type="button" class="pattern-opt" data-p="파국화">"다 망했다, 큰일났다" 느낌 — 파국화</button>
+        <button type="button" class="pattern-opt" data-p="낙인찍기">"나는 원래 이래" 느낌 — 낙인찍기</button>
+        <button type="button" class="pattern-opt" data-p="과잉일반화">"맨날 이래, 항상 이래" 느낌 — 과잉일반화</button>
+        <button type="button" class="pattern-opt" data-p="마인드리딩">"쟤 분명 이렇게 생각할 거야" 느낌 — 마인드리딩</button>
+        <button type="button" class="pattern-opt" data-p="긍정격하">"그냥 운이었어" 느낌 — 긍정격하</button>
+      </div>
+    </div>
+    <div class="field-block">
+      <span class="field-tag" style="background:#FFB627;">💥 시스템 반응 (C)</span>
+      <textarea id="s_c" placeholder="그 생각 때문에 든 감정이나 행동"></textarea>
+    </div>
+  </div>
+  <button class="btn coral" onclick="submitCase()">신고하고 패치 요청하기</button>
+  <p class="error-msg" id="s_error"></p>
+  <div class="done-box hidden" id="s_done">
+    ✅ 버그 신고 완료! 우리 모둠 친구 2명이 곧 패치(D)를 보내줄 거예요.<br>잠시 후 <b>③ 패치 확인</b> 탭에서 확인해보세요.
+  </div>
+</div>
+
+<!-- ② 친구 도와주기 -->
+<div class="screen" id="screen-help">
+  <div class="card">
+    <div class="id-row">
+      <div class="id-field"><label>모둠 번호</label><input type="text" id="h_group" inputmode="numeric" placeholder="1~5"></div>
+      <div class="id-field"><label>내 좌석번호</label><input type="text" id="h_seat" inputmode="numeric" placeholder="예: 3"></div>
+    </div>
+  </div>
+  <button class="btn small" onclick="loadAssignments()">🔍 내가 수정할 버그 확인하기</button>
+  <div id="assignBox"></div>
+</div>
+
+<!-- ③ 내 처방전 보기 -->
+<div class="screen" id="screen-result">
+  <div class="card">
+    <div class="id-row">
+      <div class="id-field"><label>모둠 번호</label><input type="text" id="r_group" inputmode="numeric" placeholder="1~5"></div>
+      <div class="id-field"><label>내 좌석번호</label><input type="text" id="r_seat" inputmode="numeric" placeholder="예: 3"></div>
+    </div>
+  </div>
+  <button class="btn small" onclick="loadMyResult()">🔄 내 패치 상태 불러오기</button>
+  <div id="myResultBox"></div>
+</div>
+
+<script>
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbyr1nhDdRxC69UcgnJCl9VcBdhhHVwMUbt-U-wPsDl95VswuAVpdawwcWcGRuPa3kEF/exec";
+
+  // 모둠별 인원수 (1~4모둠=5명, 5모둠=4명)
+  const GROUP_SIZES = { "1": 5, "2": 5, "3": 5, "4": 5, "5": 4 };
+
+  function switchTab(name){
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+  }
+
+  let selectedPattern = "";
+  document.querySelectorAll('.pattern-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedPattern = btn.dataset.p;
+      document.querySelectorAll('.pattern-opt').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  function getTargetSeats(group, seat){
+    const n = GROUP_SIZES[String(group)] || 5;
+    const s = parseInt(seat, 10);
+    const t1 = (s % n) + 1;
+    const t2 = ((s + 1) % n) + 1;
+    return [t1, t2];
+  }
+
+  function jsonp(params, callbackName){
+    return new Promise((resolve, reject) => {
+      window[callbackName] = (data) => { resolve(data); delete window[callbackName]; script.remove(); };
+      const script = document.createElement('script');
+      const qs = new URLSearchParams({ ...params, callback: callbackName }).toString();
+      script.src = SHEET_ENDPOINT + "?" + qs;
+      script.onerror = () => { reject(new Error("load failed")); script.remove(); };
+      document.body.appendChild(script);
+      setTimeout(() => reject(new Error("timeout")), 7000);
+    });
+  }
+
+  // ---- ① 등록 ----
+  function submitCase(){
+    const group = document.getElementById('s_group').value.trim();
+    const seat = document.getElementById('s_seat').value.trim();
+    const name = document.getElementById('s_name').value.trim();
+    const a = document.getElementById('s_a').value.trim();
+    const b = document.getElementById('s_b').value.trim();
+    const c = document.getElementById('s_c').value.trim();
+    const err = document.getElementById('s_error');
+    if(!group || !seat || !a || !b || !selectedPattern || !c){
+      err.textContent = "모둠·좌석번호와 A·B·패턴선택·C를 모두 입력해주세요.";
+      err.style.display = "block";
+      return;
+    }
+    err.style.display = "none";
+    const params = new URLSearchParams({
+      action: "submit", timestamp: new Date().toISOString(),
+      group, seat, name, a, b, bpattern: selectedPattern, c
+    });
+    fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
+      .then(() => { document.getElementById('s_done').classList.remove('hidden'); })
+      .catch(() => { err.textContent = "제출에 실패했어요. 다시 시도해주세요."; err.style.display = "block"; });
+  }
+
+  // ---- ② 친구 도와주기 (좌석 기반 자동 배정) ----
+  function loadAssignments(){
+    const group = document.getElementById('h_group').value.trim();
+    const seat = document.getElementById('h_seat').value.trim();
+    const box = document.getElementById('assignBox');
+    if(!group || !seat){
+      box.innerHTML = '<p class="loading">모둠 번호와 좌석번호를 먼저 입력해주세요.</p>';
+      return;
+    }
+    const targets = getTargetSeats(group, seat);
+    box.innerHTML = `<div class="assign-note">🎯 당신은 <b>${targets[0]}번</b>과 <b>${targets[1]}번</b>의 버그 수정 담당자예요!</div><p class="loading">불러오는 중...</p>`;
+
+    Promise.all(targets.map(t => jsonp({ action: "getbyseat", group, seat: t }, "cb_g_" + t + "_" + Date.now().toString(36))))
+      .then(results => {
+        box.innerHTML = `<div class="assign-note">🎯 당신은 <b>${targets[0]}번</b>과 <b>${targets[1]}번</b>의 버그 수정 담당자예요!</div>`;
+        results.forEach((data, idx) => {
+          const targetSeat = targets[idx];
+          if(!data.found){
+            box.innerHTML += `<div class="help-card"><p class="hn">${targetSeat}번 친구</p><p class="loading" style="padding:10px 0;">아직 등록 안 했어요. 잠시 후 다시 불러와보세요.</p></div>`;
+            return;
+          }
+          const div = document.createElement('div');
+          div.className = 'help-card';
+          div.innerHTML = `
+            <p class="hn">${targetSeat}번 버그 리포트${data.name ? ' · ' + escapeHtml(data.name) : ''}</p>
+            <p class="ca">🅰️ ${escapeHtml(data.a)}</p>
+            <p class="cb">🅱️ ${escapeHtml(data.b)}</p>
+            <span class="cbp">${escapeHtml(data.bpattern || '')}</span>
+            <textarea id="d_input_${targetSeat}" placeholder="이 버그, 어떻게 패치(수정)해줄 수 있을까요?"></textarea>
+            <button class="btn teal" style="margin-top:10px;" onclick="submitD(${targetSeat})">패치 코드 전송하기</button>
+            <p class="error-msg" id="d_error_${targetSeat}"></p>
+          `;
+          box.appendChild(div);
+        });
+      })
+      .catch(() => { box.innerHTML += '<p class="loading">⚠️ 불러오지 못했어요. 다시 시도해주세요.</p>'; });
+  }
+
+  function submitD(targetSeat){
+    const group = document.getElementById('h_group').value.trim();
+    const mySeat = document.getElementById('h_seat').value.trim();
+    const d = document.getElementById('d_input_' + targetSeat).value.trim();
+    const err = document.getElementById('d_error_' + targetSeat);
+    if(!d){
+      err.textContent = "반박 내용을 입력해주세요.";
+      err.style.display = "block";
+      return;
+    }
+    err.style.display = "none";
+    const params = new URLSearchParams({ action: "addD", group, targetSeat, d, bySeat: mySeat });
+    fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
+      .then(() => {
+        const el = document.getElementById('d_input_' + targetSeat);
+        el.disabled = true;
+        el.nextElementSibling.previousElementSibling.textContent = "패치 완료!";
+      })
+      .catch(() => { err.textContent = "제출에 실패했어요. 다시 시도해주세요."; err.style.display = "block"; });
+  }
+
+  // ---- ③ 내 처방전 보기 ----
+  function loadMyResult(){
+    const group = document.getElementById('r_group').value.trim();
+    const seat = document.getElementById('r_seat').value.trim();
+    const box = document.getElementById('myResultBox');
+    if(!group || !seat){
+      box.innerHTML = '<p class="loading">모둠 번호와 좌석번호를 입력해주세요.</p>';
+      return;
+    }
+    box.innerHTML = '<p class="loading">불러오는 중...</p>';
+    jsonp({ action: "myresult", group, seat }, "cb_res_" + Date.now().toString(36))
+      .then(data => {
+        if(!data.found){
+          box.innerHTML = '<p class="loading">아직 등록된 고민이 없어요. ① 탭에서 먼저 등록해주세요.</p>';
+          return;
+        }
+        const r = data.row;
+        let html = '';
+        html += `<div class="result-block"><p class="rl">🐛 버그 발생 상황 (A)</p><p class="rv">${escapeHtml(r.a)}</p></div>`;
+        html += `<div class="result-block"><p class="rl">⚠️ 에러 메시지 (B)</p><p class="rv">${escapeHtml(r.b)} <span style="color:#FF6B4A;font-weight:800;">(${escapeHtml(r.bpattern||'')})</span></p></div>`;
+        html += `<div class="result-block"><p class="rl">💥 시스템 반응 (C)</p><p class="rv">${escapeHtml(r.c)}</p></div>`;
+
+        const ds = [r.d1, r.d2].filter(x => x && String(x).trim());
+        html += `<div class="result-block"><p class="rl">🔧 친구들이 보낸 패치 (D) — ${ds.length}/2</p>`;
+        if(ds.length === 0){
+          html += `<p class="rv" style="color:#9ca3af;">아직 아무도 패치를 안 보냈어요. 잠시 후 다시 불러와보세요!</p>`;
+        } else {
+          [1,2].forEach(i => {
+            if(r['d'+i] && String(r['d'+i]).trim()){
+              html += `<div class="d-item">${escapeHtml(r['d'+i])}<div class="dby">— ${escapeHtml(r['d'+i+'by'] || '익명')}번</div></div>`;
+            }
+          });
+        }
+        html += `</div>`;
+
+        if(r.e && String(r.e).trim()){
+          html += `<div class="result-block" style="border-color:#02C39A;"><p class="rl" style="color:#02C39A;">✅ 업데이트 완료 버전 (E)</p><p class="rv">${escapeHtml(r.e)}</p></div>`;
+        } else {
+          html += `
+            <div class="card">
+              <div class="field-block">
+                <span class="field-tag" style="background:#02C39A;">✅ 업데이트 (E)</span>
+                <textarea id="r_e" placeholder="친구들 패치를 적용하고, 업데이트된 내 마인드를 적어보세요"></textarea>
+              </div>
+              <button class="btn navy" onclick="submitE('${escapeAttr(group)}','${escapeAttr(seat)}')">업데이트 적용하기</button>
+              <p class="error-msg" id="r_error"></p>
+            </div>
+          `;
+        }
+        box.innerHTML = html;
+      })
+      .catch(() => { box.innerHTML = '<p class="loading">⚠️ 불러오지 못했어요. 다시 시도해주세요.</p>'; });
+  }
+
+  function submitE(group, seat){
+    const e = document.getElementById('r_e').value.trim();
+    const err = document.getElementById('r_error');
+    if(!e){
+      err.textContent = "E를 입력해주세요.";
+      err.style.display = "block";
+      return;
+    }
+    const params = new URLSearchParams({ action: "submitE", group, seat, e });
+    fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
+      .then(() => loadMyResult())
+      .catch(() => { err.textContent = "제출에 실패했어요."; err.style.display = "block"; });
+  }
+
+  function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+  function escapeAttr(s){ return (s||'').replace(/'/g, "\\'"); }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마인드 디버깅 센터 — 라이브 대시보드 · POGOK WELL+</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#0C1E3D; --coral:#FF6B4A; --teal:#028090; --mint:#02C39A; --amber:#FFB627; --purple:#8B5CF6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--navy);color:#fff;min-height:100vh;}
+
+  .toolbar{text-align:center;padding:12px;background:#122A52;display:flex;gap:10px;justify-content:center;position:sticky;top:0;z-index:10;}
+  .toolbar button{background:#FF6B4A;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;}
+
+  .hero{padding:26px 20px 16px;text-align:center;}
+  .hero .eyebrow{color:var(--mint);font-weight:700;font-size:12px;letter-spacing:.1em;margin:0 0 8px;}
+  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:28px;margin:0 0 6px;}
+  .hero .sub{color:#B9C6E0;font-size:13px;margin:0;}
+
+  .grid{max-width:1200px;margin:0 auto;padding:10px 24px 50px;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{background:#122A52;border-radius:18px;padding:22px;}
+  .panel h2{font-size:16px;margin:0 0 16px;color:#fff;display:flex;align-items:center;gap:8px;}
+
+  .pie-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;}
+  .pie{width:200px;height:200px;border-radius:50%;flex:0 0 200px;}
+  .legend{flex:1;min-width:160px;}
+  .legend-item{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:13px;}
+  .legend-dot{width:12px;height:12px;border-radius:50%;flex:0 0 12px;}
+  .legend-label{flex:1;color:#e6ecf6;}
+  .legend-count{font-weight:900;color:#fff;}
+
+  .cloud{min-height:280px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px;padding:20px 10px;}
+  .cloud-word{font-weight:900;color:#fff;opacity:.92;line-height:1;}
+
+  .loading{text-align:center;padding:60px 20px;color:#B9C6E0;font-size:14px;grid-column:1/-1;}
+  .footer{text-align:center;padding:20px;color:#7A8BAE;font-size:11.5px;}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="loadData()">🔄 지금 새로고침</button>
+  <button id="autoBtn" onclick="toggleAuto()">⏸️ 자동새로고침 끄기</button>
+</div>
+
+<div class="hero">
+  <p class="eyebrow">POGOK WELL+ · 회복탄력성 동아리 「다시봄」</p>
+  <h1>🖥️ 마인드 디버깅 센터 — 라이브 대시보드</h1>
+  <p class="sub">우리 반이 지금 이 순간 디버깅하고 있는 생각들</p>
+</div>
+
+<div class="grid" id="grid">
+  <div class="loading">데이터를 불러오는 중...</div>
+</div>
+
+<div class="footer">포곡중학교 보건실 · POGOK WELL+ · 공개수업 9/17</div>
+
+<script>
+  // ⚠️ thought-clinic-v2.html과 동일한 Apps Script 배포 URL로 설정하세요.
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbyr1nhDdRxC69UcgnJCl9VcBdhhHVwMUbt-U-wPsDl95VswuAVpdawwcWcGRuPa3kEF/exec";
+
+  const PATTERN_COLORS = {
+    "파국화": "#FF6B4A", "낙인찍기": "#8B5CF6", "과잉일반화": "#028090",
+    "마인드리딩": "#3B82F6", "긍정격하": "#02C39A"
+  };
+
+  // 조사/불용어 (워드클라우드에서 제외)
+  const STOPWORDS = new Set(["그리고","근데","그냥","이제","진짜","너무","정말","그래서","하지만","아니","그니까","이거","저거","그거","것","수","때","걸","게","좀","다","더","안","못","이제는","그런","이런","저런"]);
+
+  function loadData(){
+    document.getElementById('grid').innerHTML = '<div class="loading">데이터를 불러오는 중...</div>';
+    const script = document.createElement('script');
+    script.src = SHEET_ENDPOINT + "?action=alldata&callback=renderDashboard&t=" + Date.now();
+    script.onerror = showError;
+    document.body.appendChild(script);
+    window._loaded = false;
+    setTimeout(() => { script.remove(); if(!window._loaded) showError(); }, 6000);
+  }
+
+  function showError(){
+    document.getElementById('grid').innerHTML = '<div class="loading">⚠️ 데이터를 불러오지 못했어요. Apps Script 배포와 주소를 확인한 뒤 새로고침 해주세요.</div>';
+  }
+
+  function renderDashboard(data){
+    window._loaded = true;
+    const rows = data.rows || [];
+    renderPie(rows);
+    renderCloud(rows);
+  }
+
+  function renderPie(rows){
+    const counts = {};
+    rows.forEach(r => { if(r.bpattern) counts[r.bpattern] = (counts[r.bpattern]||0) + 1; });
+    const total = Object.values(counts).reduce((a,b)=>a+b, 0);
+
+    const grid = document.getElementById('grid');
+    let panel = document.getElementById('piePanel');
+    if(!panel){
+      panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.id = 'piePanel';
+      grid.innerHTML = '';
+      grid.appendChild(panel);
+    }
+
+    if(total === 0){
+      panel.innerHTML = '<h2>📊 비합리적 신념 분포도</h2><p style="color:#9fb0d0;text-align:center;padding:40px 0;">아직 등록된 고민이 없어요</p>';
+      return;
+    }
+
+    // conic-gradient로 파이차트 그리기
+    let acc = 0;
+    const stops = [];
+    const legendHtml = [];
+    Object.keys(counts).forEach(key => {
+      const val = counts[key];
+      const pct = val / total * 100;
+      const color = PATTERN_COLORS[key] || "#94A3B8";
+      stops.push(`${color} ${acc}% ${acc+pct}%`);
+      acc += pct;
+      legendHtml.push(`
+        <div class="legend-item">
+          <span class="legend-dot" style="background:${color}"></span>
+          <span class="legend-label">${escapeHtml(key)}</span>
+          <span class="legend-count">${val}명</span>
+        </div>
+      `);
+    });
+
+    panel.innerHTML = `
+      <h2>📊 비합리적 신념 분포도 (총 ${total}명)</h2>
+      <div class="pie-wrap">
+        <div class="pie" style="background:conic-gradient(${stops.join(',')})"></div>
+        <div class="legend">${legendHtml.join('')}</div>
+      </div>
+    `;
+  }
+
+  function renderCloud(rows){
+    const freq = {};
+    rows.forEach(r => {
+      [r.d1, r.d2].forEach(text => {
+        if(!text) return;
+        const words = String(text).split(/[\s,.!?~"'()]+/).filter(w => w.length >= 2 && !STOPWORDS.has(w));
+        words.forEach(w => { freq[w] = (freq[w]||0) + 1; });
+      });
+    });
+
+    const grid = document.getElementById('grid');
+    let panel = document.getElementById('cloudPanel');
+    if(!panel){
+      panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.id = 'cloudPanel';
+      grid.appendChild(panel);
+    }
+
+    const entries = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0, 30);
+    if(entries.length === 0){
+      panel.innerHTML = '<h2>🔧 실시간 패치 워드클라우드</h2><p style="color:#9fb0d0;text-align:center;padding:40px 0;">아직 패치가 하나도 없어요</p>';
+      return;
+    }
+
+    const maxCount = entries[0][1];
+    const colors = ["#FF6B4A","#02C39A","#3B82F6","#FFB627","#8B5CF6"];
+    const wordsHtml = entries.map(([word, count], i) => {
+      const size = 14 + (count / maxCount) * 34; // 14px ~ 48px
+      const color = colors[i % colors.length];
+      return `<span class="cloud-word" style="font-size:${size}px;color:${color}">#${escapeHtml(word)}</span>`;
+    }).join('');
+
+    panel.innerHTML = `<h2>🔧 실시간 패치 워드클라우드</h2><div class="cloud">${wordsHtml}</div>`;
+  }
+
+  function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+  window.onload = () => { loadData(); startAuto(); };
+
+  let autoTimer = null;
+  function startAuto(){
+    autoTimer = setInterval(loadData, 5000); // 5초마다 자동 새로고침
+  }
+  function toggleAuto(){
+    const btn = document.getElementById('autoBtn');
+    if(autoTimer){
+      clearInterval(autoTimer);
+      autoTimer = null;
+      btn.textContent = "▶️ 자동새로고침 켜기";
+    } else {
+      startAuto();
+      btn.textContent = "⏸️ 자동새로고침 끄기";
+    }
+  }
+</script>
+
+</body>
+</html>
