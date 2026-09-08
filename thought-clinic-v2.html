@@ -81,6 +81,38 @@
   .d-item .dby{font-size:11px;color:var(--muted);font-weight:700;margin-top:4px;}
 
   .loading{text-align:center;padding:40px 20px;color:var(--muted);font-size:13.5px;}
+
+  /* ---- 디버깅 완료 카드 ---- */
+  @keyframes popIn{0%{transform:scale(.85);opacity:0;}100%{transform:scale(1);opacity:1;}}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+  .complete-wrap{animation:popIn .35s ease-out;}
+  .complete-badge{
+    text-align:center;padding:18px 10px 14px;
+  }
+  .complete-badge .emoji{font-size:40px;display:block;margin-bottom:6px;animation:bounce 1.6s ease-in-out infinite;}
+  .complete-badge .title{font-family:'Black Han Sans',sans-serif;font-size:22px;color:var(--navy);margin:0 0 4px;letter-spacing:.01em;}
+  .complete-badge .desc{font-size:12.5px;color:var(--muted);margin:0;}
+
+  .diff-stack{position:relative;padding:4px 0 6px;}
+  .diff-card{border-radius:14px;padding:14px 16px;margin-bottom:0;}
+  .diff-card.before{background:#FFF3EF;border:1.6px solid #FFCFC0;}
+  .diff-card.after{background:#EAFBF5;border:1.6px solid #9EE8CE;}
+  .diff-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:900;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .diff-tag.before{background:var(--coral);color:#fff;}
+  .diff-tag.after{background:var(--mint);color:#fff;}
+  .diff-text{font-size:13.5px;color:var(--ink);margin:0;line-height:1.5;}
+  .diff-text .bp{display:block;margin-top:5px;font-size:11.5px;font-weight:800;color:var(--coral);}
+  .diff-arrow{display:flex;align-items:center;justify-content:center;margin:2px 0;}
+  .diff-arrow span{
+    width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;
+    box-shadow:0 3px 0 #10254a;
+  }
+
+  .complete-stats{display:flex;gap:8px;margin-top:14px;}
+  .stat-chip{flex:1;background:#F5F6F8;border-radius:10px;padding:10px 6px;text-align:center;}
+  .stat-chip .n{font-family:'Black Han Sans',sans-serif;font-size:19px;color:var(--navy);display:block;}
+  .stat-chip .l{font-size:10.5px;color:var(--muted);font-weight:700;}
 </style>
 </head>
 <body>
@@ -98,6 +130,7 @@
 </div>
 
 <div id="identityBanner" class="identity-banner hidden"></div>
+
 
 <!-- ① 내 고민 등록 -->
 <div class="screen active" id="screen-submit">
@@ -163,7 +196,7 @@
 </div>
 
 <script>
-  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbzQwFtfgPqqKzQ8xGmcSy6EeXM9n_aqh4xwYF8PVcmy8JjdAxhC6nfYATK3UQmTMIZe/exec";
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbz7Uyj3oLAC9OfnlMSxD20sz48JsqgKHfWQNMThHy3-x-eGxkjqlJAsaPQGA4NGB-F7/exec";
 
   // 모둠별 인원수 (1~4모둠=5명, 5모둠=4명)
   const GROUP_SIZES = { "1": 5, "2": 5, "3": 5, "4": 5, "5": 4 };
@@ -323,7 +356,30 @@
         html += `</div>`;
 
         if(r.e && String(r.e).trim()){
-          html += `<div class="result-block" style="border-color:#02C39A;"><p class="rl" style="color:#02C39A;">✅ 업데이트 완료 버전 (E)</p><p class="rv">${escapeHtml(r.e)}</p></div>`;
+          html += `
+            <div class="complete-wrap">
+              <div class="complete-badge">
+                <span class="emoji">🎉</span>
+                <p class="title">디버깅 완료!</p>
+                <p class="desc">버그를 신고하고, 패치를 받고, 직접 업데이트까지 마쳤어요</p>
+              </div>
+              <div class="diff-stack">
+                <div class="diff-card before">
+                  <span class="diff-tag before">🐛 BEFORE</span>
+                  <p class="diff-text">${escapeHtml(r.b)}<span class="bp">${escapeHtml(r.bpattern||'')}</span></p>
+                </div>
+                <div class="diff-arrow"><span>↓</span></div>
+                <div class="diff-card after">
+                  <span class="diff-tag after">✅ AFTER</span>
+                  <p class="diff-text">${escapeHtml(r.e)}</p>
+                </div>
+              </div>
+              <div class="complete-stats">
+                <div class="stat-chip"><span class="n">${ds.length}</span><span class="l">받은 패치</span></div>
+                <div class="stat-chip"><span class="n">${escapeHtml(r.bpattern||'-')}</span><span class="l">발견한 신념</span></div>
+              </div>
+            </div>
+          `;
         } else {
           html += `
             <div class="card">
@@ -349,9 +405,11 @@
       err.style.display = "block";
       return;
     }
+    const box = document.getElementById('myResultBox');
+    box.innerHTML = '<p class="loading">제출 처리 중...</p>';
     const params = new URLSearchParams({ action: "submitE", group, seat, updateE: e });
     fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
-      .then(() => loadMyResult())
+      .then(() => { setTimeout(loadMyResult, 1200); })
       .catch(() => { err.textContent = "제출에 실패했어요."; err.style.display = "block"; });
   }
 
