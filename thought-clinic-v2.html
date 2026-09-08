@@ -212,7 +212,7 @@
     err.style.display = "none";
     const params = new URLSearchParams({
       action: "submit", timestamp: new Date().toISOString(),
-      group, seat, name, a, b, bpattern: selectedPattern, c
+      group, seat, name, eventA: a, beliefB: b, bpattern: selectedPattern, resultC: c
     });
     fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
       .then(() => { document.getElementById('s_done').classList.remove('hidden'); })
@@ -268,7 +268,7 @@
       return;
     }
     err.style.display = "none";
-    const params = new URLSearchParams({ action: "addD", group, targetSeat, d, bySeat: mySeat });
+    const params = new URLSearchParams({ action: "addD", group, targetSeat, patchD: d, bySeat: mySeat });
     fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
       .then(() => {
         const el = document.getElementById('d_input_' + targetSeat);
@@ -340,7 +340,7 @@
       err.style.display = "block";
       return;
     }
-    const params = new URLSearchParams({ action: "submitE", group, seat, e });
+    const params = new URLSearchParams({ action: "submitE", group, seat, updateE: e });
     fetch(SHEET_ENDPOINT + "?" + params.toString(), { method: "GET", mode: "no-cors" })
       .then(() => loadMyResult())
       .catch(() => { err.textContent = "제출에 실패했어요."; err.style.display = "block"; });
