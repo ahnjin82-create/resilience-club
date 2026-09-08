@@ -25,6 +25,11 @@
   .tab{flex:1;text-align:center;padding:13px 4px;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;}
   .tab.active{color:var(--coral);border-bottom-color:var(--coral);}
 
+  .identity-banner{
+    background:#1B3A6B;color:#fff;text-align:center;font-size:12.5px;font-weight:800;
+    padding:9px 12px;
+  }
+
   .screen{display:none;padding:16px;}
   .screen.active{display:block;}
 
@@ -64,9 +69,10 @@
 
   .help-card{background:#fff;border:1.6px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
   .help-card .hn{font-size:12px;font-weight:800;color:var(--muted);margin:0 0 8px;}
-  .help-card .ca{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 6px;}
-  .help-card .cb{font-size:12.5px;color:#374151;margin:0 0 4px;}
-  .help-card .cbp{display:inline-block;background:#FFE7DE;color:var(--coral);font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;margin-bottom:10px;}
+  .help-card .ca{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 10px;line-height:1.5;}
+  .help-card .cb{font-size:13px;color:#374151;margin:0 0 8px;line-height:1.5;}
+  .help-card .cbp{display:inline-block;background:#FFE7DE;color:var(--coral);font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;margin-bottom:12px;}
+  .patch-guide{background:#EAF3FB;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#2b3b52;line-height:1.5;margin-bottom:10px;}
 
   .result-block{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;}
   .result-block .rl{font-size:11px;font-weight:900;color:var(--muted);margin:0 0 4px;text-transform:uppercase;}
@@ -90,6 +96,8 @@
   <div class="tab" data-tab="help" onclick="switchTab('help')">② 버그 수정하기</div>
   <div class="tab" data-tab="result" onclick="switchTab('result')">③ 패치 확인</div>
 </div>
+
+<div id="identityBanner" class="identity-banner hidden"></div>
 
 <!-- ① 내 고민 등록 -->
 <div class="screen active" id="screen-submit">
@@ -244,11 +252,12 @@
           div.className = 'help-card';
           div.innerHTML = `
             <p class="hn">${targetSeat}번 버그 리포트${data.name ? ' · ' + escapeHtml(data.name) : ''}</p>
-            <p class="ca">🅰️ ${escapeHtml(data.a)}</p>
-            <p class="cb">🅱️ ${escapeHtml(data.b)}</p>
-            <span class="cbp">${escapeHtml(data.bpattern || '')}</span>
-            <textarea id="d_input_${targetSeat}" placeholder="이 버그, 어떻게 패치(수정)해줄 수 있을까요?"></textarea>
-            <button class="btn teal" style="margin-top:10px;" onclick="submitD(${targetSeat})">패치 코드 전송하기</button>
+            <p class="ca">😥 무슨 일이 있었나요?<br><b>${escapeHtml(data.a)}</b></p>
+            <p class="cb">💭 그때 든 생각(에러)은?<br><b>"${escapeHtml(data.b)}"</b></p>
+            <span class="cbp">이 생각의 정체: ${escapeHtml(data.bpattern || '')}</span>
+            <div class="patch-guide">🔧 <b>${escapeHtml(data.name || '이 친구')}</b>의 이 생각, 정말 100% 사실일까요? 다르게 생각해볼 수 있는 방법을 아래에 적어서 보내주세요!</div>
+            <textarea id="d_input_${targetSeat}" placeholder="예: 한 번 실수했다고 다 끝난 게 아니야, 다음에 잘하면 돼!"></textarea>
+            <button class="btn teal" style="margin-top:10px;" onclick="submitD(${targetSeat})">패치 보내기</button>
             <p class="error-msg" id="d_error_${targetSeat}"></p>
           `;
           box.appendChild(div);
@@ -348,6 +357,65 @@
 
   function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
   function escapeAttr(s){ return (s||'').replace(/'/g, "\\'"); }
+
+  // ---- 모둠·좌석·이름 자동 동기화 (탭 3개 + 새로고침 후에도 유지) ----
+  const GROUP_FIELDS = ['s_group', 'h_group', 'r_group'];
+  const SEAT_FIELDS = ['s_seat', 'h_seat', 'r_seat'];
+  const NAME_FIELDS = ['s_name'];
+
+  function updateBanner(){
+    const g = localStorage.getItem('dc_group') || '';
+    const st = localStorage.getItem('dc_seat') || '';
+    const nm = localStorage.getItem('dc_name') || '';
+    const banner = document.getElementById('identityBanner');
+    if (g && st) {
+      banner.textContent = `👤 지금 나는: ${g}모둠 ${st}번${nm ? ' · ' + nm : ''} (다른 사람이면 아래에서 바꿔주세요)`;
+      banner.classList.remove('hidden');
+    } else {
+      banner.classList.add('hidden');
+    }
+  }
+
+  function loadIdentity(){
+    const g = localStorage.getItem('dc_group') || '';
+    const st = localStorage.getItem('dc_seat') || '';
+    const nm = localStorage.getItem('dc_name') || '';
+    GROUP_FIELDS.forEach(id => { const el = document.getElementById(id); if (el) el.value = g; });
+    SEAT_FIELDS.forEach(id => { const el = document.getElementById(id); if (el) el.value = st; });
+    NAME_FIELDS.forEach(id => { const el = document.getElementById(id); if (el) el.value = nm; });
+    updateBanner();
+  }
+
+  function syncGroup(value){
+    localStorage.setItem('dc_group', value);
+    GROUP_FIELDS.forEach(id => { const el = document.getElementById(id); if (el && el.value !== value) el.value = value; });
+    updateBanner();
+  }
+  function syncSeat(value){
+    localStorage.setItem('dc_seat', value);
+    SEAT_FIELDS.forEach(id => { const el = document.getElementById(id); if (el && el.value !== value) el.value = value; });
+    updateBanner();
+  }
+  function syncName(value){
+    localStorage.setItem('dc_name', value);
+    NAME_FIELDS.forEach(id => { const el = document.getElementById(id); if (el && el.value !== value) el.value = value; });
+    updateBanner();
+  }
+
+  GROUP_FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', (e) => syncGroup(e.target.value));
+  });
+  SEAT_FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', (e) => syncSeat(e.target.value));
+  });
+  NAME_FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', (e) => syncName(e.target.value));
+  });
+
+  loadIdentity();
 </script>
 
 </body>
