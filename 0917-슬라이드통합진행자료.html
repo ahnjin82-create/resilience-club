@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9/17 공개수업 — 슬라이드 통합 진행자료</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A; --purple:#8B5CF6; --amber:#FFB627;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;}
+
+  .topnav{position:sticky;top:0;z-index:20;background:var(--navy);padding:10px 20px;display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;}
+  .topnav a{color:#B9C6E0;text-decoration:none;font-weight:700;}
+  .topnav a:hover{color:#fff;}
+
+  .hero{padding:34px 24px 26px;text-align:center;background:#fff;border-bottom:1px solid var(--line);}
+  .hero .eyebrow{color:var(--coral);font-weight:700;font-size:13px;letter-spacing:.08em;margin:0 0 8px;}
+  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:27px;margin:0 0 8px;color:var(--navy);}
+  .hero .sub{color:var(--muted);font-size:13.5px;margin:0 0 12px;}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .chip{background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:999px;}
+  .chip.alt{background:var(--teal);}
+  .chip.c2{background:var(--coral);}
+  .flag{max-width:760px;margin:16px auto 0;background:#FFF3EF;border-left:4px solid var(--coral);border-radius:8px;padding:10px 16px;font-size:12.5px;color:#7a2e18;text-align:left;}
+
+  .wrap{max-width:900px;margin:0 auto;padding:32px 24px 80px;}
+  section{margin-bottom:40px;}
+  h2{font-size:20px;color:var(--navy);border-left:5px solid var(--coral);padding-left:12px;margin:0 0 16px;}
+  h3{font-size:15px;color:var(--navy);margin:18px 0 8px;}
+  p{font-size:13.5px;color:#374151;}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0 16px;}
+  th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px;font-size:11.5px;}
+  td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#fafbfc;}
+
+  .checklist{list-style:none;padding:0;margin:10px 0;}
+  .checklist li{padding:7px 0 7px 26px;position:relative;font-size:13px;border-bottom:1px dashed var(--line);}
+  .checklist li::before{content:"☐";position:absolute;left:0;color:var(--teal);font-weight:900;}
+
+  /* 슬라이드 카드 */
+  .slide-card{background:#fff;border:1.6px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;}
+  .slide-head{display:flex;align-items:center;gap:12px;padding:13px 18px;background:var(--navy);color:#fff;}
+  .slide-num{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex-shrink:0;}
+  .slide-title{font-size:14.5px;font-weight:800;flex:1;}
+  .timing{background:rgba(255,255,255,.15);font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:999px;}
+  .slide-body{padding:15px 18px;}
+  .say{background:#EAF3FB;border-radius:10px;padding:11px 15px;margin-bottom:9px;font-size:13px;color:#1e3a5f;}
+  .say b{color:var(--teal);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px;}
+  .coach{background:#F3EEFF;border-left:4px solid var(--purple);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#4c1d95;margin-bottom:9px;}
+  .coach b{color:var(--purple);}
+  .between{text-align:center;padding:10px;color:var(--muted);font-size:12px;font-style:italic;}
+
+  .quote{background:#F5F6F8;border-radius:8px;padding:10px 14px;font-size:12.5px;font-style:italic;color:var(--ink);margin:8px 0;}
+
+  .qr-box{display:flex;gap:18px;align-items:center;background:var(--navy);border-radius:14px;padding:15px 18px;margin:12px 0;flex-wrap:wrap;}
+  .qr-box img{width:90px;height:90px;background:#fff;border-radius:8px;padding:5px;}
+  .qr-box .qi h4{color:#fff;margin:0 0 4px;font-size:13px;}
+  .qr-box .qi p{color:#B9C6E0;margin:0;font-size:10.5px;word-break:break-all;}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="#pre">사전 준비</a>
+  <a href="#slides">슬라이드별 진행</a>
+  <a href="#principles">교수법 6원칙</a>
+  <a href="#share">성과나눔 45분</a>
+  <a href="#links">QR·링크</a>
+</div>
+
+<div class="hero">
+  <p class="eyebrow">POGOK WELL+ · 회복탄력성 동아리 「다시봄」</p>
+  <h1>9/17 공개수업 — 슬라이드 통합 진행자료</h1>
+  <p class="sub">수업 PPT(8슬라이드) 흐름을 뼈대로, 참고자료의 모든 내용을 한 곳에 모았습니다</p>
+  <div class="chips">
+    <span class="chip">45분 수업 (15:25–16:05)</span>
+    <span class="chip alt">8슬라이드 대응</span>
+    <span class="chip c2">교사 휴대용 · 학생 화면엔 안 나옴</span>
+  </div>
+  <div class="flag">이 문서는 <b>수업 PPT(`0917-mind-debugging-terms.pptx`)와 짝을 이루는 교사용 자료</b>예요. PPT는 그대로 화면에 띄우고, 이 문서를 옆에 두고 진행하세요.</div>
+</div>
+
+<div class="wrap">
+
+<section id="pre">
+  <h2>사전 준비 (9/10 촬영 · 이후 편집)</h2>
+  <p>5개 모둠이 비합리적 신념 5종(파국화·낙인찍기·과잉일반화·마인드리딩·긍정격하) 중 하나씩 담당해 스크립트 기반 대화극 촬영. 역할은 총감독·프롬프트 서포터·배우 2명으로 구성. 모둠당 30~40초 분량을 넘지 않게 미리 안내 — 편집 단계에서 5개를 다 넣어야 5분 안에 들어옵니다.</p>
+
+  <h3>촬영 대본 — 모둠별 핵심 대사 (슬라이드 3 발문에서 그대로 활용)</h3>
+  <table>
+    <tr><th>모둠</th><th>신념</th><th>캐릭터</th><th>★ 핵심 대사</th></tr>
+    <tr><td>1모둠</td><td>파국화</td><td>지호 · 하준</td><td>"이제 다 끝났어."</td></tr>
+    <tr><td>2모둠</td><td>낙인찍기</td><td>서연 · 민아</td><td>"나는 원래 이런 앤가봐."</td></tr>
+    <tr><td>3모둠</td><td>과잉일반화</td><td>하은 · 도윤</td><td>"항상 이래."</td></tr>
+    <tr><td>4모둠</td><td>마인드리딩</td><td>유진 · 태민</td><td>"쟤 분명 날 싫어할 거야."</td></tr>
+    <tr><td>5모둠</td><td>긍정격하</td><td>지우 · 서준</td><td>"그냥 운이 좋았을 뿐이야."</td></tr>
+  </table>
+
+  <h3>당일 아침, 진짜 이거만 기억하기</h3>
+  <ul class="checklist">
+    <li>Apps Script 편집기는 절대 열어두지 않기 (디버그 세션이 잠금을 잡아먹어 학생 제출이 통째로 실패할 수 있음)</li>
+    <li>학생용 크롬북 몇 대 미리 강력 새로고침(Ctrl+Shift+R) 완료</li>
+    <li>교실 앞 화면에 대시보드 미리 띄워두고 "자동새로고침 켜기" 활성화</li>
+  </ul>
+</section>
+
+<section id="slides">
+  <h2>슬라이드별 진행 (PPT 8장 대응)</h2>
+
+  <div class="slide-card">
+    <div class="slide-head"><span class="slide-num">1</span><span class="slide-title">타이틀</span><span class="timing">도입 · 0분</span></div>
+    <div class="slide-body">
+      <div class="say"><b>멘트</b>"오늘 뒤에 계신 선생님들도, 우리랑 똑같이 이 영상 보러 오신 관객이에요. 편하게 봅시다." → 바로 영상 재생.</div>
+      <div class="coach"><b>교수법 코칭 —</b> 참관 교사가 있으면 학생 뇌는 이미 '평가받는 모드'예요. 슬라이드를 오래 붙잡지 말고, 긴장 깨는 한 문장 후 곧바로 영상으로 넘어가세요.</div>
+    </div>
+  </div>
+
+  <div class="slide-card">
+    <div class="slide-head"><span class="slide-num">2</span><span class="slide-title">오늘, 우리는 이렇게 갑니다</span><span class="timing">도입 · 1분</span></div>
+    <div class="slide-body">
+      <div class="say"><b>멘트</b>"오늘 우리가 갈 다섯 단계예요. 영상 보고, 이름 배우고, 내 버그 진단하고, 친구랑 패치 주고받고, 마지막에 업데이트까지."</div>
+      <div class="coach"><b>교수법 코칭 —</b> 이 슬라이드는 "지도"예요. 10~15초 안에 손가락으로 단계만 짚고 넘기세요. 상세 설명은 각 단계 도달했을 때 하면 됩니다.</div>
+    </div>
+  </div>
+
+  <div class="slide-card">
+    <div class="slide-head"><span class="slide-num">3</span><span class="slide-title">방금 영상 속, 5가지 생각의 함정</span><span class="timing">도입 · 6~7분</span></div>
+    <div class="slide-body">
+      <div class="say"><b>멘트 (발문1 · 사실확인)</b>"방금 그 5개 장면, 각자 뭔가 익숙한 생각의 패턴이 있었죠? 짝이랑 20초만 얘기해볼까요?"</div>
+      <div class="say"><b>멘트 (발문2 · 이름 공개)</b>"이 다섯 가지, 사실 다 이름이 있어요." → 카드 하나씩 짚으며 소개. 막히면 위 표의 핵심 대사로 되짚어주기.</div>
+      <div class="coach"><b>교수법 코칭 —</b> 발문 순서는 반드시 <b>사실확인 → 가치판단</b>을 지키세요. "왜 그렇게 말했을까?"부터 물으면 학생이 방어적으로 변해요. 판단 유도 질문 후엔 3초 기다려주세요.</div>
+    </div>
+  </div>
+
+  <div class="slide-card">
+    <div class="slide-head"><span class="slide-num">4</span><span class="slide-title">ABCDE 원리</span><span class="timing">전개① · 3분</span></div>
+    <div class="slide-body">
+      <div class="say"><b>멘트</b>"우리가 화나거나 속상한 건 사실 '그 사건' 때문이 아니에요. 그 사건을 '어떻게 생각하느냐'가 감정을 만들어요."</div>
+      <div class="coach"><b>교수법 코칭 —</b> 5글자를 다 외우게 하려 하지 말고, "사건이 아니라 생각이 감정을 만든다"는 한 문장만 확실히 남기고 넘기세요.</div>
+    </div>
+  </div>
+
+  <div class="slide-card">
+    <div class="slide-head"><span class="slide-num">5</span><span class="slide-title">그래서 오늘은, 이걸 '디버깅'이라 부를게요</span><span class="timing">전개① · 4분 (핵심)</span></div>
+    <div class="slide-body">
+      <div class="say"><b>멘트</b>"마음도 하나의 시스템이에요. 컴퓨터에 오류가 나면 '고장났다'고 안 하고 '버그가 있다'고 하죠? 오늘은 우리 생각도 똑같이 볼 거예요." → 표를 A부터 E까지 한 줄씩 짚으며 설명.</div>
+      <div class="coach"><b>교수법 코칭 —</b> 오늘 수업에서 <b>진짜 "교육"이 일어나는 지점</b>이에요. 이 매핑을 정확히 안 짚으면 학생에게 "그냥 재밌는 액티비티"로만 남아요. 왜 이 은유가 효과적이냐면 — "낙인찍기(나는 원래 이래)"를 생각을 "고정된 나"가 아니라 "고칠 수 있는 시스템"으로 재정의해 정면으로 반박하는 설계이기 때문이에요. 설명 끝엔 반드시 다리 문장을: <b>"이제 이 이름표들을 갖고, 진짜 우리 마음속에서 버그를 찾아볼 거예요."</b></div>
+    </div>
+  </div>
+
+  <div class="between">— 여기서부터 5분간, PPT 없이 <b>ABCDE 마음 훈련 앱</b>으로 교사가 직접 라이브 시연 (전개②) —<br>영상 속 캐릭터 한 명을 골라 교사가 직접 입력하며 보여줍니다. 실행의도(다음에 뭘 어떻게 할지)를 학생이 눈으로 먼저 보게 하는 목적이에요. 이 앱은 완성도 80%라, 막히는 지점이 있으면 "이 부분은 업데이트 중이라 느릴 수 있어요"라고 미리 말해두세요.</div>
+
+  <div class="slide-card">
+    <div class="slide-head"><span class="slide-num">6</span><span class="slide-title">마인드 디버깅 센터 — 사용법 3단계</span><span class="timing">전개③ 시작 · 1분</span></div>
+    <div class="slide-body">
+      <div class="say"><b>멘트</b>"이제 여러분 차례예요. 크롬북 열고 QR 찍고, 최근 있었던 가벼운 고민(시험·친구·게임 정도로만!) 하나 골라서 버그 신고해보세요. 안 되는 사람은 손 들어요, 제가 바로 갈게요."</div>
+      <div class="coach"><b>교수법 코칭 —</b> "안 되면 손 들기"를 활동 시작 <b>전에</b> 미리 깔아두는 게 핵심이에요. 시작 후 트러블 대응하면 흐름이 끊겨요.</div>
+      <div class="say" style="margin-top:8px;"><b>이어지는 개인 활동 (약 19분)</b>① 버그 신고 → ② 좌석 기반 자동 배정된 친구 2명에게 패치(D) 작성 → ③ 받은 패치 확인 후 업데이트(E) 입력, 디버깅 완료 카드 확인.</div>
+      <div class="coach" style="margin-top:8px;"><b>교수법 코칭 —</b> 활동 중반(②~③ 초반)이 반에서 가장 조용해지는 구간이에요. 침묵을 불안해하지 말고, 순회하며 "오, 이 패치 진짜 좋다"처럼 개별 피드백을 짧게 흘려주세요.</div>
+    </div>
+  </div>
+
+  <div class="slide-card">
+    <div class="slide-head"><span class="slide-num">7</span><span class="slide-title">우리 반, 실시간으로 디버깅되는 중</span><span class="timing">정리 · 3~4분</span></div>
+    <div class="slide-body">
+      <div class="say"><b>멘트</b>"자, 이제 화면을 같이 봐요. 우리 반이 어떤 생각의 함정에 제일 많이 빠졌는지, 친구들이 서로에게 어떤 패치를 보냈는지 보이죠? '디버깅 완료' 된 친구들 것도 몇 개 같이 읽어볼까요?"</div>
+      <div class="coach"><b>교수법 코칭 —</b> 이 화면(라이브 대시보드)이 오늘 수업의 클라이맥스예요. 완료 갤러리에 새 카드가 뜰 때마다 자연스럽게 짚어주면서 분위기를 살리세요.</div>
+    </div>
+  </div>
+
+  <div class="slide-card">
+    <div class="slide-head"><span class="slide-num">8</span><span class="slide-title">마무리</span><span class="timing">정리 · 1분</span></div>
+    <div class="slide-body">
+      <div class="say"><b>멘트</b>"오늘 우리는 생각의 버그를 찾고, 함께 고치는 법을 배웠어요. 회복탄력성은 타고나는 게 아니라, 오늘처럼 연습하는 기술이에요." → 소감 1~2명 발표 후 마무리.</div>
+      <div class="coach"><b>교수법 코칭 —</b> 활동으로 끝내지 말고, 이 한 문장으로 오늘 배운 걸 '삶으로 가져갈 수 있는 말'로 닫아주세요.</div>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:var(--muted);">※ 시간 합계: 도입 8분 + 전개① 7분 + 전개② 5분 + 전개③ 20분 + 정리 5분 = 총 45분. 전개③에서 가장 여유를 크게 잡아뒀으니, 시간이 부족하면 정리의 소감 나누기를 줄이세요.</p>
+</section>
+
+<section id="principles">
+  <h2>교수법 코칭 — 6가지 원칙 요약</h2>
+  <ol style="font-size:13px;color:#374151;">
+    <li><b>관찰자 시선 먼저 처리</b> — 영상 틀기 전에 긴장을 깨는 한 문장</li>
+    <li><b>발문 순서 절대 사수</b> — 사실확인 → 가치판단 → 적용, 판단 후 3초 기다리기</li>
+    <li><b>전환에는 반드시 다리 문장</b> — 활동이 바뀔 때마다 "왜 이걸 하는지"를 한 문장으로 이어붙이기</li>
+    <li><b>테크 전환은 백업 멘트와 함께</b> — "안 되면 손 들어요"를 활동 시작 전에 미리 깔기</li>
+    <li><b>에너지 낙차 관리</b> — 신나는 활동 뒤 조용한 활동이 오면, 톤을 낮추는 한 문장 + 3초 침묵</li>
+    <li><b>완벽함이 아니라 회복력</b> — 예상 못한 반응에도 자연스럽게 되돌아오는 여유가, 완벽한 대본보다 신뢰를 줍니다</li>
+  </ol>
+</section>
+
+<section id="share">
+  <h2>성과나눔 45분 (제안 구성)</h2>
+  <p>공문상 "기획·설계 나눔"은 30분(16:10~16:40)으로 명시되어 있지만, 실제 운영은 45분이 될 가능성이 있다고 하셨으니 두 가지 다 참고하세요.</p>
+  <table>
+    <tr><th>순서</th><th>시간</th><th>내용</th></tr>
+    <tr><td>프로그램 소개</td><td>7분</td><td>「다시봄」 동아리 설계 배경, 이론적 기반, 34회기 구조 개요</td></tr>
+    <tr><td>수업 다시보기</td><td>10분</td><td>방금 진행한 45분 수업의 핵심 장면(오프닝 영상, 디버깅 완료 순간) 하이라이트</td></tr>
+    <tr><td>데이터로 보는 성과</td><td>13분</td><td>라이브 대시보드를 그대로 활용 — 신념 분포도·워드클라우드·완료 갤러리로 실제 인지 변화 시연</td></tr>
+    <tr><td>확산 계획</td><td>8분</td><td>웹앱 4종 오픈소스 공유, 타 학교 적용 시 준비물 안내</td></tr>
+    <tr><td>Q&A</td><td>7분</td><td>참관 교사 질의응답</td></tr>
+  </table>
+  <div class="quote">성과나눔은 "발표"가 아니라 "증명"이에요. 대시보드를 실제로 조작하며 보여주는 시간의 비중을 높이세요.</div>
+</section>
+
+<section id="links">
+  <h2>QR·링크 모음</h2>
+  <div class="qr-box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAHsAQAAAAA4UaPNAAADVElEQVR4nO2dUW7jMAxEh4v8yzfo/Y/VG1An4H6QpigXi27TogmRIYpGtvUQGaDlEU0zYviGzT/foQHixIkTJ/4buKQdEJE8Jgcw1345cOn8DIMnTvwefJhb7JsCQETsXQCYwvvAr4Kt8xMMnjjxr9nNPwTAUAAYGhP9UBlxFdgUTLEpdunc+9yJvyZ+u2zbFJuHRENsmAAYJu7qP/ztxIk/HnfRvvTMFFc1ZobxMcbzXIMnTvx/zJ05JPowU8SGhnTHeQmE22+dW5878dfEsZaugLv0J3+lM32eeEP8BqBKFpsCROjG25ba3ts/+e3Eif8+jpQ0YWfbqunS80vYc54n3hLffN4Uoee1qHctvWtPo88T74gjl6vAculoZHxeY0/sHFzDEu+L7/N8idKs5WoN1Owd6PPEm+IpV0TEzOTNMMzeJZ0cU+SApyK4MfeAeFv8zD3w9SkgGbqJ/Zqb/mGl8ejBEyd+j6Vc2Ren6xCw63wL5U9tQ7wvnstV92eRpWpqZBKpfzQC+M8weOLEv2prWXpZtCouC9triJ7zPPGW+FIyNRRfH0VtT6Z0OT/j88R74kW965lvU9VO9fPszxwz4o3xGzxWs0dsoj0UHtIZhnnECyNDs/3owRMnfo8VoRKbH2V8vQUkRW1DvCe+S3ddOQYXVbNScWoWPX2eeD981/MlOFnfGQG2hJy1jKXPE++H728/1ZjMJTJ/SbPkPE+8K37Klf2B7CWjeM35p/+fKqj1uRN/TfwMQg5b0r1E5lHSEqK/tznPE++Kb4H3bKS310k+bwFhnOeJt8S3WOVye80ssnUjQLkcmHtAvC2+KXbgg7zR7YFs2FL1rc+d+GviZ92Dmj/vD1sBzANe9MD7DvP9paBZ63Mn/rr4Vmp4WJYmjkLEB7KaWe40M9YlJt4TvwFZcBUCYIrNwwDJWX2oeNVKAKW+Dd+TIt4az/LyGCZvFm3EGyIru35K3AX4zgjxrvi1LrHX3PamK3kZKqH5FfPAUJc6MvTRgydO/A77WIv7kGHIUvPu4XEoSvllXfpHD5448TssfH6rQum/M4KzOuVQzEPOn2CoV8GjB0+c+D22MiexFS7LZ1WX/9tRxueJ98PFPu/zb+NvZRInTpz4s+N/AXfwWNDrvFdPAAAAAElFTkSuQmCC" alt="마인드 디버깅 센터 QR">
+    <div class="qi"><h4>🖥️ 마인드 디버깅 센터 (슬라이드 6)</h4><p>ahnjin82-create.github.io/resilience-club/thought-clinic-v2.html</p></div>
+  </div>
+  <div class="qr-box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAHsAQAAAAA4UaPNAAADS0lEQVR4nO2dYW7kIAyFn1f9T27Q+x+rN4ATeH/YYJOZVbfbaafePBRFCeFTgvRiOcYQUXyijF+foQHixIkTJ/7VOFSTpW9qNdr3mg5VVVU7XZe0l+478WviMCWHpE3VTU3n0azDmuXG1DzxgjjCejeT8aZtr1S39vmloOaJ18RfTucCYAgABTAOHaKAtP41dydO/Pvxs+bVZN86xgFAADH9t+4Hj7w7ceLfj7vms5h1mncz9WgdQDb4qXHpvhO/Jn4Tt3l3S43pzxMviL/g5LEM8Q3QIRiyrurcHnd34sSfg8sBEcEQEfFAZAcAeVVVFRF9EwAiYo3tpZDjMXcnTvx78RcAGILlqI9Dx6Fm5AFMw778eR2iTef3bOm+E78m7r6NANLUVT6d9s2NsQFZU35cKt134tfF5fATH3sdgqZeada+qTkzVql9Ic9/eOLEP1p0lQ4s2Tev8TSDXFbohnEb4iXxqfCeUg46VoKB9pRpY+kHRnVqnnhRPPx5zCEnmX67OTbS1C5pOha39qX7TvyauGcO52zhsPaIBMvIN+tI+9J9J35NHGeF54xKzEp7KTqWnz8PSved+DXxyCXeEuZvffvU2JvRzhMviW9+S65ZPsySffZqAGqeeFE82Xm958Ng9/OB1Ya+DfGaeMTngT1EqVu4crk9e1SzdN+JXxPfzHgejTpFaSJuk8aqqHniBfE0Dpst+cyrj8rZIARPzRMvid+oOn2ubjO+Ed6Ok/RtiJfEU5TGTjuWn5NDl7bf3gVqnnhJfB9jXVKfUZoI6eTlPqxQ88RL4vuqZbgJVPYw7NEyYpul+078mngaWp22PfbnKE1yezrtPPGieOj5LPi8xNlsGVhj3IZ4cXy6K3IgvJohc7w1fcbOF4FzwInXxWWVAxgir2pLHHgZEomXayKhzxB//sMTJ/4v+PTS/bjDDuRVt1fAFr3pWPsf8fDEiX+s+Np9vkalzZmyKVFz/pTOS9JUhouf6x4Q/29wEdHue18AQeayZm9zDYRIPP5ZD0+c+N+UCM7kHy7cDkLdG6Vi3IZ4Qfz8n5GcQp9yDGLCSJ5FSM0TL4jf+Z9UTBVcmfM3gUo/peaJ18NF32/z58J/ZRInTpz4T8d/A7KakfWjgna0AAAAAElFTkSuQmCC" alt="ABCDE 앱 QR">
+    <div class="qi"><h4>🧠 ABCDE 마음 훈련 앱 (전개②)</h4><p>ahnjin82-create.github.io/resilience-club/abcde-practice.html</p></div>
+  </div>
+  <div class="qr-box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAHsAQAAAAA4UaPNAAADOUlEQVR4nO2dQY4jIQxFv0fZU/e/3dwATuBeGIyhMhp1dxTF4rNIU5SfEiSXZT4uWhS/aO3Pb2iAOHHixIm/AxdvF+zTBrtJE/v0cTf+hB9PnPhP8KLWbEj/ilxQVRExV5cLKAr0TjD+gB9PnPj32sP+CIBSAaBUKWqx3dxa26WAANpEN+Pccyd+Jv7YrrUJmqColCqAebs1wb2lnjvxM/Hd56Uo2qWAAtouH1dAemx/4bcTJ/5+vPu8K5YKiAX5UgVAURkR3t0+yJup5078YLx1JQa2SvVWtK9ei/b+avwRP5448e+1B5a4bSmNKICxYu39Jj3heeW3Eyf+fhyqiqJax3VRGzQ1suuSdUT7YW+WWlPPnfiZOLpLowvv5v+qU4S3u9NmXKrS54lnxLH5tvu8PwL9lo3XHvDH05F67sTPxDG3X4NLT1fH7SlYxlPPnfiZ+AMASkW7XJPsBTa2ITsGpVTfh8Xcq0o9d+Jn4iPO+9K1zkzGxr2DJ2vb1HMnfiYedJuR1bhWsyxvvePPCHMb4inxoT26DukrVpduSsjkmc8TT48jOnNvRb3T479bRomePk88Jb4KMh7zPYcJBpbqRw2HPk88IR4ifFylDq0y7kC5vdvQ54knxMdCdWw57b5d984i19PniefDF31yKTyowKwxmPU2k2JuQzwlvuvz8zNm75j9qOTQ54knxEOcxxrqa7+7qDcxBWJuQzwl/gAQ34RSfz0wvCFlL8bC3pwy+1L1Bd9OnPj78ZDPhPKD237rrDRebBjniefDZz4fy+aXvN0zH7O3PvN54lnxfR92PgKhxnjbk+qNcZ54SjxkNXWptEHIYYC9rnLcTT134mfiS+3BTNqH5+9PhDVqlcQT47ccPurzofPkhUH6PPGU+POKyriwjcvbpQKN+TzxlPh4NxBAOHxVSkWpYgdX2slmA9Clk3ruxM/Eb+cSAxjHOtlpTogbUs0Ppb/o88Rz4ssZTbGzqZexCCEUpKWeO/Ez8dtZ3BbzPZ6XinE6sY6YL7PAMvXciZ+Jh5eeQsdl+eUyiDYA96SIJ8Vvus3IamIas6uUrKsknhgX/b/Nvxv/VyZx4sSJfzr+BYMVniko+ePYAAAAAElFTkSuQmCC" alt="대시보드 QR">
+    <div class="qi"><h4>📊 라이브 대시보드 (슬라이드 7)</h4><p>ahnjin82-create.github.io/resilience-club/thought-clinic-dashboard.html</p></div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
