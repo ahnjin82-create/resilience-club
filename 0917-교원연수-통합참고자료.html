@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>교원 연수자료 — 통합 참고자료</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A; --purple:#8B5CF6; --amber:#FFB627;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;}
+
+  .topnav{position:sticky;top:0;z-index:20;background:var(--navy);padding:10px 20px;display:flex;gap:14px;flex-wrap:wrap;font-size:12px;}
+  .topnav a{color:#B9C6E0;text-decoration:none;font-weight:700;}
+  .topnav a:hover{color:#fff;}
+
+  .hero{padding:38px 24px 30px;text-align:center;background:#fff;border-bottom:1px solid var(--line);display:flex;flex-direction:column;align-items:center;}
+  .hero img{width:90px;margin-bottom:10px;}
+  .hero .eyebrow{color:var(--coral);font-weight:700;font-size:13px;letter-spacing:.08em;margin:0 0 8px;}
+  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:28px;margin:0 0 8px;color:var(--navy);}
+  .hero .sub{color:var(--muted);font-size:14px;margin:0 0 14px;}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .chip{background:var(--navy);color:#fff;font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;}
+  .chip.alt{background:var(--teal);}
+
+  .wrap{max-width:900px;margin:0 auto;padding:34px 24px 80px;}
+  section{margin-bottom:42px;}
+  h2{font-size:20px;color:var(--navy);border-left:5px solid var(--coral);padding-left:12px;margin:0 0 6px;}
+  .slidetag{font-size:11.5px;color:var(--muted);margin:0 0 16px 17px;}
+  h3{font-size:15.5px;color:var(--navy);margin:20px 0 8px;}
+  p{font-size:14px;color:#374151;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0 18px;}
+  th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px;font-size:12px;}
+  td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#fafbfc;}
+
+  .say{background:#EAF3FB;border-radius:10px;padding:13px 16px;margin:10px 0;font-size:13.5px;color:#1e3a5f;}
+  .say b{color:var(--teal);}
+  .quote{background:#F5F6F8;border-left:4px solid var(--purple);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:14.5px;font-style:italic;font-weight:700;color:#4c1d95;}
+  .note{background:#FFF3EF;border-left:4px solid var(--coral);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#7a2e18;}
+
+  .theory-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0;}
+  .theory-card{background:#fff;border:1.6px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .theory-card .tt{font-weight:900;font-size:13.5px;margin-bottom:3px;}
+  .theory-card .ts{font-size:12px;color:var(--muted);margin-bottom:6px;}
+  .theory-card .td{font-size:12.5px;color:#374151;}
+
+  .lp-card{border-radius:12px;padding:16px 18px;margin:12px 0;border:1.6px solid var(--line);background:#fff;}
+  .lp-tag{display:inline-block;font-size:11px;font-weight:900;color:#fff;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+
+  .bug-item{background:#fff;border-radius:10px;padding:12px 16px;margin-bottom:10px;border-left:4px solid var(--line);}
+  .bug-item .bt{font-weight:800;font-size:13.5px;}
+  .bug-item .bd{font-size:12.5px;color:var(--muted);margin-top:3px;}
+
+  .qr-box{display:flex;gap:20px;align-items:center;background:var(--navy);border-radius:14px;padding:16px 20px;margin:14px 0;flex-wrap:wrap;}
+  .qr-box img{width:100px;height:100px;background:#fff;border-radius:8px;padding:6px;}
+  .qr-box .qi h4{color:#fff;margin:0 0 4px;font-size:13.5px;}
+  .qr-box .qi p{color:#B9C6E0;margin:0;font-size:11px;word-break:break-all;}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="#timing">시간 배분</a>
+  <a href="#s1">01 기획 배경</a>
+  <a href="#s2">02 이론적 기반</a>
+  <a href="#s3">03 왜 디버깅인가</a>
+  <a href="#s4">04 웹앱 개발 여정</a>
+  <a href="#s5">05 배움의 4지점</a>
+  <a href="#s6">06 기대효과·확장</a>
+  <a href="#links">QR·링크</a>
+</div>
+
+<div class="hero">
+  <p class="eyebrow">POGOK WELL+ · 회복탄력성 동아리 「다시봄」</p>
+  <h1>「마인드 디버깅 센터」의 기획과 배움의 설계</h1>
+  <p class="sub">교원 연수자료(20분 발표) 통합 참고자료 — 발표 대본 및 이론적 확장판</p>
+  <div class="chips">
+    <span class="chip">20분 발표</span>
+    <span class="chip alt">16슬라이드 대응</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section id="timing">
+  <h2>시간 배분 (총 20분)</h2>
+  <table>
+    <tr><th>구간</th><th>슬라이드</th><th>시간</th><th>핵심 메시지</th></tr>
+    <tr><td>여는 말 + 목차</td><td>1~2</td><td>1.5분</td><td>오늘 나눌 이야기의 지도를 먼저 보여준다</td></tr>
+    <tr><td>기획 배경 + 이론적 기반</td><td>3~4</td><td>3.5분</td><td>왜 시작했는가, 무엇에 근거했는가</td></tr>
+    <tr><td>왜 디버깅인가</td><td>5</td><td>2분</td><td>은유 선택의 교육학적 근거</td></tr>
+    <tr><td>웹앱 개발 여정</td><td>6~9</td><td>5분</td><td>종이에서 웹앱으로, 실제 트러블슈팅, 전체 산출물</td></tr>
+    <tr><td>배움의 4가지 지점</td><td>10~14</td><td>6분</td><td>이 발표의 핵심 — 어디서 배움이 일어나는가</td></tr>
+    <tr><td>기대효과·확장 + 마무리</td><td>15~16</td><td>2분</td><td>이후의 방향과 질문 유도</td></tr>
+  </table>
+  <p style="font-size:12px;color:var(--muted);">※ 배움의 4가지 지점(10~14번)에 시간을 가장 많이 배정했어요 — 이 발표에서 청중이 가장 납득해야 할 부분이기 때문이에요. 시간이 부족하면 웹앱 개발 여정(6~9)의 트러블슈팅 슬라이드를 짧게 넘기고, 남으면 거기서 채우세요.</p>
+</section>
+
+<section id="s1">
+  <h2>01 · 기획 배경</h2>
+  <p class="slidetag">슬라이드 3 대응</p>
+  <p>이 프로젝트는 이론에서 출발한 게 아니라, <b>현장에서 반복적으로 관찰된 장면</b>에서 출발했습니다. 시험 하나로 "난 망했다"고 단정하고, 친구의 사소한 반응 하나로 "쟤가 날 싫어한다"고 확신하는 중2 학생들의 모습은 상담실에서만 다뤄지기엔 너무 보편적이었습니다.</p>
+  <p>기존 접근에는 세 가지 한계가 있었습니다. 첫째, 일방향 강의식 정신건강 교육은 학생이 자기 얘기로 이어가기 어렵습니다. 둘째, 1:1 상담 중심 개입은 확산성과 상시성에 한계가 있습니다. 셋째, "회복탄력성"이라는 말 자체가 중2 학생에게는 너무 추상적이어서 손에 잡히지 않습니다.</p>
+  <div class="quote">"학생 스스로 자기 생각을 객관화하고, 또래와 함께 실시간으로 다뤄볼 수 있는 구조를 만들 수는 없을까?"</div>
+  <div class="say"><b>발표 팁:</b> 이 파트는 "왜 굳이 이렇게까지 만들었는가"에 대한 답을 미리 깔아두는 구간이에요. 통계나 이론보다, 방금 위에 적은 것 같은 구체적인 학생 장면 하나를 먼저 던지면 청중의 공감을 더 빨리 얻을 수 있어요.</div>
+</section>
+
+<section id="s2">
+  <h2>02 · 이론적 기반</h2>
+  <p class="slidetag">슬라이드 4 대응</p>
+  <p>이 활동은 네 가지 이론적 뿌리 위에 서 있습니다.</p>
+  <div class="theory-grid">
+    <div class="theory-card"><div class="tt" style="color:var(--coral);">REBT · Albert Ellis</div><div class="ts">비합리적 신념(ABCDE)</div><div class="td">사건(A) 자체가 아니라 그 사건에 대한 믿음(B)이 결과(C)로서의 감정과 행동을 만든다는 인지치료 이론. 오늘 활동의 핵심 골격입니다.</div></div>
+    <div class="theory-card"><div class="tt" style="color:var(--teal);">사회인지이론 · Albert Bandura</div><div class="ts">또래 관찰학습</div><div class="td">타인의 행동과 그 결과를 관찰하는 것만으로도 학습이 일어난다는 이론. 학생들이 서로 '패치'를 주고받는 구조의 이론적 근거입니다.</div></div>
+    <div class="theory-card"><div class="tt" style="color:var(--mint);">CASEL SEL</div><div class="ts">사회정서학습 5대 역량</div><div class="td">자기인식·자기관리·사회적 인식·관계기술·책임 있는 의사결정 — 「다시봄」 34회기 프로그램 전체를 관통하는 틀입니다.</div></div>
+    <div class="theory-card"><div class="tt" style="color:var(--purple);">긍정심리학</div><div class="ts">강점 기반 접근</div><div class="td">결핍이 아니라 강점과 자원에 주목하는 관점. "문제 학생" 프레임이 아니라 "누구나 겪는 버그" 프레임을 택한 근거입니다.</div></div>
+  </div>
+  <div class="say"><b>발표 팁:</b> 이론 이름을 나열하는 데 시간을 쓰지 마세요. "이 활동의 어느 부분이 어느 이론과 연결되는지" 한 문장씩만 짚고 바로 다음으로 넘어가는 게 20분 안에 맞아요. 디테일은 이 참고자료로 대체하면 됩니다.</div>
+</section>
+
+<section id="s3">
+  <h2>03 · 왜 '디버깅'인가</h2>
+  <p class="slidetag">슬라이드 5 대응</p>
+  <p>ABCDE를 "사건-믿음-결과-반박-효과"로 그대로 가르치면, 중2에게는 추상적이고 딱딱합니다. '디버깅'은 학생들이 게임과 앱에서 이미 체감적으로 알고 있는 개념입니다. 이 은유 전환에는 세 가지 교육학적 의도가 있습니다.</p>
+  <table>
+    <tr><th>의도</th><th>설명</th></tr>
+    <tr><td>'낙인찍기'를 정면 반박하는 설계</td><td>"나는 원래 이래"라는 생각 자체가 비합리적 신념인데, 그 생각을 '고정된 나'가 아니라 '고칠 수 있는 시스템의 버그'로 재정의합니다.</td></tr>
+    <tr><td>실패에 대한 심리적 거리 확보</td><td>'내가 잘못했다'가 아니라 '버그가 있다'는 언어는, 자기 비난 없이 문제를 관찰할 수 있는 안전한 거리를 만들어줍니다.</td></tr>
+    <tr><td>또래 개입의 명분 제공</td><td>친구의 생각을 '지적'하는 게 아니라 '패치'해주는 것 — 개입 자체의 부담이 줄어듭니다.</td></tr>
+  </table>
+</section>
+
+<section id="s4">
+  <h2>04 · 웹앱 개발 여정</h2>
+  <p class="slidetag">슬라이드 6~9 대응</p>
+
+  <h3>처음엔, 종이 처방카드였습니다</h3>
+  <p>초기 설계는 A5 종이 카드 방식이었습니다. 학생이 종이에 A·B·C를 적어 제출하면, 교사가 회수해 무작위로 재배분하고, 친구가 카드 뒷면에 반박(D)을 적어 다시 원주인에게 전달하는 구조였습니다. 하지만 회수·재배분에 물리적 시간이 걸리고, 반 전체의 경향을 즉시 볼 수 없으며, 손글씨 판독과 분실 리스크가 있었습니다.</p>
+  <p>웹앱은 이 세 가지 한계를 정확히 메워줬습니다 — <b>즉시성</b>(제출 즉시 짝이 자동 배정), <b>가시성</b>(반 전체 경향이 실시간 그래프로), <b>완결감</b>('업데이트 완료' 화면으로 여정이 눈에 보이게 닫힘).</p>
+
+  <h3>직접 설계·구축한 것</h3>
+  <p><b>프런트엔드</b> — 마인드 디버깅 센터(학생용 3탭 웹앱, 좌석 자동 매칭·before/after 완성 카드), ABCDE 마음 훈련 앱(교사 라이브 시연용, 11종 패턴 매칭 엔진), 라이브 대시보드(신념분포도·워드클라우드·완료 갤러리).</p>
+  <p><b>백엔드</b> — Google Apps Script로 submit·getbyseat·addD·myresult·submitE·alldata 6개 기능을 직접 설계했고, 여러 학생이 동시에 제출해도 데이터가 섞이지 않도록 LockService로 동시성을 처리했으며, 좌석번호 하나로 상호 패치 상대가 자동으로 정해지는 매칭 알고리즘을 구현했습니다.</p>
+
+  <h3>실제로 겪고, 직접 고친 문제들</h3>
+  <div class="bug-item" style="border-color:var(--coral);"><div class="bt">배포 주소 꼬임</div><div class="bd">웹앱이 옛날 코드가 남아있는 배포를 계속 호출해, 응답이 빈 값으로 저장되던 문제. 실제 배포 주소를 대조해 진단·해결했습니다.</div></div>
+  <div class="bug-item" style="border-color:var(--teal);"><div class="bt">패치 매칭 로직 오류</div><div class="bd">같은 좌석으로 여러 번 테스트하며 생긴 중복 데이터 때문에, 패치가 오래된 기록에 저장되던 버그를 로직 수정으로 해결했습니다.</div></div>
+  <div class="bug-item" style="border-color:var(--purple);"><div class="bt">동시성 잠금 충돌</div><div class="bd">편집기에 남겨둔 디버그 세션이 잠금을 계속 붙잡아, 실제 학생 요청이 통째로 실패하던 문제를 실행 로그로 추적해 해결했습니다.</div></div>
+  <div class="note">이 세 가지를 발표에 넣은 이유는, 완성품만 보여주면 "그냥 신기한 거 보여주려고 웹앱 썼나?"로 겉핥기될 위험이 있기 때문이에요. 실제로 겪고 고친 과정을 보여주는 게, 기술적 화려함보다 훨씬 더 신뢰를 줍니다.</div>
+
+  <h3>전체 산출물</h3>
+  <p>웹앱만이 아니라 프로젝트 전체를 직접 준비했습니다 — 모둠별 감독 디렉션 카드까지 포함한 촬영 대본킷 5종, 성취기준·평가기준·생기부 특기사항 예시를 포함한 45분 수업지도안, 학생에게 용어를 설명하는 수업용 PPT, 그리고 체험용 QR과 각종 배포자료까지. 이 모든 것이 「다시봄」 34회기 프로그램 중 단 하나의 회기를 위한 준비물입니다.</p>
+</section>
+
+<section id="s5">
+  <h2>05 · 배움이 일어나는 4가지 지점</h2>
+  <p class="slidetag">슬라이드 10~14 대응 — 이 발표의 핵심</p>
+  <p>마인드 디버깅 센터의 다섯 글자(A→B→C→D→E) 사이사이에서, 실제로 배움이 일어나는 네 개의 지점이 있습니다.</p>
+
+  <div class="lp-card" style="border-color:var(--coral);">
+    <span class="lp-tag" style="background:var(--coral);">① 자기노출의 심리적 안전 — A·B·C 입력 순간</span>
+    <p>'솔직하게 털어놓기'는 원래 위험 부담이 큰 일입니다. 하지만 이 활동은 '고민 상담'이 아니라 '버그 신고'라는 절차로 포장되어 있어, 학생은 자기 노출의 부담을 크게 느끼지 않고 진짜 생각을 꺼냅니다.</p>
+    <div class="quote">"익명이 아니어도, 절차가 심리적 거리를 만들어줍니다."</div>
+  </div>
+
+  <div class="lp-card" style="border-color:var(--teal);">
+    <span class="lp-tag" style="background:var(--teal);">② 메타인지 — 패턴(B) 선택 순간</span>
+    <p>5가지 신념 중 하나를 '선택'하는 행위 자체가, 자신의 생각을 '나'가 아니라 '분류 가능한 대상'으로 바라보게 만듭니다. 이것이 인지행동치료에서 말하는 탈중심화(decentering)입니다.</p>
+    <div class="quote">"나는 원래 이래"에서 "나는 지금 낙인찍기를 하고 있구나"로.</div>
+  </div>
+
+  <div class="lp-card" style="border-color:var(--mint);">
+    <span class="lp-tag" style="background:var(--mint);">③ 또래 집단지성 — 패치(D) 작성·수신 순간</span>
+    <p>교사의 반박보다 또래의 반박이 더 강력하게 작동할 때가 있습니다. Bandura의 관찰학습 이론처럼, 친구가 내 생각에 다른 관점을 제시하는 과정 자체가 양쪽 모두에게 배움이 됩니다 — 패치를 쓰는 학생도, 받는 학생도 배웁니다.</p>
+    <div class="quote">가르치는 사람이 가장 많이 배운다 — 오늘은 학생이 그 역할을 합니다.</div>
+  </div>
+
+  <div class="lp-card" style="border-color:var(--purple);">
+    <span class="lp-tag" style="background:var(--purple);">④ 실시간 시각화된 완결감 — E 제출·대시보드 확인 순간</span>
+    <p>자이가르닉 효과처럼, 완결되지 않은 경험은 마음에 남습니다. Before/After 대조 카드와 학급 전체 갤러리는 '내가 이 여정을 완주했다'는 확실한 종결감을 만들고, 이것이 또래에게도 사회적 증명으로 작동합니다.</p>
+    <div class="quote">완결된 서사가 있어야, 배움이 경험으로 남습니다.</div>
+  </div>
+
+  <div class="say"><b>발표 팁:</b> 이 네 장은 발표에서 가장 힘을 줘야 할 구간이에요(총 6분 배정). 각 카드마다 "이 순간, 이 이론"을 한 문장으로 짧게 짚고, 인용구를 천천히 읽어주는 방식으로 진행하면 청중에게 여운이 남아요.</div>
+</section>
+
+<section id="s6">
+  <h2>06 · 기대 효과와 확장</h2>
+  <p class="slidetag">슬라이드 15 대응</p>
+  <table>
+    <tr><th>대상</th><th>기대 효과</th></tr>
+    <tr><td>학생에게</td><td>생각을 '고정된 사실'이 아니라 '검토 가능한 가설'로 대하는 습관, 또래에게 도움을 주고받는 경험 자체의 정서적 가치</td></tr>
+    <tr><td>학급·학교에</td><td>전체 신념 분포가 데이터로 남아 이후 상담·생활지도의 참고자료로 활용 가능, 34회기 「다시봄」 프로그램의 핵심 회기로 정착</td></tr>
+    <tr><td>타 학교로</td><td>웹앱 4종은 오픈소스로 공개 — 코드 수정 없이 학급 정보만 바꿔 바로 적용 가능, 경기도보건교육정책실행연구회를 통한 확산 검토</td></tr>
+  </table>
+  <div class="quote">"생각도, 고칠 수 있다는 것을 학생이 스스로 경험하게 할 수 있을까?" — 결국 오늘의 질문은 이 하나였습니다.</div>
+</section>
+
+<section id="links">
+  <h2>QR·링크 모음</h2>
+  <div class="qr-box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAHsAQAAAAA4UaPNAAADVElEQVR4nO2dUW7jMAxEh4v8yzfo/Y/VG1An4H6QpigXi27TogmRIYpGtvUQGaDlEU0zYviGzT/foQHixIkTJ/4buKQdEJE8Jgcw1345cOn8DIMnTvwefJhb7JsCQETsXQCYwvvAr4Kt8xMMnjjxr9nNPwTAUAAYGhP9UBlxFdgUTLEpdunc+9yJvyZ+u2zbFJuHRENsmAAYJu7qP/ztxIk/HnfRvvTMFFc1ZobxMcbzXIMnTvx/zJ05JPowU8SGhnTHeQmE22+dW5878dfEsZaugLv0J3+lM32eeEP8BqBKFpsCROjG25ba3ts/+e3Eif8+jpQ0YWfbqunS80vYc54n3hLffN4Uoee1qHctvWtPo88T74gjl6vAculoZHxeY0/sHFzDEu+L7/N8idKs5WoN1Owd6PPEm+IpV0TEzOTNMMzeJZ0cU+SApyK4MfeAeFv8zD3w9SkgGbqJ/Zqb/mGl8ejBEyd+j6Vc2Ren6xCw63wL5U9tQ7wvnstV92eRpWpqZBKpfzQC+M8weOLEv2prWXpZtCouC9triJ7zPPGW+FIyNRRfH0VtT6Z0OT/j88R74kW965lvU9VO9fPszxwz4o3xGzxWs0dsoj0UHtIZhnnECyNDs/3owRMnfo8VoRKbH2V8vQUkRW1DvCe+S3ddOQYXVbNScWoWPX2eeD981/MlOFnfGQG2hJy1jKXPE++H728/1ZjMJTJ/SbPkPE+8K37Klf2B7CWjeM35p/+fKqj1uRN/TfwMQg5b0r1E5lHSEqK/tznPE++Kb4H3bKS310k+bwFhnOeJt8S3WOVye80ssnUjQLkcmHtAvC2+KXbgg7zR7YFs2FL1rc+d+GviZ92Dmj/vD1sBzANe9MD7DvP9paBZ63Mn/rr4Vmp4WJYmjkLEB7KaWe40M9YlJt4TvwFZcBUCYIrNwwDJWX2oeNVKAKW+Dd+TIt4az/LyGCZvFm3EGyIru35K3AX4zgjxrvi1LrHX3PamK3kZKqH5FfPAUJc6MvTRgydO/A77WIv7kGHIUvPu4XEoSvllXfpHD5448TssfH6rQum/M4KzOuVQzEPOn2CoV8GjB0+c+D22MiexFS7LZ1WX/9tRxueJ98PFPu/zb+NvZRInTpz4s+N/AXfwWNDrvFdPAAAAAElFTkSuQmCC" alt="마인드 디버깅 센터 QR">
+    <div class="qi"><h4>🖥️ 마인드 디버깅 센터</h4><p>ahnjin82-create.github.io/resilience-club/thought-clinic-v2.html</p></div>
+  </div>
+  <div class="qr-box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAHsAQAAAAA4UaPNAAADS0lEQVR4nO2dYW7kIAyFn1f9T27Q+x+rN4ATeH/YYJOZVbfbaafePBRFCeFTgvRiOcYQUXyijF+foQHixIkTJ/7VOFSTpW9qNdr3mg5VVVU7XZe0l+478WviMCWHpE3VTU3n0azDmuXG1DzxgjjCejeT8aZtr1S39vmloOaJ18RfTucCYAgABTAOHaKAtP41dydO/Pvxs+bVZN86xgFAADH9t+4Hj7w7ceLfj7vms5h1mncz9WgdQDb4qXHpvhO/Jn4Tt3l3S43pzxMviL/g5LEM8Q3QIRiyrurcHnd34sSfg8sBEcEQEfFAZAcAeVVVFRF9EwAiYo3tpZDjMXcnTvx78RcAGILlqI9Dx6Fm5AFMw778eR2iTef3bOm+E78m7r6NANLUVT6d9s2NsQFZU35cKt134tfF5fATH3sdgqZeada+qTkzVql9Ic9/eOLEP1p0lQ4s2Tev8TSDXFbohnEb4iXxqfCeUg46VoKB9pRpY+kHRnVqnnhRPPx5zCEnmX67OTbS1C5pOha39qX7TvyauGcO52zhsPaIBMvIN+tI+9J9J35NHGeF54xKzEp7KTqWnz8PSved+DXxyCXeEuZvffvU2JvRzhMviW9+S65ZPsySffZqAGqeeFE82Xm958Ng9/OB1Ya+DfGaeMTngT1EqVu4crk9e1SzdN+JXxPfzHgejTpFaSJuk8aqqHniBfE0Dpst+cyrj8rZIARPzRMvid+oOn2ubjO+Ed6Ok/RtiJfEU5TGTjuWn5NDl7bf3gVqnnhJfB9jXVKfUZoI6eTlPqxQ88RL4vuqZbgJVPYw7NEyYpul+078mngaWp22PfbnKE1yezrtPPGieOj5LPi8xNlsGVhj3IZ4cXy6K3IgvJohc7w1fcbOF4FzwInXxWWVAxgir2pLHHgZEomXayKhzxB//sMTJ/4v+PTS/bjDDuRVt1fAFr3pWPsf8fDEiX+s+Np9vkalzZmyKVFz/pTOS9JUhouf6x4Q/29wEdHue18AQeayZm9zDYRIPP5ZD0+c+N+UCM7kHy7cDkLdG6Vi3IZ4Qfz8n5GcQp9yDGLCSJ5FSM0TL4jf+Z9UTBVcmfM3gUo/peaJ18NF32/z58J/ZRInTpz4T8d/A7KakfWjgna0AAAAAElFTkSuQmCC" alt="ABCDE 앱 QR">
+    <div class="qi"><h4>🧠 ABCDE 마음 훈련 앱</h4><p>ahnjin82-create.github.io/resilience-club/abcde-practice.html</p></div>
+  </div>
+  <div class="qr-box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAHsAQAAAAA4UaPNAAADOUlEQVR4nO2dQY4jIQxFv0fZU/e/3dwATuBeGIyhMhp1dxTF4rNIU5SfEiSXZT4uWhS/aO3Pb2iAOHHixIm/AxdvF+zTBrtJE/v0cTf+hB9PnPhP8KLWbEj/ilxQVRExV5cLKAr0TjD+gB9PnPj32sP+CIBSAaBUKWqx3dxa26WAANpEN+Pccyd+Jv7YrrUJmqColCqAebs1wb2lnjvxM/Hd56Uo2qWAAtouH1dAemx/4bcTJ/5+vPu8K5YKiAX5UgVAURkR3t0+yJup5078YLx1JQa2SvVWtK9ei/b+avwRP5448e+1B5a4bSmNKICxYu39Jj3heeW3Eyf+fhyqiqJax3VRGzQ1suuSdUT7YW+WWlPPnfiZOLpLowvv5v+qU4S3u9NmXKrS54lnxLH5tvu8PwL9lo3XHvDH05F67sTPxDG3X4NLT1fH7SlYxlPPnfiZ+AMASkW7XJPsBTa2ITsGpVTfh8Xcq0o9d+Jn4iPO+9K1zkzGxr2DJ2vb1HMnfiYedJuR1bhWsyxvvePPCHMb4inxoT26DukrVpduSsjkmc8TT48jOnNvRb3T479bRomePk88Jb4KMh7zPYcJBpbqRw2HPk88IR4ifFylDq0y7kC5vdvQ54knxMdCdWw57b5d984i19PniefDF31yKTyowKwxmPU2k2JuQzwlvuvz8zNm75j9qOTQ54knxEOcxxrqa7+7qDcxBWJuQzwl/gAQ34RSfz0wvCFlL8bC3pwy+1L1Bd9OnPj78ZDPhPKD237rrDRebBjniefDZz4fy+aXvN0zH7O3PvN54lnxfR92PgKhxnjbk+qNcZ54SjxkNXWptEHIYYC9rnLcTT134mfiS+3BTNqH5+9PhDVqlcQT47ccPurzofPkhUH6PPGU+POKyriwjcvbpQKN+TzxlPh4NxBAOHxVSkWpYgdX2slmA9Clk3ruxM/Eb+cSAxjHOtlpTogbUs0Ppb/o88Rz4ssZTbGzqZexCCEUpKWeO/Ez8dtZ3BbzPZ6XinE6sY6YL7PAMvXciZ+Jh5eeQsdl+eUyiDYA96SIJ8Vvus3IamIas6uUrKsknhgX/b/Nvxv/VyZx4sSJfzr+BYMVniko+ePYAAAAAElFTkSuQmCC" alt="대시보드 QR">
+    <div class="qi"><h4>📊 라이브 대시보드</h4><p>ahnjin82-create.github.io/resilience-club/thought-clinic-dashboard.html</p></div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
