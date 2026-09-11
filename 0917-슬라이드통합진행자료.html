@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>9/17 공개수업 — 슬라이드 통합 진행자료</title>
+<title>9/17 공개수업 — 슬라이드 통합 진행자료 (상세판)</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
   :root{
@@ -19,15 +19,13 @@
 
   .hero{padding:34px 24px 26px;text-align:center;background:#fff;border-bottom:1px solid var(--line);}
   .hero .eyebrow{color:var(--coral);font-weight:700;font-size:13px;letter-spacing:.08em;margin:0 0 8px;}
-  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:27px;margin:0 0 8px;color:var(--navy);}
+  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:26px;margin:0 0 8px;color:var(--navy);}
   .hero .sub{color:var(--muted);font-size:13.5px;margin:0 0 12px;}
   .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
   .chip{background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:999px;}
   .chip.alt{background:var(--teal);}
-  .chip.c2{background:var(--coral);}
-  .flag{max-width:760px;margin:16px auto 0;background:#FFF3EF;border-left:4px solid var(--coral);border-radius:8px;padding:10px 16px;font-size:12.5px;color:#7a2e18;text-align:left;}
 
-  .wrap{max-width:900px;margin:0 auto;padding:32px 24px 80px;}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 24px 80px;}
   section{margin-bottom:40px;}
   h2{font-size:20px;color:var(--navy);border-left:5px solid var(--coral);padding-left:12px;margin:0 0 16px;}
   h3{font-size:15px;color:var(--navy);margin:18px 0 8px;}
@@ -43,17 +41,40 @@
   .checklist li::before{content:"☐";position:absolute;left:0;color:var(--teal);font-weight:900;}
 
   /* 슬라이드 카드 */
-  .slide-card{background:#fff;border:1.6px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;}
-  .slide-head{display:flex;align-items:center;gap:12px;padding:13px 18px;background:var(--navy);color:#fff;}
-  .slide-num{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex-shrink:0;}
-  .slide-title{font-size:14.5px;font-weight:800;flex:1;}
+  .slide-card{background:#fff;border:1.8px solid var(--line);border-radius:16px;margin-bottom:24px;overflow:hidden;}
+  .slide-head{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--navy);color:#fff;}
+  .slide-num{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0;}
+  .slide-title{font-size:15px;font-weight:800;flex:1;}
   .timing{background:rgba(255,255,255,.15);font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:999px;}
-  .slide-body{padding:15px 18px;}
-  .say{background:#EAF3FB;border-radius:10px;padding:11px 15px;margin-bottom:9px;font-size:13px;color:#1e3a5f;}
-  .say b{color:var(--teal);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px;}
-  .coach{background:#F3EEFF;border-left:4px solid var(--purple);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#4c1d95;margin-bottom:9px;}
-  .coach b{color:var(--purple);}
-  .between{text-align:center;padding:10px;color:var(--muted);font-size:12px;font-style:italic;}
+  .slide-body{padding:18px 20px;}
+
+  .block{margin-bottom:14px;}
+  .block:last-child{margin-bottom:0;}
+  .block-label{font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .screen .block-label{color:var(--muted);}
+  .screen-box{background:#F5F6F8;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#374151;}
+
+  .say .block-label{color:var(--teal);}
+  .say-box{background:#EAF3FB;border-radius:10px;padding:12px 15px;font-size:13.5px;color:#1e3a5f;}
+  .say-box p{margin:0 0 8px;color:#1e3a5f;font-size:13.5px;}
+  .say-box p:last-child{margin-bottom:0;}
+
+  .timebox .block-label{color:var(--amber);}
+  .timebox-box{background:#FFFBF0;border-radius:10px;padding:10px 14px;font-size:12px;color:#7a5a10;}
+  .timebox-box ul{margin:0;padding-left:18px;}
+  .timebox-box li{margin-bottom:3px;}
+
+  .qa .block-label{color:var(--coral);}
+  .qa-box{background:#FFF3EF;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#7a2e18;}
+  .qa-box .q{font-weight:800;margin-bottom:3px;}
+  .qa-box .a{margin:0 0 8px;}
+  .qa-box .a:last-child{margin-bottom:0;}
+
+  .coach .block-label{color:var(--purple);}
+  .coach-box{background:#F3EEFF;border-radius:10px;padding:11px 15px;font-size:12.5px;color:#4c1d95;}
+
+  .between{background:#EAFBF5;border:1.6px dashed var(--mint);border-radius:14px;padding:16px 20px;margin-bottom:24px;font-size:13px;color:#0b6b52;}
+  .between b{color:var(--mint);}
 
   .quote{background:#F5F6F8;border-radius:8px;padding:10px 14px;font-size:12.5px;font-style:italic;color:var(--ink);margin:8px 0;}
 
@@ -67,7 +88,7 @@
 
 <div class="topnav">
   <a href="#pre">사전 준비</a>
-  <a href="#slides">슬라이드별 진행</a>
+  <a href="#slides">슬라이드별 진행 (상세)</a>
   <a href="#principles">교수법 6원칙</a>
   <a href="#share">성과나눔 45분</a>
   <a href="#links">QR·링크</a>
@@ -75,113 +96,199 @@
 
 <div class="hero">
   <p class="eyebrow">POGOK WELL+ · 회복탄력성 동아리 「다시봄」</p>
-  <h1>9/17 공개수업 — 슬라이드 통합 진행자료</h1>
-  <p class="sub">수업 PPT(8슬라이드) 흐름을 뼈대로, 참고자료의 모든 내용을 한 곳에 모았습니다</p>
+  <h1>9/17 공개수업 — 슬라이드 통합 진행자료 (상세판)</h1>
+  <p class="sub">수업 PPT(8슬라이드) 흐름 그대로, 화면 설명·시간분배·전체 멘트·예상 질문 대응·교수법까지 전부 담았습니다</p>
   <div class="chips">
     <span class="chip">45분 수업 (15:25–16:05)</span>
-    <span class="chip alt">8슬라이드 대응</span>
-    <span class="chip c2">교사 휴대용 · 학생 화면엔 안 나옴</span>
+    <span class="chip alt">교사 휴대용 · 학생 화면엔 안 나옴</span>
   </div>
-  <div class="flag">이 문서는 <b>수업 PPT(`0917-mind-debugging-terms.pptx`)와 짝을 이루는 교사용 자료</b>예요. PPT는 그대로 화면에 띄우고, 이 문서를 옆에 두고 진행하세요.</div>
 </div>
 
 <div class="wrap">
 
 <section id="pre">
   <h2>사전 준비 (9/10 촬영 · 이후 편집)</h2>
-  <p>5개 모둠이 비합리적 신념 5종(파국화·낙인찍기·과잉일반화·마인드리딩·긍정격하) 중 하나씩 담당해 스크립트 기반 대화극 촬영. 역할은 총감독·프롬프트 서포터·배우 2명으로 구성. 모둠당 30~40초 분량을 넘지 않게 미리 안내 — 편집 단계에서 5개를 다 넣어야 5분 안에 들어옵니다.</p>
-
-  <h3>촬영 대본 — 모둠별 핵심 대사 (슬라이드 3 발문에서 그대로 활용)</h3>
+  <p>5개 모둠이 비합리적 신념 5종(파국화·낙인찍기·과잉일반화·마인드리딩·긍정격하) 중 하나씩 담당해 스크립트 기반 대화극 촬영. 역할은 총감독·프롬프트 서포터·배우 2명. 모둠당 30~40초, 편집본은 총 5분 내외.</p>
   <table>
     <tr><th>모둠</th><th>신념</th><th>캐릭터</th><th>★ 핵심 대사</th></tr>
-    <tr><td>1모둠</td><td>파국화</td><td>지호 · 하준</td><td>"이제 다 끝났어."</td></tr>
-    <tr><td>2모둠</td><td>낙인찍기</td><td>서연 · 민아</td><td>"나는 원래 이런 앤가봐."</td></tr>
-    <tr><td>3모둠</td><td>과잉일반화</td><td>하은 · 도윤</td><td>"항상 이래."</td></tr>
-    <tr><td>4모둠</td><td>마인드리딩</td><td>유진 · 태민</td><td>"쟤 분명 날 싫어할 거야."</td></tr>
-    <tr><td>5모둠</td><td>긍정격하</td><td>지우 · 서준</td><td>"그냥 운이 좋았을 뿐이야."</td></tr>
+    <tr><td>1모둠</td><td>파국화</td><td>지호 · 하준</td><td>"이제 다 끝났어." (수학 60점대, 특목고 좌절)</td></tr>
+    <tr><td>2모둠</td><td>낙인찍기</td><td>서연 · 민아</td><td>"나는 원래 이런 앤가봐." (지각, 수행평가 깜빡)</td></tr>
+    <tr><td>3모둠</td><td>과잉일반화</td><td>하은 · 도윤</td><td>"항상 이래." (친구가 인사 안 받음)</td></tr>
+    <tr><td>4모둠</td><td>마인드리딩</td><td>유진 · 태민</td><td>"쟤 분명 날 싫어할 거야." (카톡 답장 늦음)</td></tr>
+    <tr><td>5모둠</td><td>긍정격하</td><td>지우 · 서준</td><td>"그냥 운이 좋았을 뿐이야." (과학대회 금상)</td></tr>
   </table>
+  <p style="font-size:12px;color:var(--muted);">※ 이 대사·상황을 슬라이드 4번(ABCDE 원리) 설명 때 예시로 그대로 재사용하면, 학생들이 이미 아는 이야기라 이해가 훨씬 빨라요. 아래 슬라이드4 멘트에 이미 반영해뒀어요.</p>
 
   <h3>당일 아침, 진짜 이거만 기억하기</h3>
   <ul class="checklist">
     <li>Apps Script 편집기는 절대 열어두지 않기 (디버그 세션이 잠금을 잡아먹어 학생 제출이 통째로 실패할 수 있음)</li>
     <li>학생용 크롬북 몇 대 미리 강력 새로고침(Ctrl+Shift+R) 완료</li>
     <li>교실 앞 화면에 대시보드 미리 띄워두고 "자동새로고침 켜기" 활성화</li>
+    <li>영상 파일을 PPT에 직접 심었다면 재생 테스트 1회, 소리 크기 확인</li>
   </ul>
 </section>
 
 <section id="slides">
-  <h2>슬라이드별 진행 (PPT 8장 대응)</h2>
+  <h2>슬라이드별 진행 (상세)</h2>
 
   <div class="slide-card">
-    <div class="slide-head"><span class="slide-num">1</span><span class="slide-title">타이틀</span><span class="timing">도입 · 0분</span></div>
+    <div class="slide-head"><span class="slide-num">1</span><span class="slide-title">타이틀</span><span class="timing">도입 · 30초</span></div>
     <div class="slide-body">
-      <div class="say"><b>멘트</b>"오늘 뒤에 계신 선생님들도, 우리랑 똑같이 이 영상 보러 오신 관객이에요. 편하게 봅시다." → 바로 영상 재생.</div>
-      <div class="coach"><b>교수법 코칭 —</b> 참관 교사가 있으면 학생 뇌는 이미 '평가받는 모드'예요. 슬라이드를 오래 붙잡지 말고, 긴장 깨는 한 문장 후 곧바로 영상으로 넘어가세요.</div>
+      <div class="block screen"><div class="block-label">화면</div><div class="screen-box">"🖥️ 마인드 디버깅 센터" 큰 제목, "내 마음속 버그를 신고하고, 친구들에게 패치를 받아보세요" 부제</div></div>
+      <div class="block say"><div class="block-label">멘트</div><div class="say-box">
+        <p>"안녕하세요, 오늘 여러분 만나서 반가워요. 오늘 뒤에 계신 선생님들도, 우리랑 똑같이 이 영상 보러 오신 관객이에요. 편하게 봅시다."</p>
+        <p>(바로 이어서) "지금부터 영상 하나 보여드릴게요. 우리 반 친구들이 직접 찍은 거예요." → 영상 재생 시작</p>
+      </div></div>
+      <div class="block qa"><div class="block-label">돌발 상황 대응</div><div class="qa-box">
+        <div class="q">영상이 바로 안 재생되면?</div><div class="a">당황하지 말고 "잠깐만요, 준비하는 동안 다 같이 심호흡 한 번 할까요?"로 5초 벌기 → 재생 버튼 다시 클릭. 그래도 안 되면 소리만이라도 먼저 틀고 화면은 다음 시도.</div>
+      </div></div>
+      <div class="block coach"><div class="block-label">교수법 코칭</div><div class="coach-box">참관 교사가 있으면 학생 뇌는 이미 '평가받는 모드'예요. 슬라이드를 오래 붙잡지 말고, 긴장 깨는 한 문장 후 곧바로 영상으로 넘어가세요.</div></div>
     </div>
   </div>
 
   <div class="slide-card">
     <div class="slide-head"><span class="slide-num">2</span><span class="slide-title">오늘, 우리는 이렇게 갑니다</span><span class="timing">도입 · 1분</span></div>
     <div class="slide-body">
-      <div class="say"><b>멘트</b>"오늘 우리가 갈 다섯 단계예요. 영상 보고, 이름 배우고, 내 버그 진단하고, 친구랑 패치 주고받고, 마지막에 업데이트까지."</div>
-      <div class="coach"><b>교수법 코칭 —</b> 이 슬라이드는 "지도"예요. 10~15초 안에 손가락으로 단계만 짚고 넘기세요. 상세 설명은 각 단계 도달했을 때 하면 됩니다.</div>
+      <div class="block screen"><div class="block-label">화면</div><div class="screen-box">01 영상으로 만나기 → 02 이름 붙이기 → 03 내 버그 진단하기 → 04 함께 패치하기 → 05 업데이트 완료! (5단계 카드)</div></div>
+      <div class="block say"><div class="block-label">멘트</div><div class="say-box">
+        <p>"오늘 우리가 갈 다섯 단계예요. 방금 본 영상에서 이름을 배우고, 이제 내 마음속에도 있을 그 버그를 직접 찾아보고, 친구랑 서로 고쳐주고, 마지막엔 내가 직접 업데이트까지 해볼 거예요."</p>
+      </div></div>
+      <div class="block timebox"><div class="block-label">시간 배분</div><div class="timebox-box"><ul>
+        <li>손가락으로 5단계 하나씩 짚기: 40초</li>
+        <li>"이 순서 그대로 갈 거예요" 한 문장으로 마무리: 20초</li>
+      </ul></div></div>
+      <div class="block coach"><div class="block-label">교수법 코칭</div><div class="coach-box">이 슬라이드는 "지도"예요. 오래 설명하지 마세요 — 상세 설명은 각 단계에 도달했을 때 하면 됩니다.</div></div>
     </div>
   </div>
 
   <div class="slide-card">
     <div class="slide-head"><span class="slide-num">3</span><span class="slide-title">방금 영상 속, 5가지 생각의 함정</span><span class="timing">도입 · 6~7분</span></div>
     <div class="slide-body">
-      <div class="say"><b>멘트 (발문1 · 사실확인)</b>"방금 그 5개 장면, 각자 뭔가 익숙한 생각의 패턴이 있었죠? 짝이랑 20초만 얘기해볼까요?"</div>
-      <div class="say"><b>멘트 (발문2 · 이름 공개)</b>"이 다섯 가지, 사실 다 이름이 있어요." → 카드 하나씩 짚으며 소개. 막히면 위 표의 핵심 대사로 되짚어주기.</div>
-      <div class="coach"><b>교수법 코칭 —</b> 발문 순서는 반드시 <b>사실확인 → 가치판단</b>을 지키세요. "왜 그렇게 말했을까?"부터 물으면 학생이 방어적으로 변해요. 판단 유도 질문 후엔 3초 기다려주세요.</div>
+      <div class="block screen"><div class="block-label">화면</div><div class="screen-box">파국화·낙인찍기·과잉일반화·마인드리딩·긍정격하 5개 카드 (이름은 아직 안 뜨고, 발문 후 하나씩 공개하는 방식으로 진행 추천)</div></div>
+      <div class="block say"><div class="block-label">멘트 — 발문1 (사실확인, 1.5분)</div><div class="say-box">
+        <p>"방금 그 5개 장면, 각자 뭔가 익숙한 생각의 패턴이 있었죠? 짝이랑 20초만 얘기해볼까요. 시작!" (20초 후) "자, 누구 하나 얘기해볼 사람?" → 1~2명 지목 또는 자원 받기</p>
+      </div></div>
+      <div class="block say"><div class="block-label">멘트 — 발문2 (이름 공개, 4~5분)</div><div class="say-box">
+        <p>"이 다섯 가지, 사실 다 이름이 있어요." → 슬라이드 카드 하나씩 짚으며:</p>
+        <p>"1모둠 지호가 '이제 다 끝났어'라고 했던 거, 이걸 <b>파국화</b>라고 해요 — 작은 일 하나로 다 망했다고 생각하는 거죠."</p>
+        <p>"2모둠 서연이 '나는 원래 이런 앤가봐' 했던 거, <b>낙인찍기</b>예요."</p>
+        <p>"3모둠 하은이 '항상 이래' 했던 거, <b>과잉일반화</b>."</p>
+        <p>"4모둠 유진이 '쟤 분명 날 싫어할 거야' 했던 거, <b>마인드리딩</b> — 남의 마음을 근거 없이 넘겨짚는 거예요."</p>
+        <p>"5모둠 지우가 '그냥 운이었어' 했던 거, <b>긍정격하</b> — 내가 잘한 것도 깎아내리는 거죠."</p>
+      </div></div>
+      <div class="block qa"><div class="block-label">예상 상황 대응</div><div class="qa-box">
+        <div class="q">학생들이 조용하거나 대답을 안 하면?</div><div class="a">3초 이상 기다리기. 그래도 없으면 "어려운 질문 아니에요, 그냥 느낀 대로면 돼요"라고 문턱을 낮추고 다시 물어보기. 그래도 안 나오면 교사가 먼저 하나 예시를 던지고 "이런 것처럼요" 하고 다음으로 넘어가도 괜찮아요.</div>
+        <div class="q">엉뚱하거나 다른 답이 나오면?</div><div class="a">틀렸다고 하지 말고 "오, 그것도 일리 있네요! 근데 이 장면에서는 이런 부분도 있었어요"로 자연스럽게 방향만 틀어주기.</div>
+      </div></div>
+      <div class="block coach"><div class="block-label">교수법 코칭</div><div class="coach-box">발문 순서는 반드시 <b>사실확인 → 가치판단</b>을 지키세요. "왜 그렇게 말했을까?"부터 물으면 학생이 방어적으로 변해요.</div></div>
     </div>
   </div>
 
   <div class="slide-card">
     <div class="slide-head"><span class="slide-num">4</span><span class="slide-title">ABCDE 원리</span><span class="timing">전개① · 3분</span></div>
     <div class="slide-body">
-      <div class="say"><b>멘트</b>"우리가 화나거나 속상한 건 사실 '그 사건' 때문이 아니에요. 그 사건을 '어떻게 생각하느냐'가 감정을 만들어요."</div>
-      <div class="coach"><b>교수법 코칭 —</b> 5글자를 다 외우게 하려 하지 말고, "사건이 아니라 생각이 감정을 만든다"는 한 문장만 확실히 남기고 넘기세요.</div>
+      <div class="block screen"><div class="block-label">화면</div><div class="screen-box">A(사건) → B(믿음) → C(결과) → D(반박) → E(효과) 5개 색상 박스, 영→한 병기</div></div>
+      <div class="block say"><div class="block-label">멘트 (전체, 약 2분)</div><div class="say-box">
+        <p>"우리가 화나거나 속상한 건 사실 '그 사건' 때문이 아니에요. 그 사건을 '어떻게 생각하느냐'가 감정을 만들어요."</p>
+        <p>"예를 들어볼게요. 아까 1모둠 지호, 수학 60점대 받은 게 사건(A)이에요. 근데 지호를 진짜 힘들게 한 건 점수 자체가 아니라 '이제 다 끝났어'라는 생각(B)이었죠. 그 생각 때문에 좌절하고 포기하고 싶어진 거예요(C)."</p>
+        <p>"그럼 이 생각이 진짜 사실인지 따져보는 게 D(반박)예요. '진짜 다 끝난 걸까? 한 번 시험으로?' 이렇게요. 그리고 그렇게 따져보고 나서 얻는 더 건강한 생각이 E(효과)예요."</p>
+      </div></div>
+      <div class="block timebox"><div class="block-label">시간 배분</div><div class="timebox-box"><ul>
+        <li>A·B·C 설명 (지호 예시 포함): 80초</li>
+        <li>D·E 설명: 40초</li>
+        <li>다음 슬라이드로 전환 멘트: 20초</li>
+      </ul></div></div>
+      <div class="block qa"><div class="block-label">예상 질문 대응</div><div class="qa-box">
+        <div class="q">"그럼 진짜 안 좋은 일이 생겨도 무조건 좋게만 생각해야 해요?"</div>
+        <div class="a">이 질문 자주 나와요. 답변 준비: "아니에요, 사실을 왜곡하라는 게 아니에요. '60점 받았다'는 사실은 그대로 두고, 거기에 '그래서 다 끝났다'까지 자동으로 붙이지 말자는 거예요. 사실과 생각을 분리해서 보는 연습이에요."</div>
+      </div></div>
+      <div class="block coach"><div class="block-label">교수법 코칭</div><div class="coach-box">5글자를 다 외우게 하려 하지 말고, "사건이 아니라 생각이 감정을 만든다"는 한 문장만 확실히 남기고 넘기세요. 구체적 예시(지호) 하나로 충분해요 — 다섯 글자마다 새 예시를 들 필요 없어요.</div></div>
     </div>
   </div>
 
   <div class="slide-card">
     <div class="slide-head"><span class="slide-num">5</span><span class="slide-title">그래서 오늘은, 이걸 '디버깅'이라 부를게요</span><span class="timing">전개① · 4분 (핵심)</span></div>
     <div class="slide-body">
-      <div class="say"><b>멘트</b>"마음도 하나의 시스템이에요. 컴퓨터에 오류가 나면 '고장났다'고 안 하고 '버그가 있다'고 하죠? 오늘은 우리 생각도 똑같이 볼 거예요." → 표를 A부터 E까지 한 줄씩 짚으며 설명.</div>
-      <div class="coach"><b>교수법 코칭 —</b> 오늘 수업에서 <b>진짜 "교육"이 일어나는 지점</b>이에요. 이 매핑을 정확히 안 짚으면 학생에게 "그냥 재밌는 액티비티"로만 남아요. 왜 이 은유가 효과적이냐면 — "낙인찍기(나는 원래 이래)"를 생각을 "고정된 나"가 아니라 "고칠 수 있는 시스템"으로 재정의해 정면으로 반박하는 설계이기 때문이에요. 설명 끝엔 반드시 다리 문장을: <b>"이제 이 이름표들을 갖고, 진짜 우리 마음속에서 버그를 찾아볼 거예요."</b></div>
+      <div class="block screen"><div class="block-label">화면</div><div class="screen-box">REBT 용어 / 오늘의 이름 / 의미, 5행짜리 매핑 표 (A=버그발생상황 ... E=업데이트)</div></div>
+      <div class="block say"><div class="block-label">멘트 (전체, 약 3분)</div><div class="say-box">
+        <p>"마음도 하나의 시스템이에요. 컴퓨터에 오류가 나면 우리는 '고장났다'고 안 하고 '버그가 있다'고 하죠? 오늘은 우리 생각도 똑같이 볼 거예요."</p>
+        <p>(표를 한 줄씩 짚으며) "아까 A였던 사건, 오늘은 <b>버그 발생 상황</b>이라고 부를게요. B였던 믿음은 <b>에러 메시지</b>, C는 <b>시스템 반응</b>. 그리고 친구가 해주는 반박은 <b>패치</b>, 마지막에 내가 새로 쓰는 생각은 <b>업데이트</b>예요."</p>
+        <p>"즉, 잘못된 믿음 하나가 버그고, 그걸 찾아서 고치는 과정이 디버깅이에요."</p>
+      </div></div>
+      <div class="block timebox"><div class="block-label">시간 배분</div><div class="timebox-box"><ul>
+        <li>은유 도입 문장: 30초</li>
+        <li>표 5줄 설명: 2분</li>
+        <li>다음 활동으로 다리 문장: 30초</li>
+      </ul></div></div>
+      <div class="block qa"><div class="block-label">예상 질문 대응</div><div class="qa-box">
+        <div class="q">"그럼 저는 버그가 있는 사람이에요?"</div>
+        <div class="a">"아니요! 버그는 '나'가 아니라 '지금 이 생각 하나'에만 붙는 이름이에요. 사람한테 붙이는 게 아니라, 그 순간의 생각 패턴에 붙이는 거예요." (이 답변이 낙인찍기를 정면 반박하는 핵심 포인트예요)</div>
+      </div></div>
+      <div class="block coach"><div class="block-label">교수법 코칭</div><div class="coach-box">오늘 수업에서 <b>진짜 "교육"이 일어나는 지점</b>이에요. 이 매핑을 정확히 안 짚으면 학생에게 "그냥 재밌는 액티비티"로만 남아요. 설명 끝엔 반드시 다리 문장을: <b>"이제 이 이름표들을 갖고, 진짜 우리 마음속에서 버그를 찾아볼 거예요."</b></div></div>
     </div>
   </div>
 
-  <div class="between">— 여기서부터 5분간, PPT 없이 <b>ABCDE 마음 훈련 앱</b>으로 교사가 직접 라이브 시연 (전개②) —<br>영상 속 캐릭터 한 명을 골라 교사가 직접 입력하며 보여줍니다. 실행의도(다음에 뭘 어떻게 할지)를 학생이 눈으로 먼저 보게 하는 목적이에요. 이 앱은 완성도 80%라, 막히는 지점이 있으면 "이 부분은 업데이트 중이라 느릴 수 있어요"라고 미리 말해두세요.</div>
+  <div class="between">
+    <b>여기서부터 5분간, PPT 없이 ABCDE 마음 훈련 앱으로 교사가 직접 라이브 시연 (전개②)</b>
+    <div class="block say" style="margin-top:10px;"><div class="block-label">진행 순서</div><div class="say-box">
+      <p>1) "이번엔 아까 그 영상 속 캐릭터 한 명을 골라서, 제가 직접 이 앱에 입력해볼게요." → 화면 공유 전환</p>
+      <p>2) 지호(파국화) 예시로 A·B·C를 실제로 입력하며 소리 내어 진행: "사건(A)은 '수학 60점' ... 믿음(B)은 '이제 다 끝났어' ... 패턴은 파국화 선택하고 ..."</p>
+      <p>3) 앱이 반박(D) 예시를 보여주면 "이렇게 다르게 볼 수도 있죠?"로 마무리 → "이제 여러분 차례예요"로 전환</p>
+    </div></div>
+    <div class="block qa" style="margin-top:10px;"><div class="block-label">돌발 상황 대응</div><div class="qa-box">
+      <div class="q">앱이 멈추거나 느리면?</div><div class="a">이 앱은 완성도 80%예요. 미리 말해두세요: "이 부분은 업데이트 중이라 살짝 느릴 수 있어요." 그래도 안 되면 화면 없이 말로만 설명하고 다음으로 넘어가도 무방해요 — 이 활동의 핵심은 슬라이드 5에서 이미 전달됐어요.</div>
+    </div></div>
+  </div>
 
   <div class="slide-card">
-    <div class="slide-head"><span class="slide-num">6</span><span class="slide-title">마인드 디버깅 센터 — 사용법 3단계</span><span class="timing">전개③ 시작 · 1분</span></div>
+    <div class="slide-head"><span class="slide-num">6</span><span class="slide-title">마인드 디버깅 센터 — 사용법 3단계</span><span class="timing">전개③ · 1분 안내 + 19분 활동</span></div>
     <div class="slide-body">
-      <div class="say"><b>멘트</b>"이제 여러분 차례예요. 크롬북 열고 QR 찍고, 최근 있었던 가벼운 고민(시험·친구·게임 정도로만!) 하나 골라서 버그 신고해보세요. 안 되는 사람은 손 들어요, 제가 바로 갈게요."</div>
-      <div class="coach"><b>교수법 코칭 —</b> "안 되면 손 들기"를 활동 시작 <b>전에</b> 미리 깔아두는 게 핵심이에요. 시작 후 트러블 대응하면 흐름이 끊겨요.</div>
-      <div class="say" style="margin-top:8px;"><b>이어지는 개인 활동 (약 19분)</b>① 버그 신고 → ② 좌석 기반 자동 배정된 친구 2명에게 패치(D) 작성 → ③ 받은 패치 확인 후 업데이트(E) 입력, 디버깅 완료 카드 확인.</div>
-      <div class="coach" style="margin-top:8px;"><b>교수법 코칭 —</b> 활동 중반(②~③ 초반)이 반에서 가장 조용해지는 구간이에요. 침묵을 불안해하지 말고, 순회하며 "오, 이 패치 진짜 좋다"처럼 개별 피드백을 짧게 흘려주세요.</div>
+      <div class="block screen"><div class="block-label">화면</div><div class="screen-box">① 버그 신고 ② 버그 수정하기 ③ 패치 확인, 3단계 카드 + QR코드</div></div>
+      <div class="block say"><div class="block-label">멘트 (안내, 1분)</div><div class="say-box">
+        <p>"이제 여러분 차례예요. 크롬북 열고, QR 찍고, 최근 있었던 가벼운 고민(시험·친구·게임 정도로만!) 하나 골라서 버그 신고해보세요. 안 되는 사람은 손 들어요, 제가 바로 갈게요."</p>
+      </div></div>
+      <div class="block timebox"><div class="block-label">활동 19분 세부 시간표</div><div class="timebox-box"><ul>
+        <li>0~5분: ① 버그 신고 (A·B·패턴선택·C 입력 후 제출)</li>
+        <li>5분 시점: "다 제출한 사람? 이제 ②번 탭으로 넘어가세요" 전체 공지</li>
+        <li>5~13분: ② 자동 배정된 친구 2명 조회 + 패치(D) 작성해서 보내기</li>
+        <li>13분 시점: "이제 ③번 탭에서 내 패치 확인하고, 업데이트까지 써보세요" 전체 공지</li>
+        <li>13~19분: ③ 패치 확인 후 업데이트(E) 입력, 디버깅 완료 카드 확인</li>
+      </ul></div></div>
+      <div class="block qa"><div class="block-label">예상 상황 대응</div><div class="qa-box">
+        <div class="q">일찍 끝낸 학생이 있으면?</div><div class="a">"다른 친구 걸 다시 한번 읽어보고, 응원 한마디 더 남겨줄래요?" 같은 여유 과제 준비.</div>
+        <div class="q">패치가 안 와서 기다리는 학생이 있으면?</div><div class="a">"조금만 기다려봐요, 친구가 지금 쓰고 있을 거예요" 안심시키고, 시간이 많이 지나도 안 오면 교사가 직접 가서 배정된 친구 진행 상황 확인.</div>
+        <div class="q">기술적으로 안 되는 학생이 있으면?</div><div class="a">Ctrl+Shift+R 강력 새로고침부터 시도, 그래도 안 되면 옆 친구 화면 같이 보며 진행.</div>
+      </div></div>
+      <div class="block coach"><div class="block-label">교수법 코칭</div><div class="coach-box">"안 되면 손 들기"를 활동 시작 <b>전에</b> 미리 깔아두는 게 핵심이에요. 활동 중반(②~③ 초반)이 가장 조용해지는 구간인데, 침묵을 불안해하지 말고 순회하며 "오, 이 패치 진짜 좋다"처럼 개별 피드백을 짧게 흘려주세요.</div></div>
     </div>
   </div>
 
   <div class="slide-card">
     <div class="slide-head"><span class="slide-num">7</span><span class="slide-title">우리 반, 실시간으로 디버깅되는 중</span><span class="timing">정리 · 3~4분</span></div>
     <div class="slide-body">
-      <div class="say"><b>멘트</b>"자, 이제 화면을 같이 봐요. 우리 반이 어떤 생각의 함정에 제일 많이 빠졌는지, 친구들이 서로에게 어떤 패치를 보냈는지 보이죠? '디버깅 완료' 된 친구들 것도 몇 개 같이 읽어볼까요?"</div>
-      <div class="coach"><b>교수법 코칭 —</b> 이 화면(라이브 대시보드)이 오늘 수업의 클라이맥스예요. 완료 갤러리에 새 카드가 뜰 때마다 자연스럽게 짚어주면서 분위기를 살리세요.</div>
+      <div class="block screen"><div class="block-label">화면</div><div class="screen-box">라이브 대시보드로 전환 — 신념 분포도(원형차트), 실시간 패치 워드클라우드, 디버깅 완료 갤러리</div></div>
+      <div class="block say"><div class="block-label">멘트</div><div class="say-box">
+        <p>"자, 이제 화면을 같이 봐요." (원형차트 가리키며) "우리 반이 어떤 생각의 함정에 제일 많이 빠졌는지 보이죠?" (워드클라우드 가리키며) "그리고 이게 친구들이 서로에게 보낸 패치들이에요." (완료 갤러리 가리키며) "여기 '디버깅 완료' 된 친구들 것도 몇 개 같이 읽어볼까요?" → 카드 1~2개 소리 내어 읽기</p>
+      </div></div>
+      <div class="block coach"><div class="block-label">교수법 코칭</div><div class="coach-box">이 화면이 오늘 수업의 클라이맥스예요. 완료 갤러리에 새 카드가 뜰 때마다 "어 방금 떴다!"하는 반응이 나오면 자연스럽게 짚어주면서 분위기를 살리세요.</div></div>
     </div>
   </div>
 
   <div class="slide-card">
     <div class="slide-head"><span class="slide-num">8</span><span class="slide-title">마무리</span><span class="timing">정리 · 1분</span></div>
     <div class="slide-body">
-      <div class="say"><b>멘트</b>"오늘 우리는 생각의 버그를 찾고, 함께 고치는 법을 배웠어요. 회복탄력성은 타고나는 게 아니라, 오늘처럼 연습하는 기술이에요." → 소감 1~2명 발표 후 마무리.</div>
-      <div class="coach"><b>교수법 코칭 —</b> 활동으로 끝내지 말고, 이 한 문장으로 오늘 배운 걸 '삶으로 가져갈 수 있는 말'로 닫아주세요.</div>
+      <div class="block say"><div class="block-label">멘트</div><div class="say-box">
+        <p>"오늘 우리는 생각의 버그를 찾고, 함께 고치는 법을 배웠어요. 회복탄력성은 타고나는 게 아니라, 오늘처럼 연습하는 기술이에요." → "혹시 오늘 소감 한마디 해줄 사람?" 1~2명 발표 → "오늘 다들 고생 많았어요!"</p>
+      </div></div>
+      <div class="block qa"><div class="block-label">시간이 부족하거나 남으면</div><div class="qa-box">
+        <div class="q">시간이 부족하면</div><div class="a">소감 발표를 생략하고 마무리 멘트만으로 종료.</div>
+        <div class="q">시간이 남으면</div><div class="a">소감 발표를 2~3명으로 늘리거나, 대시보드로 다시 돌아가 완료 갤러리 카드를 몇 개 더 읽어주기.</div>
+      </div></div>
+      <div class="block coach"><div class="block-label">교수법 코칭</div><div class="coach-box">활동으로 끝내지 말고, 이 한 문장으로 오늘 배운 걸 '삶으로 가져갈 수 있는 말'로 닫아주세요.</div></div>
     </div>
   </div>
 
-  <p style="font-size:12px;color:var(--muted);">※ 시간 합계: 도입 8분 + 전개① 7분 + 전개② 5분 + 전개③ 20분 + 정리 5분 = 총 45분. 전개③에서 가장 여유를 크게 잡아뒀으니, 시간이 부족하면 정리의 소감 나누기를 줄이세요.</p>
+  <p style="font-size:12px;color:var(--muted);">※ 시간 합계: 도입 8분(슬라이드1~3) + 전개① 7분(슬라이드4~5) + 전개② 5분(라이브 시연) + 전개③ 20분(슬라이드6) + 정리 5분(슬라이드7~8) = 총 45분.</p>
 </section>
 
 <section id="principles">
