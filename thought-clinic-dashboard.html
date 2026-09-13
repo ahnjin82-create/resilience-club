@@ -110,6 +110,7 @@
     const rows = data.rows || [];
     renderPie(rows);
     renderCloud(rows);
+    renderFinalCloud(rows);
     renderGallery(rows);
   }
 
@@ -195,6 +196,43 @@
     }).join('');
 
     panel.innerHTML = `<h2>🔧 실시간 패치 워드클라우드</h2><div class="cloud">${wordsHtml}</div>`;
+  }
+
+  // ---- 우리 반의 업데이트(E) 워드클라우드 — 정리 단계용, 기존 업데이트(E) 데이터를 그대로 재사용 ----
+  function renderFinalCloud(rows){
+    const freq = {};
+    rows.forEach(r => {
+      const text = r.e;
+      if(!text) return;
+      const words = String(text).split(/[\s,.!?~"'()]+/).filter(w => w.length >= 2 && !STOPWORDS.has(w));
+      words.forEach(w => { freq[w] = (freq[w]||0) + 1; });
+    });
+
+    const grid = document.getElementById('grid');
+    let panel = document.getElementById('finalCloudPanel');
+    if(!panel){
+      panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.id = 'finalCloudPanel';
+      panel.style.gridColumn = '1/-1';
+      grid.appendChild(panel);
+    }
+
+    const entries = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0, 40);
+    if(entries.length === 0){
+      panel.innerHTML = '<h2>🌈 우리 반의 업데이트 워드클라우드</h2><p style="color:#9fb0d0;text-align:center;padding:40px 0;">아직 업데이트를 완료한 친구가 없어요</p>';
+      return;
+    }
+
+    const maxCount = entries[0][1];
+    const colors = ["#02C39A","#FFB627","#3B82F6","#FF6B4A","#8B5CF6"];
+    const wordsHtml = entries.map(([word, count], i) => {
+      const size = 14 + (count / maxCount) * 40; // 14px ~ 54px
+      const color = colors[i % colors.length];
+      return `<span class="cloud-word" style="font-size:${size}px;color:${color}">#${escapeHtml(word)}</span>`;
+    }).join('');
+
+    panel.innerHTML = `<h2>🌈 우리 반의 업데이트 워드클라우드</h2><p style="color:#9fb0d0;font-size:12.5px;margin:-8px 0 14px;">우리 반 전체가 새로 쓴 생각들이 모여 만드는 오늘의 결론</p><div class="cloud">${wordsHtml}</div>`;
   }
 
   function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
