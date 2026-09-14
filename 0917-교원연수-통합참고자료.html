@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>교원 연수자료 — 통합 참고자료</title>
+<title>교원 연수자료 — 통합 참고자료 (v2)</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
   :root{
@@ -13,15 +13,14 @@
   *{box-sizing:border-box;}
   body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;}
 
-  .topnav{position:sticky;top:0;z-index:20;background:var(--navy);padding:10px 20px;display:flex;gap:14px;flex-wrap:wrap;font-size:12px;}
+  .topnav{position:sticky;top:0;z-index:20;background:var(--navy);padding:10px 20px;display:flex;gap:12px;flex-wrap:wrap;font-size:11px;}
   .topnav a{color:#B9C6E0;text-decoration:none;font-weight:700;}
   .topnav a:hover{color:#fff;}
 
-  .hero{padding:38px 24px 30px;text-align:center;background:#fff;border-bottom:1px solid var(--line);display:flex;flex-direction:column;align-items:center;}
-  .hero img{width:90px;margin-bottom:10px;}
+  .hero{padding:38px 24px 30px;text-align:center;background:#fff;border-bottom:1px solid var(--line);}
   .hero .eyebrow{color:var(--coral);font-weight:700;font-size:13px;letter-spacing:.08em;margin:0 0 8px;}
-  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:28px;margin:0 0 8px;color:var(--navy);}
-  .hero .sub{color:var(--muted);font-size:14px;margin:0 0 14px;}
+  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:26px;margin:0 0 8px;color:var(--navy);}
+  .hero .sub{color:var(--muted);font-size:13.5px;margin:0 0 14px;}
   .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
   .chip{background:var(--navy);color:#fff;font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;}
   .chip.alt{background:var(--teal);}
@@ -68,7 +67,10 @@
   <a href="#timing">시간 배분</a>
   <a href="#s1">01 기획 배경</a>
   <a href="#s2">02 이론적 기반</a>
+  <a href="#s2b">K-SEL 상세</a>
+  <a href="#s2c">정보 교과 융합</a>
   <a href="#s3">03 왜 디버깅인가</a>
+  <a href="#s3b">왜 토의가 아닌가</a>
   <a href="#s4">04 웹앱 개발 여정</a>
   <a href="#s5">05 배움의 4지점</a>
   <a href="#s6">06 기대효과·확장</a>
@@ -78,36 +80,36 @@
 <div class="hero">
   <p class="eyebrow">POGOK WELL+ · 회복탄력성 동아리 「다시봄」</p>
   <h1>「마인드 디버깅 센터」의 기획과 배움의 설계</h1>
-  <p class="sub">교원 연수자료(20분 발표) 통합 참고자료 — 발표 대본 및 이론적 확장판</p>
+  <p class="sub">교원 연수자료(20분 발표) 통합 참고자료 v2 — 19슬라이드 대응</p>
   <div class="chips">
-    <span class="chip">20분 발표</span>
-    <span class="chip alt">16슬라이드 대응</span>
+    <span class="chip">20~22분 발표</span>
+    <span class="chip alt">19슬라이드 대응</span>
   </div>
 </div>
 
 <div class="wrap">
 
 <section id="timing">
-  <h2>시간 배분 (총 20분)</h2>
+  <h2>시간 배분 (총 20~22분)</h2>
   <table>
     <tr><th>구간</th><th>슬라이드</th><th>시간</th><th>핵심 메시지</th></tr>
     <tr><td>여는 말 + 목차</td><td>1~2</td><td>1.5분</td><td>오늘 나눌 이야기의 지도를 먼저 보여준다</td></tr>
-    <tr><td>기획 배경 + 이론적 기반</td><td>3~4</td><td>3.5분</td><td>왜 시작했는가, 무엇에 근거했는가</td></tr>
-    <tr><td>왜 디버깅인가</td><td>5</td><td>2분</td><td>은유 선택의 교육학적 근거</td></tr>
-    <tr><td>웹앱 개발 여정</td><td>6~9</td><td>5분</td><td>종이에서 웹앱으로, 실제 트러블슈팅, 전체 산출물</td></tr>
-    <tr><td>배움의 4가지 지점</td><td>10~14</td><td>6분</td><td>이 발표의 핵심 — 어디서 배움이 일어나는가</td></tr>
-    <tr><td>기대효과·확장 + 마무리</td><td>15~16</td><td>2분</td><td>이후의 방향과 질문 유도</td></tr>
+    <tr><td>기획 배경</td><td>3</td><td>1.5분</td><td>왜 시작했는가</td></tr>
+    <tr><td>이론적 기반 + K-SEL + 정보 교과 융합</td><td>4~6</td><td>4분</td><td>무엇에 근거했는가 — REBT·Bandura·K-SEL·긍정심리학, 그리고 정보과 데이터 영역과의 실제 연계</td></tr>
+    <tr><td>왜 디버깅인가 + 왜 토의가 아닌가</td><td>7~8</td><td>3.5분</td><td>은유 선택의 근거, 그리고 예상 질문에 선제적으로 답하기</td></tr>
+    <tr><td>웹앱 개발 여정</td><td>9~12</td><td>4.5분</td><td>종이에서 웹앱으로, 실제 트러블슈팅, 전체 산출물</td></tr>
+    <tr><td>배움의 4가지 지점</td><td>13~17</td><td>5.5분</td><td>이 발표의 핵심 — 어디서 배움이 일어나는가</td></tr>
+    <tr><td>기대효과·확장 + 마무리</td><td>18~19</td><td>2분</td><td>이후의 방향과 질문 유도</td></tr>
   </table>
-  <p style="font-size:12px;color:var(--muted);">※ 배움의 4가지 지점(10~14번)에 시간을 가장 많이 배정했어요 — 이 발표에서 청중이 가장 납득해야 할 부분이기 때문이에요. 시간이 부족하면 웹앱 개발 여정(6~9)의 트러블슈팅 슬라이드를 짧게 넘기고, 남으면 거기서 채우세요.</p>
+  <p style="font-size:12.5px;color:var(--muted);">※ 슬라이드가 16→19장으로 늘면서 발표 시간이 20분에서 22분 정도로 자연스럽게 늘어났어요. 시간이 부족하면 웹앱 개발 여정(9~12)의 트러블슈팅 슬라이드를 짧게 넘기고, 배움의 4가지 지점(13~17)엔 시간을 최대한 유지하세요 — 이 발표에서 청중이 가장 납득해야 할 부분입니다.</p>
 </section>
 
 <section id="s1">
   <h2>01 · 기획 배경</h2>
   <p class="slidetag">슬라이드 3 대응</p>
   <p>이 프로젝트는 이론에서 출발한 게 아니라, <b>현장에서 반복적으로 관찰된 장면</b>에서 출발했습니다. 시험 하나로 "난 망했다"고 단정하고, 친구의 사소한 반응 하나로 "쟤가 날 싫어한다"고 확신하는 중2 학생들의 모습은 상담실에서만 다뤄지기엔 너무 보편적이었습니다.</p>
-  <p>기존 접근에는 세 가지 한계가 있었습니다. 첫째, 일방향 강의식 정신건강 교육은 학생이 자기 얘기로 이어가기 어렵습니다. 둘째, 1:1 상담 중심 개입은 확산성과 상시성에 한계가 있습니다. 셋째, "회복탄력성"이라는 말 자체가 중2 학생에게는 너무 추상적이어서 손에 잡히지 않습니다.</p>
+  <p>기존 접근에는 세 가지 한계가 있었습니다. 첫째, 일방향 강의식 정신건강 교육은 학생이 자기 얘기로 이어가기 어렵습니다. 둘째, 1:1 상담 중심 개입은 확산성과 상시성에 한계가 있습니다. 셋째, "회복탄력성"이라는 말 자체가 추상적이어서 손에 잡히지 않습니다.</p>
   <div class="quote">"학생 스스로 자기 생각을 객관화하고, 또래와 함께 실시간으로 다뤄볼 수 있는 구조를 만들 수는 없을까?"</div>
-  <div class="say"><b>발표 팁:</b> 이 파트는 "왜 굳이 이렇게까지 만들었는가"에 대한 답을 미리 깔아두는 구간이에요. 통계나 이론보다, 방금 위에 적은 것 같은 구체적인 학생 장면 하나를 먼저 던지면 청중의 공감을 더 빨리 얻을 수 있어요.</div>
 </section>
 
 <section id="s2">
@@ -117,15 +119,43 @@
   <div class="theory-grid">
     <div class="theory-card"><div class="tt" style="color:var(--coral);">REBT · Albert Ellis</div><div class="ts">비합리적 신념(ABCDE)</div><div class="td">사건(A) 자체가 아니라 그 사건에 대한 믿음(B)이 결과(C)로서의 감정과 행동을 만든다는 인지치료 이론. 오늘 활동의 핵심 골격입니다.</div></div>
     <div class="theory-card"><div class="tt" style="color:var(--teal);">사회인지이론 · Albert Bandura</div><div class="ts">또래 관찰학습</div><div class="td">타인의 행동과 그 결과를 관찰하는 것만으로도 학습이 일어난다는 이론. 학생들이 서로 '패치'를 주고받는 구조의 이론적 근거입니다.</div></div>
-    <div class="theory-card"><div class="tt" style="color:var(--mint);">CASEL SEL</div><div class="ts">사회정서학습 5대 역량</div><div class="td">자기인식·자기관리·사회적 인식·관계기술·책임 있는 의사결정 — 「다시봄」 34회기 프로그램 전체를 관통하는 틀입니다.</div></div>
-    <div class="theory-card"><div class="tt" style="color:var(--purple);">긍정심리학</div><div class="ts">강점 기반 접근</div><div class="td">결핍이 아니라 강점과 자원에 주목하는 관점. "문제 학생" 프레임이 아니라 "누구나 겪는 버그" 프레임을 택한 근거입니다.</div></div>
+    <div class="theory-card"><div class="tt" style="color:var(--mint);">K-SEL</div><div class="ts">한국형 사회정서교육</div><div class="td">교육부(2024)가 신설한 '사회정서성장지원과' 주도의 국가 정책. 4대 영역·6대 핵심역량 — 「다시봄」 34회기 프로그램 전체의 틀입니다.</div></div>
+    <div class="theory-card"><div class="tt" style="color:var(--purple);">긍정심리학</div><div class="ts">강점 기반 접근</div><div class="td">결핍이 아니라 강점과 자원에 주목 — '문제 학생' 프레임이 아니라 '누구나 겪는 버그' 프레임의 근거입니다.</div></div>
   </div>
-  <div class="say"><b>발표 팁:</b> 이론 이름을 나열하는 데 시간을 쓰지 마세요. "이 활동의 어느 부분이 어느 이론과 연결되는지" 한 문장씩만 짚고 바로 다음으로 넘어가는 게 20분 안에 맞아요. 디테일은 이 참고자료로 대체하면 됩니다.</div>
+</section>
+
+<section id="s2b">
+  <h2>K-SEL 한국형 사회정서학습 6대 핵심 역량 (상세)</h2>
+  <p class="slidetag">슬라이드 5 대응</p>
+  <p>교육부(2024) 연구를 기반으로 한 K-SEL은 <b>4대 영역(자기·관계·공동체·마음건강)</b>과 <b>6대 핵심역량</b>으로 구성됩니다.</p>
+  <table>
+    <tr><th>역량</th><th>정의</th></tr>
+    <tr><td>① 자기인식</td><td>자신의 정서적 반응과 상태를 직면하고 알아차리는 능력</td></tr>
+    <tr><td>② 자기관리</td><td>충동에 휘둘리지 않고 부정적인 마음을 스스로 가라앉히고 제어하는 태도</td></tr>
+    <tr><td>③ 관계인식</td><td>역지사지의 마음으로 타인의 사정을 다각적으로 헤아려보는 힘</td></tr>
+    <tr><td>④ 관계관리</td><td>나를 주어로 삼아 객관적이고 차분하게 감정을 전달하는 소통법</td></tr>
+    <tr><td>⑤ 공동체 가치 인식</td><td>상호 신뢰가 공동체 관계망 유지에 얼마나 중요한지 아는 것</td></tr>
+    <tr><td>⑥ 정신건강 인식·관리</td><td>마음을 건강하게 돌보고, 필요하면 주변 어른에게 도움을 요청하는 기술</td></tr>
+  </table>
+  <div class="note">참고: 일부 교육 칼럼에서는 "K-SEL의 4대 영역·6개 역량이 국제 표준(CASEL)에서 개념적으로 일부 이탈했다"는 비판도 제기되고 있습니다. 질문이 나오면 "국내 실정에 맞춰 교육부가 확장한 버전"이라고 설명하면 무난합니다.</div>
+</section>
+
+<section id="s2c">
+  <h2>정보 교과와의 융합 — 데이터로 완성되는 배움</h2>
+  <p class="slidetag">슬라이드 6 대응</p>
+  <p>학년부장 선생님의 권고로, 2022 개정 교육과정 중학교 정보과 '데이터' 영역 성취기준과 연계하여 설계하였습니다.</p>
+  <table>
+    <tr><th>성취기준</th><th>내용</th><th>오늘 활동에선</th></tr>
+    <tr><td>[9정02-02]</td><td>문제 해결에 적합한 데이터를 수집하고, 목적에 맞게 구분하여 관리한다</td><td>학생이 A·B·C를 입력 → 좌석·모둠별로 시트에 자동 정리</td></tr>
+    <tr><td>[9정02-03]</td><td>실생활의 데이터를 표, 다이어그램 등 다양한 형태로 구조화한다</td><td>대시보드의 원형 신념분포도·실시간 패치 워드클라우드</td></tr>
+    <tr><td>[9정02-04]</td><td>데이터 간의 관계를 파악하고, 데이터에 기반하여 의미를 해석한다</td><td>"우리 반은 파국화가 제일 많네" — 반 전체 경향을 읽어내기</td></tr>
+  </table>
+  <div class="say"><b>발표 팁:</b> 정보 교과는 2022 개정 교육과정에서 '공통교과'로 승격되어 국가 수준 성취기준이 명확히 문서화되어 있어요. 반면 보건 교과는 '교양 교과'로 분류되어 성취기준이 학교별 문서로만 확인 가능합니다 — 이 차이를 언급하면, 왜 정보과 연계가 근거로서 특히 탄탄한지 설명하는 데 도움이 됩니다.</div>
 </section>
 
 <section id="s3">
   <h2>03 · 왜 '디버깅'인가</h2>
-  <p class="slidetag">슬라이드 5 대응</p>
+  <p class="slidetag">슬라이드 7 대응</p>
   <p>ABCDE를 "사건-믿음-결과-반박-효과"로 그대로 가르치면, 중2에게는 추상적이고 딱딱합니다. '디버깅'은 학생들이 게임과 앱에서 이미 체감적으로 알고 있는 개념입니다. 이 은유 전환에는 세 가지 교육학적 의도가 있습니다.</p>
   <table>
     <tr><th>의도</th><th>설명</th></tr>
@@ -133,11 +163,27 @@
     <tr><td>실패에 대한 심리적 거리 확보</td><td>'내가 잘못했다'가 아니라 '버그가 있다'는 언어는, 자기 비난 없이 문제를 관찰할 수 있는 안전한 거리를 만들어줍니다.</td></tr>
     <tr><td>또래 개입의 명분 제공</td><td>친구의 생각을 '지적'하는 게 아니라 '패치'해주는 것 — 개입 자체의 부담이 줄어듭니다.</td></tr>
   </table>
+  <div class="note">보너스: 마인크래프트 비유도 유효합니다 — Mojang(모장)은 실제로 'Mojira'라는 공개 버그 트래커를 운영하고, 패치노트에 'Fixed bugs' 섹션을 공개합니다. "유저 신고 → 개발자 검토 → 패치 배포"가 오늘 활동의 "학생 신고(A·B·C) → 친구 검토·패치(D) → 업데이트(E)"와 정확히 대응됩니다.</div>
+</section>
+
+<section id="s3b">
+  <h2>예상 질문에 미리 답하기 · 왜 토의가 아니라 이 방식인가</h2>
+  <p class="slidetag">슬라이드 8 대응</p>
+  <p>정직하게 답할 부분입니다. 이건 단순히 "작년보다 낫다/못하다"의 문제가 아니라, 애초에 다루는 내용의 성격이 완전히 달라서 방식이 달라진 것입니다.</p>
+  <p><b>핵심 차이</b> — 작년 주제(감염병 시대의 딜레마)는 외부적·가상적 딜레마였습니다. "나라면 어떤 선택을 할까"를 얘기하는 건 나를 드러내는 위험 부담이 적어, 모둠 토의가 최적의 방식이었습니다. 하지만 이번 주제는 "내가 실제로 갖고 있는 인지왜곡"입니다. "나는 원래 이런 앤가봐", "쟤가 날 싫어할 거야"는 남 얘기가 아니라 내 진짜 취약한 속마음입니다. 이런 걸 모둠 안에서 소리 내어 말하라고 하면, 방어적으로 변하거나 겉핥기 답만 나올 수 있습니다.</p>
+  <table>
+    <tr><th>강점</th><th>설명</th></tr>
+    <tr><td>① 자기노출의 심리적 안전</td><td>텍스트로 혼자 입력하는 게, 실시간 발표보다 훨씬 낮은 부담으로 진짜 속마음을 꺼내게 합니다 — CMC(컴퓨터 매개 소통) 연구에서 반복 확인된 현상으로, 특히 청소년은 민감한 주제일수록 텍스트 채널에서 더 솔직해집니다.</td></tr>
+    <tr><td>② 100% 참여 보장</td><td>모둠 토의는 필연적으로 목소리 큰 학생이 주도하고 조용한 학생은 듣기만 합니다. 이 구조는 전원이 A·B·C를 다 쓰고, 전원이 패치를 주고받고, 전원이 E를 씁니다.</td></tr>
+    <tr><td>③ 말보다 글이 요구하는 인지적 노력</td><td>즉흥적으로 반응하는 것과, 친구의 신념을 읽고 정리해서 반박을 글로 쓰는 건 인지적 부담이 다릅니다. 패치를 쓰는 행위 자체가 상대의 생각을 이해하고 재구성하는, 더 깊은 처리 과정입니다.</td></tr>
+    <tr><td>④ 구조화된 스캐폴딩</td><td>자유토의는 이런 개인적 주제에서 쉽게 표면화됩니다. ABCDE 구조는 학생이 실제로 REBT 모델을 적용하도록 강제하는 틀입니다.</td></tr>
+  </table>
+  <div class="note">정직한 트레이드오프 — 이 방식은 실시간 인간 상호작용의 생동감은 확실히 덜합니다. 참관 교사 입장에서 "아이들이 눈 마주치고 대화하는 역동적인 장면"은 덜 보이고, 모둠 토의가 길러주는 즉흥적 경청·협상 같은 대인 스킬은 이 활동에선 안 커집니다. 이 부분은 숨기지 말고 솔직하게 인정하고 넘어가세요 — 오히려 신뢰를 높입니다.</div>
 </section>
 
 <section id="s4">
   <h2>04 · 웹앱 개발 여정</h2>
-  <p class="slidetag">슬라이드 6~9 대응</p>
+  <p class="slidetag">슬라이드 9~12 대응</p>
 
   <h3>처음엔, 종이 처방카드였습니다</h3>
   <p>초기 설계는 A5 종이 카드 방식이었습니다. 학생이 종이에 A·B·C를 적어 제출하면, 교사가 회수해 무작위로 재배분하고, 친구가 카드 뒷면에 반박(D)을 적어 다시 원주인에게 전달하는 구조였습니다. 하지만 회수·재배분에 물리적 시간이 걸리고, 반 전체의 경향을 즉시 볼 수 없으며, 손글씨 판독과 분실 리스크가 있었습니다.</p>
@@ -151,7 +197,6 @@
   <div class="bug-item" style="border-color:var(--coral);"><div class="bt">배포 주소 꼬임</div><div class="bd">웹앱이 옛날 코드가 남아있는 배포를 계속 호출해, 응답이 빈 값으로 저장되던 문제. 실제 배포 주소를 대조해 진단·해결했습니다.</div></div>
   <div class="bug-item" style="border-color:var(--teal);"><div class="bt">패치 매칭 로직 오류</div><div class="bd">같은 좌석으로 여러 번 테스트하며 생긴 중복 데이터 때문에, 패치가 오래된 기록에 저장되던 버그를 로직 수정으로 해결했습니다.</div></div>
   <div class="bug-item" style="border-color:var(--purple);"><div class="bt">동시성 잠금 충돌</div><div class="bd">편집기에 남겨둔 디버그 세션이 잠금을 계속 붙잡아, 실제 학생 요청이 통째로 실패하던 문제를 실행 로그로 추적해 해결했습니다.</div></div>
-  <div class="note">이 세 가지를 발표에 넣은 이유는, 완성품만 보여주면 "그냥 신기한 거 보여주려고 웹앱 썼나?"로 겉핥기될 위험이 있기 때문이에요. 실제로 겪고 고친 과정을 보여주는 게, 기술적 화려함보다 훨씬 더 신뢰를 줍니다.</div>
 
   <h3>전체 산출물</h3>
   <p>웹앱만이 아니라 프로젝트 전체를 직접 준비했습니다 — 모둠별 감독 디렉션 카드까지 포함한 촬영 대본킷 5종, 성취기준·평가기준·생기부 특기사항 예시를 포함한 45분 수업지도안, 학생에게 용어를 설명하는 수업용 PPT, 그리고 체험용 QR과 각종 배포자료까지. 이 모든 것이 「다시봄」 34회기 프로그램 중 단 하나의 회기를 위한 준비물입니다.</p>
@@ -159,7 +204,7 @@
 
 <section id="s5">
   <h2>05 · 배움이 일어나는 4가지 지점</h2>
-  <p class="slidetag">슬라이드 10~14 대응 — 이 발표의 핵심</p>
+  <p class="slidetag">슬라이드 13~17 대응 — 이 발표의 핵심</p>
   <p>마인드 디버깅 센터의 다섯 글자(A→B→C→D→E) 사이사이에서, 실제로 배움이 일어나는 네 개의 지점이 있습니다.</p>
 
   <div class="lp-card" style="border-color:var(--coral);">
@@ -186,12 +231,12 @@
     <div class="quote">완결된 서사가 있어야, 배움이 경험으로 남습니다.</div>
   </div>
 
-  <div class="say"><b>발표 팁:</b> 이 네 장은 발표에서 가장 힘을 줘야 할 구간이에요(총 6분 배정). 각 카드마다 "이 순간, 이 이론"을 한 문장으로 짧게 짚고, 인용구를 천천히 읽어주는 방식으로 진행하면 청중에게 여운이 남아요.</div>
+  <div class="note"><b>이 수업을 관통하는 한 문장:</b> "내 감정은 해석에서 왔다." — 학생 대상 수업 PPT의 마지막 슬라이드에도 이 문장으로 열고 닫는 구조를 심어뒀습니다. 성과나눔에서도 이 문장을 인용하면, 오늘 발표 전체가 하나의 메시지로 수렴되는 효과가 있습니다.</div>
 </section>
 
 <section id="s6">
   <h2>06 · 기대 효과와 확장</h2>
-  <p class="slidetag">슬라이드 15 대응</p>
+  <p class="slidetag">슬라이드 18 대응</p>
   <table>
     <tr><th>대상</th><th>기대 효과</th></tr>
     <tr><td>학생에게</td><td>생각을 '고정된 사실'이 아니라 '검토 가능한 가설'로 대하는 습관, 또래에게 도움을 주고받는 경험 자체의 정서적 가치</td></tr>
