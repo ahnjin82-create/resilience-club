@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>9/17 공개수업 — 슬라이드 통합 진행자료 (상세판)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{
+    --navy:#1B3A6B; --teal:#028090; --mint:#02C39A; --coral:#FF6B4A; --purple:#8B5CF6; --amber:#FFB627;
+    --ink:#1B2436; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;}
+
+  .topnav{position:sticky;top:0;z-index:20;background:var(--navy);padding:10px 20px;display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;}
+  .topnav a{color:#B9C6E0;text-decoration:none;font-weight:700;}
+  .topnav a:hover{color:#fff;}
+
+  .hero{padding:34px 24px 26px;text-align:center;background:#fff;border-bottom:1px solid var(--line);}
+  .hero .eyebrow{color:var(--coral);font-weight:700;font-size:13px;letter-spacing:.08em;margin:0 0 8px;}
+  .hero h1{font-family:'Black Han Sans',sans-serif;font-size:26px;margin:0 0 8px;color:var(--navy);}
+  .hero .sub{color:var(--muted);font-size:13.5px;margin:0 0 12px;}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .chip{background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:999px;}
+  .chip.alt{background:var(--teal);}
+
+  .wrap{max-width:920px;margin:0 auto;padding:32px 24px 80px;}
+  section{margin-bottom:40px;}
+  h2{font-size:20px;color:var(--navy);border-left:5px solid var(--coral);padding-left:12px;margin:0 0 16px;}
+  h3{font-size:15px;color:var(--navy);margin:18px 0 8px;}
+  p{font-size:13.5px;color:#374151;}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0 16px;}
+  th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px;font-size:11.5px;}
+  td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#fafbfc;}
+
+  .checklist{list-style:none;padding:0;margin:10px 0;}
+  .checklist li{padding:7px 0 7px 26px;position:relative;font-size:13px;border-bottom:1px dashed var(--line);}
+  .checklist li::before{content:"☐";position:absolute;left:0;color:var(--teal);font-weight:900;}
+
+  /* 슬라이드 카드 */
+  .slide-card{background:#fff;border:1.8px solid var(--line);border-radius:16px;margin-bottom:24px;overflow:hidden;}
+  .slide-head{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--navy);color:#fff;}
+  .slide-num{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0;}
+  .slide-title{font-size:15px;font-weight:800;flex:1;}
+  .timing{background:rgba(255,255,255,.15);font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:999px;}
+  .slide-body{padding:18px 20px;}
+
+  .block{margin-bottom:14px;}
+  .block:last-child{margin-bottom:0;}
+  .block-label{font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .screen .block-label{color:var(--muted);}
+  .screen-box{background:#F5F6F8;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#374151;}
+
+  .say .block-label{color:var(--teal);}
+  .say-box{background:#EAF3FB;border-radius:10px;padding:12px 15px;font-size:13.5px;color:#1e3a5f;}
+  .say-box p{margin:0 0 8px;color:#1e3a5f;font-size:13.5px;}
+  .say-box p:last-child{margin-bottom:0;}
+
+  .timebox .block-label{color:var(--amber);}
+  .timebox-box{background:#FFFBF0;border-radius:10px;padding:10px 14px;font-size:12px;color:#7a5a10;}
+  .timebox-box ul{margin:0;padding-left:18px;}
+  .timebox-box li{margin-bottom:3px;}
+
+  .qa .block-label{color:var(--coral);}
+  .qa-box{background:#FFF3EF;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#7a2e18;}
+  .qa-box .q{font-weight:800;margin-bottom:3px;}
+  .qa-box .a{margin:0 0 8px;}
+  .qa-box .a:last-child{margin-bottom:0;}
+
+  .coach .block-label{color:var(--purple);}
+  .coach-box{background:#F3EEFF;border-radius:10px;padding:11px 15px;font-size:12.5px;color:#4c1d95;}
+
+  .between{background:#EAFBF5;border:1.6px dashed var(--mint);border-radius:14px;padding:16px 20px;margin-bottom:24px;font-size:13px;color:#0b6b52;}
+  .between b{color:var(--mint);}
+
+  .quote{background:#F5F6F8;border-radius:8px;padding:10px 14px;font-size:12.5px;font-style:italic;color:var(--ink);margin:8px 0;}
+
+  .qr-box{display:flex;gap:18px;align-items:center;background:var(--navy);border-radius:14px;padding:15px 18px;margin:12px 0;flex-wrap:wrap;}
+  .qr-box img{width:90px;height:90px;background:#fff;border-radius:8px;padding:5px;}
+  .qr-box .qi h4{color:#fff;margin:0 0 4px;font-size:13px;}
+  .qr-box .qi p{color:#B9C6E0;margin:0;font-size:10.5px;word-break:break-all;}
+</style>
+</head>
+<body><div class="hero">
+<p class="eyebrow">POGOK WELL+ · 회복탄력성 동아리 「다시봄」</p>
+<h1>9/17 공개수업 — 대본만 (원본 그대로)</h1>
+<p class="sub">요약 없이, 슬라이드 순서 그대로 멘트만 모았습니다 — 화면 설명·시간배분·코칭은 뺐습니다</p>
+<div class="chips">
+<span class="chip">45분 수업 (15:20–16:05)</span>
+<span class="chip alt">교사 휴대용 · 학생 화면엔 안 나옴</span>
+</div>
+</div><div class="wrap"><div class="slide-card"><div class="slide-head"><span class="slide-num">1</span><span class="slide-title">타이틀</span><span class="timing"><svg height="22" style="vertical-align:-5px;margin-right:4px;" viewbox="0 0 22 22" width="22"><circle cx="11.0" cy="11.0" fill="none" r="9.4" stroke="#FFFFFF" stroke-width="1.6"></circle><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="11.0" x2="15.6" y1="11.0" y2="12.1"></line><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="11.0" x2="13.2" y1="11.0" y2="17.7"></line><circle cx="11.0" cy="11.0" fill="#FFFFFF" r="1.3"></circle></svg>15:27까지 · 도입</span></div><div class="slide-body"><div class="block say"><div class="block-label">멘트 — ① 인트로</div><div class="say-box">
+<p>"얘들아 안녕! 오늘 뒤에 계신 선생님들은 그냥 우리 영상 같이 봐주실 손님이라고 생각하면 돼요. 자, 그럼 바로 시작해볼까요?"</p>
+</div></div><div class="block say"><div class="block-label">멘트 — ② 학습목표 안내 (놓치면 안 됨, 영상보다 먼저)</div><div class="say-box">
+<p>"영상 보기 전에, 오늘 학습목표부터 같이 볼게요 — <b>'비합리적 신념 5가지 유형을 이해하고, 자신과 타인의 생각을 점검·수정하는 과정을 통해 회복탄력성을 기를 수 있다'</b>예요. 오늘 이거 하나만 기억하고 가면 돼요."</p>
+</div></div><div class="block say"><div class="block-label">멘트 — ③ 영상 소개 + 재생</div><div class="say-box">
+<p>"지금부터 영상 하나 보여드릴게요. 이거 사실 여러분이 지난 9월 10일에 직접 찍은 거예요! 5개 모둠이 비합리적 신념 5가지 중 하나씩 맡아서, 직접 각본 쓰고 촬영하고 연기까지 다 한 거예요."</p>
+<p>"그럼 한번 볼까요?" → <b>영상 재생 (6분, 반드시 별도로 카운트)</b></p>
+</div></div></div></div><div class="slide-card"><div class="slide-head"><span class="slide-num">2</span><span class="slide-title">오늘, 우리는 이렇게 갑니다</span><span class="timing"><svg height="22" style="vertical-align:-5px;margin-right:4px;" viewbox="0 0 22 22" width="22"><circle cx="11.0" cy="11.0" fill="none" r="9.4" stroke="#FFFFFF" stroke-width="1.6"></circle><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="11.0" x2="15.6" y1="11.0" y2="12.1"></line><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="11.0" x2="13.2" y1="11.0" y2="17.7"></line><circle cx="11.0" cy="11.0" fill="#FFFFFF" r="1.3"></circle></svg>15:27까지 · 도입</span></div><div class="slide-body"><div class="block say"><div class="block-label">멘트 (오늘의 흐름 — 학습목표는 슬라이드1에서 이미 안내함)</div><div class="say-box">
+<p>"이제 이 다섯 단계로 가볼게요. 방금 본 영상에서 이름을 배우고, 이제 내 마음속에도 있을 그 버그를 직접 찾아보고, 친구랑 서로 고쳐주고, 마지막엔 내가 직접 업데이트까지 해볼 거예요."</p>
+</div></div></div></div><div class="slide-card"><div class="slide-head"><span class="slide-num">3</span><span class="slide-title">방금 영상 속, 5가지 생각의 함정</span><span class="timing"><svg height="22" style="vertical-align:-5px;margin-right:4px;" viewbox="0 0 22 22" width="22"><circle cx="11.0" cy="11.0" fill="none" r="9.4" stroke="#FFFFFF" stroke-width="1.6"></circle><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="11.0" x2="15.5" y1="11.0" y2="12.3"></line><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="11.0" x2="9.5" y1="11.0" y2="17.9"></line><circle cx="11.0" cy="11.0" fill="#FFFFFF" r="1.3"></circle></svg>15:32까지 · 도입</span></div><div class="slide-body"><div class="block say"><div class="block-label">멘트 — 발문1 (사실확인, 1분)</div><div class="say-box">
+<p>"방금 그 5개 장면, 각자 뭔가 익숙한 생각의 패턴이 있었죠? 짝이랑 20초만 얘기해볼까요. 시작!" (20초 후) "자, 누구 하나 얘기해볼 사람?" → 1~2명 지목 또는 자원 받기</p>
+</div></div><div class="block say"><div class="block-label">멘트 — 발문2 (이름 공개, 4분)</div><div class="say-box">
+<p>"이 다섯 가지, 사실 다 이름이 있어요." → 슬라이드 카드 하나씩 짚으며:</p>
+<p>"1모둠 지호가 '이제 다 끝났어'라고 했던 거, 이걸 <b>파국화</b>라고 해요 — 작은 일 하나로 다 망했다고 생각하는 거죠."</p>
+<p>"2모둠 서연이 '나는 원래 이런 앤가봐' 했던 거, <b>낙인찍기</b>예요."</p>
+<p>"3모둠 하은이 '항상 이래' 했던 거, <b>과잉일반화</b>."</p>
+<p>"4모둠 유진이 '쟤 분명 날 싫어할 거야' 했던 거, <b>마인드리딩</b> — 남의 마음을 근거 없이 넘겨짚는 거예요."</p>
+<p>"5모둠 지우가 '그냥 운이었어' 했던 거, <b>긍정격하</b> — 내가 잘한 것도 깎아내리는 거죠."</p>
+</div></div></div></div><div class="slide-card"><div class="slide-head"><span class="slide-num">4</span><span class="slide-title">ABCDE 원리</span><span class="timing"><svg height="22" style="vertical-align:-5px;margin-right:4px;" viewbox="0 0 22 22" width="22"><circle cx="11.0" cy="11.0" fill="none" r="9.4" stroke="#FFFFFF" stroke-width="1.6"></circle><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="11.0" x2="15.4" y1="11.0" y2="12.5"></line><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="11.0" x2="5.8" y1="11.0" y2="15.7"></line><circle cx="11.0" cy="11.0" fill="#FFFFFF" r="1.3"></circle></svg>15:38까지 · 전개①</span></div><div class="slide-body"><div class="block say"><div class="block-label">멘트 (전체, 약 2분)</div><div class="say-box">
+<p>"우리가 화나거나 속상한 건 사실 '그 사건' 때문이 아니에요. 그 사건을 '어떻게 생각하느냐'가 감정을 만들어요."</p>
+<p>"예를 들어볼게요. 아까 1모둠 지호, 수학 60점대 받은 게 사건(A)이에요. 근데 지호를 진짜 힘들게 한 건 점수 자체가 아니라 '이제 다 끝났어'라는 생각(B)이었죠. 그 생각 때문에 좌절하고 포기하고 싶어진 거예요(C)."</p>
+<p>"그럼 이 생각이 진짜 사실인지 따져보는 게 D(반박)예요. '진짜 다 끝난 걸까? 한 번 시험으로?' 이렇게요. 그리고 그렇게 따져보고 나서 얻는 더 건강한 생각이 E(효과)예요."</p>
+<p>(한 박자 쉬고, 힘주어) "즉, <b>내 감정은 해석에서 왔다</b> — 오늘 이거 하나만 기억해도 돼요."</p>
+</div></div><div class="block say" style="margin-top:14px;border-top:1px dashed var(--line);padding-top:14px;"><div class="block-label">이어서 — 전개② 라이브 시연 (4분, 이 자리로 이동)</div><div class="say-box">
+<p>1) "이번엔 아까 그 영상 속 캐릭터 한 명을 골라서, 제가 직접 이 앱에 입력해볼게요." → 화면 공유 전환</p>
+<p>2) 지호(파국화) 예시로 A·B·C를 실제로 입력하며 소리 내어 진행: "사건(A)은 '수학 60점' ... 믿음(B)은 '이제 다 끝났어' ... 패턴은 파국화 선택하고 ..."</p>
+<p>3) 앱이 반박(D) 예시를 보여주면 "이렇게 다르게 볼 수도 있죠?"로 마무리 → "이제 이 이름들을 배우고, 진짜 우리 마음속 버그를 찾아볼 거예요"로 슬라이드5로 전환</p>
+</div></div></div></div><div class="slide-card"><div class="slide-head"><span class="slide-num">5</span><span class="slide-title">그래서 오늘은, 이걸 '디버깅'이라 부를게요</span><span class="timing"><svg height="22" style="vertical-align:-5px;margin-right:4px;" viewbox="0 0 22 22" width="22"><circle cx="11.0" cy="11.0" fill="none" r="9.4" stroke="#FFFFFF" stroke-width="1.6"></circle><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="11.0" x2="15.4" y1="11.0" y2="12.6"></line><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="11.0" x2="4.6" y1="11.0" y2="13.9"></line><circle cx="11.0" cy="11.0" fill="#FFFFFF" r="1.3"></circle></svg>15:41까지 · 전개①(핵심)</span></div><div class="slide-body"><div class="block say"><div class="block-label">멘트 (전체, 약 3분)</div><div class="say-box">
+<p>"여러분 마인크래프트 해봤죠? 게임하다가 이상한 거 발견하면 그거 그냥 방치 안 해요. 모장(마인크래프트 회사)에 신고하면, 그게 실제로 홈페이지에 '버그 리스트'로 뜨고, 다음 업데이트 때 '이번에 이 버그 고쳤어요' 하고 패치 노트에 나와요."</p>
+<p>"오늘 우리가 할 것도 완전히 똑같아요 — 내 생각의 버그를 신고하고, 친구가 검토하고, 다음 업데이트(E)에서 고치는 거예요."</p>
+<p>(표를 한 줄씩 짚으며) "아까 A였던 사건, 오늘은 <b>버그 발생 상황</b>이라고 부를게요. B였던 믿음은 <b>에러 메시지</b>, C는 <b>시스템 반응</b>. 그리고 친구가 해주는 반박은 <b>패치</b>, 마지막에 내가 새로 쓰는 생각은 <b>업데이트</b>예요."</p>
+<p>"즉, 잘못된 믿음 하나가 버그고, 그걸 찾아서 고치는 과정이 디버깅이에요."</p>
+</div></div></div></div><div class="slide-card"><div class="slide-head"><span class="slide-num">6</span><span class="slide-title">마인드 디버깅 센터 — 사용법 3단계</span><span class="timing"><svg height="22" style="vertical-align:-5px;margin-right:4px;" viewbox="0 0 22 22" width="22"><circle cx="11.0" cy="11.0" fill="none" r="9.4" stroke="#FFFFFF" stroke-width="1.6"></circle><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="11.0" x2="15.1" y1="11.0" y2="13.3"></line><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="11.0" x2="11.0" y1="11.0" y2="3.9"></line><circle cx="11.0" cy="11.0" fill="#FFFFFF" r="1.3"></circle></svg>16:00까지 · 전개③</span></div><div class="slide-body"><div class="block say"><div class="block-label">멘트 — 왜 이걸 해보는지 (동기부여, 30초)</div><div class="say-box">
+<p>"검은 그림자가 갑자기 나를 덮칠 때, 원래 100미터를 20초에 뛰는 내가 갑자기 13초로 뛸 수는 없어요. 그래서 우리는 평소에 달리기 연습을 해두는 거예요."</p>
+<p><b>"가장 사소할 수 있는 일상에서, 연습해두는 거지. 인생의 커다란 시련과 고난 앞에 내가 취할 자세를, 미리 사소하게 연습하는 거지."</b></p>
+<p>"오늘 우리가 하는 이 활동도 똑같아요. 시험이나 친구 문제 같은 작은 고민으로 지금 연습해두면, 나중에 진짜 크고 힘든 일이 왔을 때 이미 몸에 익어있는 거예요."</p>
+</div></div><div class="block say"><div class="block-label">멘트 (안내, 1분)</div><div class="say-box">
+<p>"이제 여러분 차례예요. 크롬북 열고, QR 찍고, 최근 있었던 가벼운 고민(시험·친구·게임 정도로만!) 하나 골라서 버그 신고해보세요. 안 되는 사람은 손 들어요, 제가 바로 갈게요."</p>
+</div></div></div></div><div class="between"><b>여기서 30초, 짝과 눈 마주치는 순간 (선택 활동)</b><div class="block say" style="margin-top:10px;"><div class="block-label">멘트</div><div class="say-box">
+<p>"자, 이제 다들 업데이트까지 썼죠? 30초만 줄게요. 짝이랑 화면 보여주면서, 내가 받은 패치 중에 제일 마음에 들었던 거 딱 하나만 짝한테 읽어주세요. 짝은 '오 좋다' 한마디만 해주면 돼요. 시작!"</p>
+<p>(30초 후) "자, 여기까지! 이제 우리 반 전체가 어떻게 됐는지 화면으로 같이 볼까요?"</p>
+</div></div></div><div class="slide-card"><div class="slide-head"><span class="slide-num">7</span><span class="slide-title">우리 반, 실시간으로 디버깅되는 중</span><span class="timing"><svg height="22" style="vertical-align:-5px;margin-right:4px;" viewbox="0 0 22 22" width="22"><circle cx="11.0" cy="11.0" fill="none" r="9.4" stroke="#FFFFFF" stroke-width="1.6"></circle><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="11.0" x2="15.0" y1="11.0" y2="13.5"></line><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="11.0" x2="13.2" y1="11.0" y2="4.3"></line><circle cx="11.0" cy="11.0" fill="#FFFFFF" r="1.3"></circle></svg>16:03까지 · 정리</span></div><div class="slide-body"><div class="block say"><div class="block-label">멘트</div><div class="say-box">
+<p>"자, 이제 화면을 같이 봐요." (원형차트 가리키며) "우리 반이 어떤 생각의 함정에 제일 많이 빠졌는지 보이죠?" (패치 워드클라우드 가리키며) "이게 친구들이 서로에게 보낸 패치들이에요."</p>
+<p>(업데이트 워드클라우드 가리키며) "그리고 이건, 여러분이 직접 새로 쓴 생각들을 다 모은 거예요 — 우리 반만의 멘티미터라고 생각하면 돼요. 어떤 단어가 크게 보이나요?"</p>
+<p>(완료 갤러리 가리키며) "여기 '디버깅 완료' 된 친구들 문장도 몇 개 같이 읽어볼까요?" → 카드 1~2개 소리 내어 읽기</p>
+</div></div></div></div><div class="slide-card"><div class="slide-head"><span class="slide-num">8</span><span class="slide-title">마무리</span><span class="timing"><svg height="22" style="vertical-align:-5px;margin-right:4px;" viewbox="0 0 22 22" width="22"><circle cx="11.0" cy="11.0" fill="none" r="9.4" stroke="#FFFFFF" stroke-width="1.6"></circle><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" x1="11.0" x2="15.0" y1="11.0" y2="13.5"></line><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="11.0" x2="14.5" y1="11.0" y2="4.9"></line><circle cx="11.0" cy="11.0" fill="#FFFFFF" r="1.3"></circle></svg>16:05까지 · 정리</span></div><div class="slide-body"><div class="block say"><div class="block-label">멘트 — ① 핵심 문장 + 소감 요청</div><div class="say-box">
+<p>"오늘 하나만 기억하고 가면 돼요 — <b>'내 감정은 해석에서 왔다.'</b> 우리는 오늘 생각의 버그를 찾고, 함께 고치는 법을 배웠어요. 회복탄력성은 타고나는 게 아니라, 오늘처럼 연습하는 기술이에요." → "혹시 오늘 소감 한마디 해줄 사람?" (3초 대기)</p>
+</div></div><div class="block say"><div class="block-label">멘트 — ② 소감이 없으면 (거의 확실히 이 경로예요) → 대시보드 복귀</div><div class="say-box">
+<p>"다들 부끄러운가 보다! 그럼 화면이 대신 말해주는 거 한 번 더 볼까요?" → <b>슬라이드7(대시보드)로 다시 전환</b> → 완료 갤러리 카드 1~2개 더 소리 내어 읽기</p>
+</div></div><div class="block say"><div class="block-label">멘트 — ③ 최종 마무리</div><div class="say-box">
+<p>"오늘 다들 고생 많았어요!"</p>
+</div></div></div></div></div></body>
+</html>
