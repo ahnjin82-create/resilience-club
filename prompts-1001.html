@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>어플력 연수 — 프롬프트 복사</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+  :root{--navy:#1B3A6B;--teal:#028090;--mint:#02C39A;--coral:#FF6B4A;--amber:#FFB627;--ink:#1B2436;--muted:#6b7280;--line:#e5e7eb;--bg:#fafaf8;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:50px;}
+  .wrap{max-width:560px;margin:0 auto;}
+  .hero{background:var(--navy);padding:22px 20px 18px;text-align:center;}
+  .hero .eb{color:var(--mint);font-weight:700;font-size:12px;letter-spacing:.08em;margin:0 0 6px;}
+  .hero h1{color:#fff;font-size:20px;margin:0 0 4px;}
+  .hero .sub{color:#B9C6E0;font-size:12.5px;margin:0;}
+  .card{background:#fff;border:1.6px solid var(--line);border-radius:14px;margin:16px 14px 0;padding:16px 16px 18px;}
+  .card h2{font-size:15px;margin:0 0 4px;color:var(--navy);}
+  .tag{display:inline-block;font-size:11px;font-weight:900;color:#fff;padding:3px 9px;border-radius:6px;margin-bottom:8px;}
+  .desc{font-size:12.5px;color:var(--muted);margin:0 0 12px;}
+  label{display:block;font-size:12px;font-weight:700;color:#374151;margin:10px 0 4px;}
+  input[type=text]{width:100%;border:1.6px solid #d8dce4;border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;background:#fbfbfa;}
+  .out{background:#0f2a52;color:#fff;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.65;margin-top:12px;white-space:pre-wrap;word-break:keep-all;font-family:Consolas,'Noto Sans KR',monospace;}
+  .btn{width:100%;border:none;border-radius:12px;padding:14px 8px;font-size:15px;font-weight:900;cursor:pointer;color:#fff;background:var(--coral);margin-top:10px;}
+  .btn.done{background:var(--teal);}
+  .note{font-size:11.5px;color:#7a2e18;background:#FFF3EF;border-radius:8px;padding:8px 10px;margin-top:10px;}
+  .foot{text-align:center;font-size:11.5px;color:var(--muted);margin:22px 14px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <p class="eb">POGOK WELL+ · 어플력(App力) 연수</p>
+    <h1>프롬프트 복사 페이지</h1>
+    <p class="sub">칸을 채우고 → 복사 버튼 → claude.ai에 붙여넣기</p>
+  </div>
+
+  <div class="card">
+    <span class="tag" style="background:#FF6B4A;">실습 A · 영상 스크립트</span>
+    <h2>Claude에게 스크립트 + Vrew 타임라인 받기</h2>
+    <p class="desc">주제와 대상만 바꾸세요. 결과가 나오면 전체 복사(Ctrl+A → Ctrl+C) 후 Vrew에 붙여넣습니다.</p>
+    <label for="a_topic">주제 (예: 흡연예방, 성교육, 안전교육)</label>
+    <input type="text" id="a_topic" placeholder="주제를 입력하세요">
+    <label for="a_target">대상</label>
+    <input type="text" id="a_target" value="중학생">
+    <div class="out" id="a_out"></div>
+    <button class="btn" id="a_btn" onclick="copyText('a_out','a_btn')">📋 프롬프트 복사</button>
+  </div>
+
+  <div class="card">
+    <span class="tag" style="background:#028090;">실습 C · 웹앱</span>
+    <h2>Claude에게 학생 활동 웹앱 만들어달라고 하기</h2>
+    <p class="desc">주제만 바꾸세요. 결과가 나오면 “색깔 바꿔줘”처럼 대화로 한 번은 고쳐보세요.</p>
+    <label for="c_topic">주제</label>
+    <input type="text" id="c_topic" placeholder="주제를 입력하세요">
+    <div class="out" id="c_out"></div>
+    <button class="btn" id="c_btn" onclick="copyText('c_out','c_btn')">📋 프롬프트 복사</button>
+  </div>
+
+  <div class="card">
+    <span class="tag" style="background:#8B5CF6;">덧붙이는 한 줄 (선택)</span>
+    <h2>웹앱 요청에 이어서 붙이면 좋은 문장</h2>
+    <p class="desc">9/17 실패에서 나온 보완책입니다. 필요한 것만 복사해서 이어 붙이세요.</p>
+    <div class="out" id="x1_out">제출 버튼은 한 번 누르면 바로 비활성화하고, 모둠·좌석은 숫자만 입력받게 해줘.</div>
+    <button class="btn" id="x1_btn" style="background:#8B5CF6;" onclick="copyText('x1_out','x1_btn')">📋 복사 (중복 클릭·입력 방지)</button>
+    <div class="out" id="x2_out" style="margin-top:14px;">구글시트에 자동 저장되는 백엔드도 같이 만들어줘.</div>
+    <button class="btn" id="x2_btn" style="background:#8B5CF6;" onclick="copyText('x2_out','x2_btn')">📋 복사 (구글시트 저장 백엔드)</button>
+    <div class="note">백엔드는 요청만으로 끝나지 않아요. 만든 뒤에 <b>웹앱에 연결된 배포 주소가 최신인지</b> 꼭 확인하세요.</div>
+  </div>
+
+  <p class="foot">오늘 실습에서는 여기까지 — 완벽하지 않아도, 한 번 써보세요.</p>
+</div>
+
+<script>
+  const tpl = {
+    a: (t, g) => `[${t || '주제'}]를 ${g || '중학생'} 대상으로 스크립트 + Vrew 타임라인 + 장면 설명을 한 번에 작성해줘. 자막용 짧은 문장, 도입→본론3→마무리, 나레이션 1,000~1,200자, 5분 기준 시작·종료 시간 포함`,
+    c: (t) => `[${t || '주제'}]에 대한 학생 활동 웹앱을 만들어줘. 조건: 객관식 5개(즉각 해설), 주관식 2개(30자 이상), 제출 후 결과 화면, HTML 파일 하나로 완성`
+  };
+  function render(){
+    document.getElementById('a_out').textContent = tpl.a(document.getElementById('a_topic').value.trim(), document.getElementById('a_target').value.trim());
+    document.getElementById('c_out').textContent = tpl.c(document.getElementById('c_topic').value.trim());
+  }
+  ['a_topic','a_target','c_topic'].forEach(id => document.getElementById(id).addEventListener('input', render));
+  render();
+
+  function flash(btnId){
+    const b = document.getElementById(btnId);
+    const old = b.textContent;
+    b.textContent = '✅ 복사됐어요! claude.ai에 붙여넣으세요';
+    b.classList.add('done');
+    setTimeout(() => { b.textContent = old; b.classList.remove('done'); }, 2200);
+  }
+  function copyText(outId, btnId){
+    const text = document.getElementById(outId).textContent;
+    const fallback = () => {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try { document.execCommand('copy'); flash(btnId); } catch(e) { alert('복사가 안 되면 글자를 길게 눌러 직접 복사해주세요.'); }
+      document.body.removeChild(ta);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(() => flash(btnId)).catch(fallback);
+    } else { fallback(); }
+  }
+</script>
+</body>
+</html>
