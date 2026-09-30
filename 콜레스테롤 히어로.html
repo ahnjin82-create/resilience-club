@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>콜레스테롤 히어로: 15초 초스피드 혈관 수호전</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        .font-jua {
+            font-family: 'Jua', sans-serif;
+        }
+        canvas {
+            touch-action: none;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6)); }
+            50% { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.9)); }
+        }
+        .glow-effect {
+            animation: pulse-glow 2s infinite;
+        }
+        /* Custom Scrollbar for review modal */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 overflow-x-hidden">
+
+    <div id="game-container" class="relative w-full max-w-2xl bg-slate-900 border-2 border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center">
+        
+        <!-- TOP HUD (Head-Up Display) -->
+        <div class="w-full bg-slate-800/90 border-b border-slate-700 px-4 py-3 flex items-center justify-between text-sm sm:text-base z-10">
+            <!-- Score Indicator -->
+            <div class="flex items-center space-x-2">
+                <span class="text-xs sm:text-sm text-slate-400 font-bold">점수</span>
+                <span id="score-display" class="font-jua text-2xl sm:text-3xl text-yellow-400">0</span>
+                <span class="text-xs text-slate-400">점</span>
+            </div>
+
+            <!-- Timer Indicator -->
+            <div class="flex flex-col items-center">
+                <span class="text-xs text-slate-400 font-bold">남은 시간</span>
+                <div class="flex items-center space-x-1">
+                    <span id="timer-display" class="font-jua text-2xl sm:text-3xl text-emerald-400">15</span>
+                    <span class="text-xs text-emerald-400">초</span>
+                </div>
+            </div>
+
+            <!-- HDL vs LDL Balance Bar -->
+            <div class="hidden sm:flex flex-col items-end w-32">
+                <div class="flex justify-between w-full text-xs mb-1">
+                    <span class="text-red-400 font-bold">LDL</span>
+                    <span class="text-emerald-400 font-bold">HDL</span>
+                </div>
+                <div class="w-full bg-slate-700 h-3 rounded-full overflow-hidden flex">
+                    <div id="balance-bar-ldl" class="bg-red-500 h-full transition-all duration-300" style="width: 50%;"></div>
+                    <div id="balance-bar-hdl" class="bg-emerald-500 h-full transition-all duration-300" style="width: 50%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CANVAS GAMEPLAY AREA -->
+        <div class="relative w-full flex-grow aspect-square sm:aspect-[4/3] md:aspect-[16/10] bg-gradient-to-b from-slate-950 via-slate-900 to-red-950/20 overflow-hidden flex items-center justify-center border-b-2 border-slate-700">
+            <canvas id="gameCanvas" class="w-full h-full block cursor-pointer"></canvas>
+
+            <!-- START OVERLAY SCREEN -->
+            <div id="start-screen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center z-20 overflow-y-auto">
+                <div class="w-14 h-14 bg-blue-500/20 border-2 border-blue-400 rounded-full flex items-center justify-center mb-2 glow-effect">
+                    <span class="text-3xl">⚡</span>
+                </div>
+                <h1 class="font-jua text-2xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-emerald-300 to-yellow-400 mb-1">
+                    콜레스테롤 히어로
+                </h1>
+                <p class="text-slate-300 text-xs sm:text-sm max-w-sm mb-3 leading-relaxed">
+                    <strong>15초 초스피드 혈관 수호전!</strong><br>
+                    빠르게 떨어지는 풍선 중 <strong class="text-emerald-400">HDL 상승 풍선만 획득하세요 (+1점)</strong>.<br>
+                    혈관을 막는 <strong class="text-red-400">LDL/중성지방 풍선은 피하세요! (-1점)</strong>
+                </p>
+
+                <!-- Grade Information Box (사전 안내) -->
+                <div class="w-full max-w-sm bg-slate-800/80 border border-amber-500/40 p-2.5 rounded-xl text-left mb-3">
+                    <div class="flex justify-between items-center mb-1.5 pb-1 border-b border-slate-700">
+                        <span class="text-amber-400 font-bold text-xs flex items-center gap-1">
+                            📊 혈관 수호 단계 기준 (15초 제한)
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-5 gap-1 text-[10px] text-center font-bold">
+                        <div class="bg-emerald-950/70 border border-emerald-500/40 p-1 rounded">
+                            <span class="text-emerald-400 block">마스터</span>
+                            <span class="text-slate-200">30점~</span>
+                        </div>
+                        <div class="bg-blue-950/70 border border-blue-500/40 p-1 rounded">
+                            <span class="text-blue-400 block">수호자</span>
+                            <span class="text-slate-200">20~29점</span>
+                        </div>
+                        <div class="bg-yellow-950/70 border border-yellow-500/40 p-1 rounded">
+                            <span class="text-yellow-400 block">파수꾼</span>
+                            <span class="text-slate-200">10~19점</span>
+                        </div>
+                        <div class="bg-orange-950/70 border border-orange-500/40 p-1 rounded">
+                            <span class="text-orange-400 block">탐험가</span>
+                            <span class="text-slate-200">1~9점</span>
+                        </div>
+                        <div class="bg-red-950/70 border border-red-500/40 p-1 rounded">
+                            <span class="text-red-400 block">연습생</span>
+                            <span class="text-slate-200">0점 이하</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rules Guide Box -->
+                <div class="grid grid-cols-2 gap-2 w-full max-w-sm text-left mb-4 text-[10px] sm:text-xs">
+                    <div class="bg-emerald-950/50 border border-emerald-500/30 p-2 rounded-xl">
+                        <div class="font-bold text-emerald-400 mb-0.5 flex items-center gap-1">
+                            <span>🧺 Good 담기 (+1점)</span>
+                        </div>
+                        <p class="text-slate-300">생선, 견과류, 유산소 등</p>
+                    </div>
+                    <div class="bg-red-950/50 border border-red-500/30 p-2 rounded-xl">
+                        <div class="font-bold text-red-400 mb-0.5 flex items-center gap-1">
+                            <span>🚫 Bad 피하기 (-1점)</span>
+                        </div>
+                        <p class="text-slate-300">삼겹살, 튀김, 흡연 등</p>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="w-full max-w-xs py-3 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white font-jua text-lg rounded-xl shadow-lg shadow-emerald-500/20 transform hover:scale-105 transition-all">
+                    혈관 수호 시작하기 (15초)
+                </button>
+            </div>
+
+            <!-- GAME OVER OVERLAY SCREEN -->
+            <div id="game-over-screen" class="hidden absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-20 overflow-y-auto">
+                <span id="rank-badge" class="px-4 py-1 rounded-full text-xs font-bold mb-2 bg-yellow-500/20 border border-yellow-400 text-yellow-300">
+                    혈관 종합 판정
+                </span>
+                <h2 id="result-title" class="font-jua text-3xl sm:text-4xl text-white mb-1">혈관 수호 완료!</h2>
+                
+                <div class="flex items-baseline space-x-2 my-3">
+                    <span class="text-slate-400 text-sm">최종 점수:</span>
+                    <span id="final-score" class="font-jua text-4xl text-yellow-400">0</span>
+                    <span class="text-slate-400 text-sm">점</span>
+                </div>
+
+                <!-- High School Evaluation Grade Card -->
+                <div id="evaluation-card" class="w-full max-w-md bg-slate-800/80 border border-slate-700 p-4 rounded-xl text-left mb-4 text-xs sm:text-sm">
+                    <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-700">
+                        <span class="text-slate-400 font-bold">혈관 수호 단계</span>
+                        <span id="grade-text" class="font-jua text-xl text-emerald-400">마스터 단계 (혈관의 신)</span>
+                    </div>
+                    <p id="grade-description" class="text-slate-300 leading-relaxed mb-3">
+                        HDL 지수가 높고 혈관이 깨끗합니다! 깨끗한 혈액순환을 유지하고 있습니다.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                        <div class="bg-slate-900 p-2 rounded-lg">
+                            <span class="block text-slate-400">획득한 HDL (+1)</span>
+                            <span id="stat-good-count" class="font-bold text-emerald-400 text-base">0개</span>
+                        </div>
+                        <div class="bg-slate-900 p-2 rounded-lg">
+                            <span class="block text-slate-400">흡수된 LDL/중성지방 (-1)</span>
+                            <span id="stat-bad-count" class="font-bold text-red-400 text-base">0개</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Educational Tip Section -->
+                <div class="w-full max-w-md bg-blue-950/40 border border-blue-500/30 p-3 rounded-xl text-left mb-5">
+                    <span class="text-blue-400 font-bold text-xs block mb-1">💡 고교 생명과학 팁: HDL vs LDL</span>
+                    <p class="text-xs text-slate-300 leading-normal">
+                        • <strong>HDL(고밀도 지단백):</strong> 혈관 벽의 남은 콜레스테롤을 간으로 운반하여 제거함.<br>
+                        • <strong>LDL(저밀도 지단백):</strong> 간에서 세포로 콜레스테롤을 운반하나, 많으면 혈관 벽에 쌓여 동맥경화를 유발함.
+                    </p>
+                </div>
+
+                <div class="flex space-x-3 w-full max-w-xs">
+                    <button id="restart-btn" class="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-jua text-lg rounded-xl shadow-lg transition-all">
+                        다시 도전
+                    </button>
+                    <button id="knowledge-btn" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-jua text-sm rounded-xl transition-all">
+                        도감 보기
+                    </button>
+                </div>
+            </div>
+
+            <!-- CHOLESTEROL ENCYCLOPEDIA MODAL -->
+            <div id="knowledge-modal" class="hidden absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 z-30">
+                <div class="w-full max-w-lg h-full max-h-[85%] flex flex-col bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="bg-slate-800 p-3 border-b border-slate-700 flex justify-between items-center">
+                        <h3 class="font-jua text-lg text-yellow-400">📘 콜레스테롤 음식 & 습관 백과</h3>
+                        <button id="close-modal-btn" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+                    </div>
+                    <div class="p-4 overflow-y-auto space-y-4 flex-1 text-xs sm:text-sm">
+                        <!-- Good Section -->
+                        <div>
+                            <h4 class="font-bold text-emerald-400 border-b border-emerald-500/30 pb-1 mb-2 flex items-center gap-1">
+                                <span>💚 HDL(좋은 콜레스테롤) 상승 요소 (+1점)</span>
+                            </h4>
+                            <ul class="space-y-2 text-slate-300">
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-emerald-300">🐟 등푸른 생선 (고등어, 연어):</strong> 불포화지방산인 오메가-3가 풍부하여 HDL을 올리고 중성지방을 낮춥니다.
+                                </li>
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-emerald-300">🏃‍♂️ 규칙적인 유산소 운동:</strong> 혈중 LPL(지방단백질 분해효소) 활성을 높여 HDL 합성을 촉진합니다.
+                                </li>
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-emerald-300">🥑 아보카도 & 🫒 올리브유:</strong> 단일불포화지방산이 풍부하여 LDL은 낮추고 HDL 수준은 유지합니다.
+                                </li>
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-emerald-300">🥜 견과류 & 🌾 귀리(통곡물):</strong> 베타글루칸과 식이섬유가 콜레스테롤의 장 흡수를 억제합니다.
+                                </li>
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-emerald-300">🥗 신선한 채소 & 과일:</strong> 수용성 식이섬유와 항산화 물질이 혈관 내 염증을 줄입니다.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Bad Section -->
+                        <div>
+                            <h4 class="font-bold text-red-400 border-b border-red-500/30 pb-1 mb-2 flex items-center gap-1">
+                                <span>🔴 LDL · 중성지방 · 총콜레스테롤 상승 요소 (-1점)</span>
+                            </h4>
+                            <ul class="space-y-2 text-slate-300">
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-red-300">🥓 삼겹살 & 가공육 (포화지방):</strong> 간에서 LDL 수용체 재활용을 방해하여 혈중 LDL을 상승시킵니다.
+                                </li>
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-red-300">🍟 튀김 & 마가린 (트랜스지방):</strong> LDL을 극심하게 올릴 뿐만 아니라 유일하게 **HDL까지 감소**시킵니다.
+                                </li>
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-red-300">🥤 탄산음료 & 달콤한 디저트:</strong> 과도한 당분이 간에서 **중성지방(Triglyceride)**으로 전환되어 쌓입니다.
+                                </li>
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-red-300">🚬 흡연 & 과도한 음주:</strong> 혈관 내피세포를 손상시켜 LDL 산화를 촉진하고 HDL 수치를 급격히 떨어뜨립니다.
+                                </li>
+                                <li class="bg-slate-800/60 p-2 rounded border border-slate-700/50">
+                                    <strong class="text-red-300">🛋️ 장시간 좌식/운동 부족:</strong> 지방 대사 효소의 활성이 감소하여 혈중 총콜레스테롤 및 중성지방이 누적됩니다.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-slate-800 border-t border-slate-700 text-center">
+                        <button id="back-to-result-btn" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-jua rounded-lg transition-all">
+                            확인 완료
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTROLS FOOTER (Mobile Touch Buttons & Instructions) -->
+        <div class="w-full bg-slate-800 p-2 sm:p-3 flex flex-col items-center justify-between text-xs text-slate-400 gap-2 shrink-0">
+            <div class="flex items-center justify-center space-x-2 mb-1 hidden sm:flex">
+                <span class="bg-slate-700 px-2 py-0.5 rounded text-slate-200">조작법</span>
+                <span>화면 터치/드래그 또는 아래 버튼으로 <strong class="text-slate-200">바구니 이동</strong></span>
+            </div>
+
+            <!-- Touch Left/Right On-screen buttons for smartphone compatibility -->
+            <div class="flex items-center space-x-2 w-full justify-between gap-2 h-16 sm:h-auto">
+                <button id="touch-left" class="flex-1 h-full sm:h-auto sm:px-8 sm:py-4 bg-slate-700 active:bg-blue-600 rounded-xl text-white font-bold text-xl sm:text-lg select-none shadow-md flex items-center justify-center">
+                    ◀ <span class="hidden sm:inline ml-2">왼쪽으로 이동</span>
+                </button>
+                
+                <button id="touch-right" class="flex-1 h-full sm:h-auto sm:px-8 sm:py-4 bg-slate-700 active:bg-blue-600 rounded-xl text-white font-bold text-xl sm:text-lg select-none shadow-md flex items-center justify-center">
+                    <span class="hidden sm:inline mr-2">오른쪽으로 이동</span> ▶
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* WEB AUDIO API SOUND SYNTHESIZER */
+        class SoundEngine {
+            constructor() {
+                this.ctx = null;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+            }
+
+            playShoot() {
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
+
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.08);
+            }
+
+            playGood() {
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.15);
+            }
+
+            playBad() {
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.setValueAtTime(130, now + 0.08);
+
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.2);
+            }
+
+            playOver() {
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+                    gain.gain.setValueAtTime(0.15, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.2);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.2);
+                });
+            }
+        }
+
+        const sound = new SoundEngine();
+
+        // CHOLESTEROL ITEMS DATABASE
+        const GOOD_ITEMS = [
+            { name: "등푸른 생선", emoji: "🐟", detail: "오메가-3" },
+            { name: "유산소 운동", emoji: "🏃‍♂️", detail: "LPL 활성화" },
+            { name: "아보카도", emoji: "🥑", detail: "단일불포화지방" },
+            { name: "견과류", emoji: "🥜", detail: "불포화지방산" },
+            { name: "올리브유", emoji: "🫒", detail: "올레산" },
+            { name: "신선한 채소", emoji: "🥗", detail: "수용성 식이섬유" },
+            { name: "귀리/잡곡", emoji: "🌾", detail: "베타글루칸" },
+            { name: "사과/과일", emoji: "🍏", detail: "펙틴" }
+        ];
+
+        const BAD_ITEMS = [
+            { name: "삼겹살/포화지방", emoji: "🥓", detail: "포화지방산" },
+            { name: "튀김/트랜스지방", emoji: "🍟", detail: "트랜스지방" },
+            { name: "탄산음료/당분", emoji: "🥤", detail: "과당/설탕" },
+            { name: "흡연", emoji: "🚬", detail: "혈관 내피손상" },
+            { name: "운동 부족", emoji: "🛋️", detail: "대사 저하" },
+            { name: "도넛/케이크", emoji: "🍩", detail: "정제당" },
+            { name: "소시지/가공육", emoji: "🌭", detail: "나트륨/포화지방" },
+            { name: "과도한 음주", emoji: "🍺", detail: "간 지방합성" }
+        ];
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d', { alpha: false }); // Optimize rendering
+
+        // State variables
+        let isGaming = false;
+        let score = 0;
+        let timeLeft = 15;
+        let timerInterval = null;
+        let animationFrameId = null;
+        let goodCaughtCount = 0;
+        let badCaughtCount = 0;
+
+        // Entities
+        let particles = [];
+        let floatingTexts = [];
+        let fallingItems = [];
+
+        // Player Basket Object (Increased base speed for snappy reactions)
+        const player = {
+            x: 0,
+            y: 0,
+            width: 55,
+            height: 40,
+            speed: 16,
+            moveLeft: false,
+            moveRight: false,
+            targetX: -1
+        };
+
+        // Resize Canvas dynamically
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            player.y = canvas.height - player.height - 15; // Raised slightly from bottom
+            if (player.x === 0 || player.x > canvas.width) {
+                player.x = canvas.width / 2 - player.width / 2;
+            }
+            player.targetX = player.x; // Reset target
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { player.moveLeft = true; player.targetX = -1; }
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { player.moveRight = true; player.targetX = -1; }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') player.moveLeft = false;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') player.moveRight = false;
+        });
+
+        // Pointer Aiming (Touch / Drag)
+        function handlePointerInput(e) {
+            if (!isGaming) return;
+            // Prevent default behavior to stop scrolling on mobile while dragging
+            if(e.cancelable) e.preventDefault(); 
+            
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
+            const canvasX = clientX - rect.left;
+            
+            // Set a target for smooth interpolation instead of snapping instantly
+            player.targetX = Math.max(0, Math.min(canvas.width - player.width, canvasX - player.width / 2));
+            
+            // Cancel button movement if dragging on canvas
+            player.moveLeft = false;
+            player.moveRight = false;
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+             player.targetX = player.x; // Init target
+             handlePointerInput(e);
+        });
+        canvas.addEventListener('mousemove', (e) => {
+            if (e.buttons > 0) handlePointerInput(e); // Allow dragging
+        });
+        
+        // Mobile touch specific events for canvas
+        canvas.addEventListener('touchstart', (e) => {
+             player.targetX = player.x; 
+             handlePointerInput(e);
+        }, { passive: false });
+        canvas.addEventListener('touchmove', (e) => {
+             handlePointerInput(e);
+        }, { passive: false });
+        
+        canvas.addEventListener('touchend', () => {
+             // Optional: stop moving on touchend, or let it slide to target.
+             // We let it slide to the last target.
+        });
+
+        // Touch Control Buttons
+        const btnLeft = document.getElementById('touch-left');
+        const btnRight = document.getElementById('touch-right');
+
+        const bindBtn = (btn, action) => {
+            btn.addEventListener('touchstart', (e) => { 
+                if(e.cancelable) e.preventDefault(); 
+                action(true); 
+                player.targetX = -1; // Disable pointer target when using buttons
+            }, { passive: false });
+            btn.addEventListener('touchend', (e) => { 
+                if(e.cancelable) e.preventDefault(); 
+                action(false); 
+            }, { passive: false });
+            btn.addEventListener('mousedown', () => { action(true); player.targetX = -1; });
+            btn.addEventListener('mouseup', () => action(false));
+            btn.addEventListener('mouseleave', () => action(false));
+        };
+
+        bindBtn(btnLeft, (val) => player.moveLeft = val);
+        bindBtn(btnRight, (val) => player.moveRight = val);
+
+        let spawnTimer = 0;
+        function spawnItem() {
+            let isGood = Math.random() < 0.52;
+
+            if (!isGood) {
+                const hasRecentBad = fallingItems.some(item => !item.isGood && item.y < 200);
+                if (hasRecentBad) {
+                    isGood = true; 
+                }
+            }
+
+            const template = isGood 
+                ? GOOD_ITEMS[Math.floor(Math.random() * GOOD_ITEMS.length)]
+                : BAD_ITEMS[Math.floor(Math.random() * BAD_ITEMS.length)];
+
+            const itemWidth = 140;
+            const itemHeight = 75;
+
+            let posX = 0;
+            let validPos = false;
+            let attempts = 0;
+
+            while (!validPos && attempts < 25) {
+                attempts++;
+                posX = Math.random() * (canvas.width - itemWidth - 20) + 10;
+                validPos = true;
+
+                for (let other of fallingItems) {
+                    const xOverlap = Math.abs(posX - other.x) < itemWidth + 15;
+                    const yOverlap = other.y < itemHeight + 40;
+                    if (xOverlap && yOverlap) {
+                        validPos = false;
+                        break;
+                    }
+                }
+            }
+
+            if (!validPos && fallingItems.length > 5) return;
+
+            // 속도 재조정 (글자 인식률과 박진감의 균형)
+            // HDL: 1.8 ~ 2.3 (기존 1.0~1.4와 직전 2.8~3.6의 중간)
+            // LDL: 2.6 ~ 3.2 (기존 1.8~2.4와 직전 4.0~5.2의 중간)
+            const baseSpeed = isGood 
+                ? (1.8 + Math.random() * 0.5) 
+                : (2.6 + Math.random() * 0.6);
+            
+            // 15초 흐름에 따른 적정 가속도
+            const speed = baseSpeed + (15 - timeLeft) * 0.03;
+
+            fallingItems.push({
+                x: posX,
+                y: -itemHeight - 10,
+                width: itemWidth,
+                height: itemHeight,
+                speed: speed,
+                isGood: isGood,
+                ...template
+            });
+        }
+
+        function addFloatingText(text, x, y, color) {
+            floatingTexts.push({
+                text: text,
+                x: x,
+                y: y,
+                color: color,
+                alpha: 1.0,
+                vy: -2.0
+            });
+        }
+
+        function createParticles(x, y, color) {
+            for (let i = 0; i < 15; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    radius: Math.random() * 5 + 2,
+                    color: color,
+                    alpha: 1.0
+                });
+            }
+        }
+
+        function updateGame() {
+            if (!isGaming) return;
+
+            // Player Movement Logic (Keyboard/Buttons OR Touch Interpolation)
+            if (player.targetX !== -1) {
+                // Touch/Drag: Interpolate towards target smoothly
+                const dx = player.targetX - player.x;
+                player.x += dx * 0.3; // 0.3 is the smoothing factor
+                
+                // Snap to target if close enough
+                if(Math.abs(dx) < 1) player.x = player.targetX;
+            } else {
+                // Keyboard/Buttons: Fixed speed
+                if (player.moveLeft) {
+                    player.x -= player.speed;
+                }
+                if (player.moveRight) {
+                    player.x += player.speed;
+                }
+            }
+
+            // Boundary constraints
+            if (player.x < 0) player.x = 0;
+            if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
+
+
+            // Spawn Control
+            spawnTimer++;
+            if (spawnTimer > 18) {
+                spawnItem();
+                spawnTimer = 0;
+            }
+
+            // Update Falling Items
+            for (let i = fallingItems.length - 1; i >= 0; i--) {
+                const item = fallingItems[i];
+                item.y += item.speed;
+
+                // Collision Check (AABB with Basket)
+                // We make the basket hitbox slightly smaller than visual for fairness
+                const hitboxPadding = 10;
+                const hitX = player.x + hitboxPadding < item.x + item.width && player.x + player.width - hitboxPadding > item.x;
+                const hitY = player.y < item.y + item.height && player.y + player.height > item.y + (item.height * 0.8); // Require balloon to fall into basket a bit
+
+                if (hitX && hitY) {
+                    const centerX = item.x + item.width / 2;
+                    if (item.isGood) {
+                        score += 1;
+                        goodCaughtCount++;
+                        sound.playGood();
+                        addFloatingText(`+1 ${item.name}!`, centerX, player.y - 10, '#34d399');
+                        createParticles(centerX, player.y, '#10b981');
+                    } else {
+                        score -= 1;
+                        badCaughtCount++;
+                        sound.playBad();
+                        addFloatingText(`-1 ${item.name}`, centerX, player.y - 10, '#f87171');
+                        createParticles(centerX, player.y, '#ef4444');
+                    }
+                    updateHUD();
+                    fallingItems.splice(i, 1);
+                    continue;
+                }
+
+                // Balloon escaped off screen (missed)
+                if (item.y > canvas.height + 20) {
+                    fallingItems.splice(i, 1);
+                }
+            }
+
+            // Update Floating Texts
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                const ft = floatingTexts[i];
+                ft.y += ft.vy;
+                ft.alpha -= 0.025;
+                if (ft.alpha <= 0) floatingTexts.splice(i, 1);
+            }
+
+            // Update Particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.03;
+                if (p.alpha <= 0) particles.splice(i, 1);
+            }
+        }
+
+        function drawGame() {
+            // Background base color
+            ctx.fillStyle = '#0f172a'; // slate-900 equivalent
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Background Vessel Effect
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.1)';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < canvas.height; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i + Math.sin(Date.now() * 0.002 + i) * 20);
+                ctx.stroke();
+            }
+
+            // Draw Basket at bottom
+            const basketCenterX = player.x + player.width / 2;
+            
+            ctx.fillStyle = '#b45309'; // Brown basket color
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(player.x + player.width, player.y);
+            ctx.lineTo(player.x + player.width - 8, player.y + player.height); // 너비 축소에 맞춰 밑단 각도 조절
+            ctx.lineTo(player.x + 8, player.y + player.height); // 너비 축소에 맞춰 밑단 각도 조절
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.strokeStyle = '#f59e0b'; // Lighter border
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Basket internal shadow/depth
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(player.x + player.width, player.y);
+            ctx.lineTo(player.x + player.width - 4, player.y + 12); // 그림자 너비 조절
+            ctx.lineTo(player.x + 4, player.y + 12); // 그림자 너비 조절
+            ctx.closePath();
+            ctx.fill();
+
+            // Launcher Label (Basket Icon)
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 16px Pretendard, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('🧺', basketCenterX, player.y + 26);
+
+            // Draw Falling Balloons (Realistic Balloon Oval + String + Unified Palette)
+            fallingItems.forEach(item => {
+                const w = item.width;
+                const h = item.height;
+                const bx = item.x;
+                const by = item.y;
+
+                ctx.save();
+
+                // Balloon Main Body Shape
+                ctx.fillStyle = 'rgba(30, 41, 59, 0.95)'; // Unified dark slate color
+                ctx.strokeStyle = '#6366f1'; // Unified indigo glow border
+                ctx.lineWidth = 2.5;
+
+                ctx.beginPath();
+                ctx.roundRect(bx, by, w, h - 15, 18);
+                ctx.fill();
+                ctx.stroke();
+
+                // Balloon Tie Knot
+                ctx.fillStyle = '#6366f1';
+                ctx.beginPath();
+                ctx.moveTo(bx + w / 2 - 6, by + h - 15);
+                ctx.lineTo(bx + w / 2 + 6, by + h - 15);
+                ctx.lineTo(bx + w / 2, by + h - 8);
+                ctx.closePath();
+                ctx.fill();
+
+                // Balloon String
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(bx + w / 2, by + h - 8);
+                ctx.quadraticCurveTo(bx + w / 2 + 10, by + h, bx + w / 2 - 5, by + h + 12);
+                ctx.stroke();
+
+                // Emoji
+                ctx.font = '28px sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText(item.emoji, bx + 10, by + 38);
+
+                // Item Name
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 15px Pretendard, sans-serif';
+                ctx.fillText(item.name, bx + 46, by + 26);
+
+                // Detail Text
+                ctx.fillStyle = '#cbd5e1';
+                ctx.font = '12px Pretendard, sans-serif';
+                ctx.fillText(item.detail, bx + 46, by + 46);
+
+                ctx.restore();
+            });
+
+            // Draw Floating Texts
+            floatingTexts.forEach(ft => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, ft.alpha);
+                ctx.fillStyle = ft.color;
+                ctx.font = 'bold 16px Jua, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(ft.text, ft.x, ft.y);
+                ctx.restore();
+            });
+
+            // Draw Particles
+            particles.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+
+        function gameLoop() {
+            updateGame();
+            drawGame();
+            if (isGaming) {
+                animationFrameId = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function updateHUD() {
+            document.getElementById('score-display').textContent = score;
+
+            const total = Math.max(1, goodCaughtCount + badCaughtCount);
+            const hdlPercent = Math.min(100, Math.max(10, Math.round((goodCaughtCount / total) * 100)));
+            const ldlPercent = 100 - hdlPercent;
+
+            document.getElementById('balance-bar-hdl').style.width = `${hdlPercent}%`;
+            document.getElementById('balance-bar-ldl').style.width = `${ldlPercent}%`;
+        }
+
+        function startGame() {
+            sound.init();
+            isGaming = true;
+            score = 0;
+            timeLeft = 15;
+            goodCaughtCount = 0;
+            badCaughtCount = 0;
+            fallingItems = [];
+            particles = [];
+            floatingTexts = [];
+            
+            player.x = canvas.width / 2 - player.width / 2;
+            player.targetX = -1;
+
+            document.getElementById('score-display').textContent = '0';
+            document.getElementById('timer-display').textContent = '15';
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-over-screen').classList.add('hidden');
+            document.getElementById('knowledge-modal').classList.add('hidden');
+
+            updateHUD();
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-display').textContent = timeLeft;
+
+                if (timeLeft <= 3) {
+                    document.getElementById('timer-display').className = 'font-jua text-2xl sm:text-3xl text-red-500 animate-ping';
+                } else {
+                    document.getElementById('timer-display').className = 'font-jua text-2xl sm:text-3xl text-emerald-400';
+                }
+
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            cancelAnimationFrame(animationFrameId);
+            gameLoop();
+        }
+
+        function endGame() {
+            isGaming = false;
+            clearInterval(timerInterval);
+            cancelAnimationFrame(animationFrameId);
+            sound.playOver();
+
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('stat-good-count').textContent = `${goodCaughtCount}개 (+${goodCaughtCount})`;
+            document.getElementById('stat-bad-count').textContent = `${badCaughtCount}개 (-${badCaughtCount})`;
+
+            const gradeText = document.getElementById('grade-text');
+            const gradeDesc = document.getElementById('grade-description');
+            const rankBadge = document.getElementById('rank-badge');
+
+            if (score >= 30) {
+                gradeText.textContent = "마스터 단계 (혈관의 신)";
+                gradeText.className = "font-jua text-xl text-emerald-400";
+                gradeDesc.textContent = "30점 이상 달성! 신적인 판단력과 순발력으로 HDL 풍선만 완벽히 획득해 최고의 혈관 상태를 만들었습니다.";
+                rankBadge.textContent = "🏆 SUPER MASTER";
+            } else if (score >= 20) {
+                gradeText.textContent = "수호자 단계 (혈관 가디언)";
+                gradeText.className = "font-jua text-xl text-blue-400";
+                gradeDesc.textContent = "20점대 우수한 성적! 빠르고 정교하게 좋은 요소만 바구니에 담아 혈관을 깨끗이 수호했습니다.";
+                rankBadge.textContent = "✨ EXCELLENT";
+            } else if (score >= 10) {
+                gradeText.textContent = "파수꾼 단계 (혈관 파수꾼)";
+                gradeText.className = "font-jua text-xl text-yellow-400";
+                gradeDesc.textContent = "10점대 양호한 결과! 나쁜 풍선 회피를 조금만 더 주의하면 최고 단계에 오를 수 있습니다.";
+                rankBadge.textContent = "👍 GOOD";
+            } else if (score >= 1) {
+                gradeText.textContent = "탐험가 단계 (혈관 챌린저)";
+                gradeText.className = "font-jua text-xl text-orange-400";
+                gradeDesc.textContent = "1~9점 달성! 속도가 빨라 아쉽게 놓친 풍선이 많았습니다. 좋은 음식 풍선을 집중 공략해 보세요!";
+                rankBadge.textContent = "⚠️ CHALLENGING";
+            } else {
+                gradeText.textContent = "연습생 단계 (혈관 루키)";
+                gradeText.className = "font-jua text-xl text-red-400";
+                gradeDesc.textContent = "0점 이하 기록! LDL/트랜스지방 풍선이 많이 흡수되었습니다. 도감을 복습하고 다시 도전해 보세요!";
+                rankBadge.textContent = "🚨 TRY AGAIN";
+            }
+
+            document.getElementById('game-over-screen').classList.remove('hidden');
+        }
+
+        document.getElementById('start-btn').addEventListener('click', startGame);
+        document.getElementById('restart-btn').addEventListener('click', startGame);
+
+        document.getElementById('knowledge-btn').addEventListener('click', () => {
+            document.getElementById('knowledge-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('close-modal-btn').addEventListener('click', () => {
+            document.getElementById('knowledge-modal').classList.add('hidden');
+        });
+
+        document.getElementById('back-to-result-btn').addEventListener('click', () => {
+            document.getElementById('knowledge-modal').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
