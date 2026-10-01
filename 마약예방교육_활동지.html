@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>문 앞에서 멈춰라 — 활동지</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #C0392B;
+    --red-light: #FADBD8;
+    --red-dark: #7B241C;
+    --blue: #2980B9;
+    --blue-light: #EBF5FB;
+    --blue-dark: #1A5276;
+    --gray: #2C3E50;
+    --gray-mid: #7F8C8D;
+    --gray-light: #F4F6F7;
+    --white: #FFFFFF;
+    --border: #DDDDDD;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #F0F2F5;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+    color: var(--gray);
+  }
+
+  .sheet {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    overflow: hidden;
+  }
+
+  /* 헤더 */
+  .header {
+    background: var(--red);
+    padding: 28px 32px 22px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .header p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.80);
+    margin-top: 6px;
+  }
+
+  /* 학생 정보 */
+  .student-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .info-cell {
+    padding: 12px 16px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .info-cell:last-child { border-right: none; }
+  .info-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--red);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .info-input {
+    border: none;
+    border-bottom: 1.5px solid var(--border);
+    outline: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: var(--gray);
+    padding: 4px 0;
+    width: 100%;
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+  .info-input:focus { border-color: var(--red); }
+
+  /* 본문 */
+  .body { padding: 28px 32px; }
+
+  /* 파트 헤더 */
+  .part-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .part-badge {
+    background: var(--red);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .part-title {
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--gray);
+    letter-spacing: -0.3px;
+  }
+  .part-desc {
+    font-size: 13px;
+    color: var(--gray-mid);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .part-section {
+    margin-bottom: 36px;
+  }
+
+  /* 체크리스트 */
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--red); background: #FFF9F9; }
+  .check-item.checked {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    transition: all 0.18s;
+    font-size: 13px;
+    color: transparent;
+  }
+  .check-item.checked .check-box {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+  }
+  .check-text { font-size: 14px; line-height: 1.5; color: var(--gray); }
+
+  /* 힌트 박스 */
+  .hint-box {
+    background: var(--blue-light);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--blue-dark);
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+
+  /* 구분선 */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  /* 상황 카드 */
+  .situation { margin-bottom: 20px; }
+  .situation-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue-dark);
+    background: var(--blue-light);
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .fill-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .fill-prefix { font-size: 14px; color: var(--gray); white-space: nowrap; }
+  .fill-input {
+    flex: 1;
+    min-width: 120px;
+    border: none;
+    border-bottom: 2px solid var(--border);
+    outline: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: var(--gray);
+    padding: 4px 2px;
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+  .fill-input:focus { border-color: var(--red); }
+  .fill-suffix { font-size: 14px; color: var(--gray); white-space: nowrap; }
+
+  /* 신고번호 박스 */
+  .hotline-box {
+    background: var(--red-light);
+    border: 2px solid var(--red);
+    border-radius: 10px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .hotline-item { text-align: center; }
+  .hotline-num {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+  }
+  .hotline-label { font-size: 12px; color: var(--red-dark); margin-top: 3px; }
+  .hotline-divider { width: 1px; height: 40px; background: var(--red); opacity: 0.3; }
+
+  /* PART 3 자유 서술 */
+  .free-write {
+    width: 100%;
+    min-height: 80px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: var(--gray);
+    resize: vertical;
+    outline: none;
+    line-height: 1.7;
+    transition: border-color 0.2s;
+  }
+  .free-write:focus { border-color: var(--red); }
+  .free-write::placeholder { color: #BBBBBB; }
+
+  /* 하단 슬로건 */
+  .slogan {
+    background: var(--red);
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    margin-top: 28px;
+    border-radius: 8px;
+  }
+
+  /* 인쇄 버튼 */
+  .print-btn {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    background: var(--gray);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: #1A252F; }
+
+  /* 인쇄 스타일 */
+  @media print {
+    body { background: white; padding: 0; }
+    .sheet { box-shadow: none; border-radius: 0; }
+    .print-btn { display: none; }
+    .check-item { break-inside: avoid; }
+  }
+
+  @media (max-width: 480px) {
+    .body { padding: 20px 18px; }
+    .header { padding: 22px 20px 18px; }
+    .header h1 { font-size: 21px; }
+    .student-info { grid-template-columns: 1fr; }
+    .info-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .hotline-box { gap: 16px; }
+    .hotline-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <!-- 헤더 -->
+  <div class="header">
+    <h1>문 앞에서 멈춰라 — 활동지</h1>
+    <p>마약 및 약물 오남용 예방교육</p>
+  </div>
+
+  <!-- 학생 정보 -->
+  <div class="student-info">
+    <div class="info-cell">
+      <span class="info-label">학년</span>
+      <input class="info-input" type="text" placeholder="학년">
+    </div>
+    <div class="info-cell">
+      <span class="info-label">반 · 번호</span>
+      <input class="info-input" type="text" placeholder="반  번">
+    </div>
+    <div class="info-cell">
+      <span class="info-label">이름</span>
+      <input class="info-input" type="text" placeholder="이름">
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- PART 1 -->
+    <div class="part-section">
+      <div class="part-header">
+        <span class="part-badge">PART 1</span>
+        <span class="part-title">나의 약물 습관 체크리스트</span>
+      </div>
+      <p class="part-desc">해당하는 항목을 클릭해 보세요. 솔직하게 체크할수록 나에게 도움이 됩니다.</p>
+
+      <div class="checklist">
+        <div class="check-item" onclick="toggle(this)">
+          <div class="check-box">✓</div>
+          <span class="check-text">처방전 없이 진통제를 먹은 적이 있다.</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="check-box">✓</div>
+          <span class="check-text">약국 수면유도제를 혼자 사서 먹은 적이 있다.</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="check-box">✓</div>
+          <span class="check-text">SNS에서 본 다이어트 약을 먹거나 궁금했던 적이 있다.</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="check-box">✓</div>
+          <span class="check-text">약을 먹다 보니 더 많은 양이 필요해진 적이 있다.</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="check-box">✓</div>
+          <span class="check-text">모르는 사람에게 음료나 음식을 받아 먹은 적이 있다.</span>
+        </div>
+      </div>
+
+      <div class="hint-box">
+        💡 체크 개수가 많을수록, 지금 당장 습관을 바꿔야 한다는 신호입니다.<br>
+        걱정되는 점이 있으면 보건 선생님과 이야기해 보세요.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PART 2 -->
+    <div class="part-section">
+      <div class="part-header">
+        <span class="part-badge">PART 2</span>
+        <span class="part-title">거절 대사 완성하기</span>
+      </div>
+      <p class="part-desc">빈칸을 채워 각 상황에서 내가 할 말을 완성해 보세요.</p>
+
+      <div class="situation">
+        <span class="situation-label">상황 1. 친구가 '이거 한번 해봐, 기분 진짜 달라진다'고 권할 때</span>
+        <div class="fill-row">
+          <span class="fill-prefix">나는</span>
+          <input class="fill-input" type="text" placeholder="                    ">
+          <span class="fill-suffix">. 그냥 하기 싫어.</span>
+        </div>
+      </div>
+
+      <div class="situation">
+        <span class="situation-label">상황 2. SNS 모르는 계정에서 '공짜로 줄게, 택배로 보내줄게'라고 연락이 올 때</span>
+        <div class="fill-row">
+          <span class="fill-prefix">일단 바로 계정을</span>
+          <input class="fill-input" type="text" placeholder="                    ">
+        </div>
+        <div class="fill-row">
+          <span class="fill-prefix">그리고 캡처해서</span>
+          <input class="fill-input" type="text" placeholder="                    ">
+        </div>
+      </div>
+
+      <div class="situation">
+        <span class="situation-label">상황 3. 갑자기 어지럽고 이상한 느낌이 들 때 (음료를 받아 마신 후)</span>
+        <div class="fill-row">
+          <span class="fill-prefix">즉시</span>
+          <input class="fill-input" type="text" placeholder="                    ">
+        </div>
+        <div class="fill-row">
+          <span class="fill-prefix">가장 가까운 어른(예: 선생님, 보호자)에게</span>
+          <input class="fill-input" type="text" placeholder="          ">
+        </div>
+      </div>
+
+      <div class="hotline-box">
+        <div class="hotline-item">
+          <div class="hotline-num">182</div>
+          <div class="hotline-label">마약 신고 (24시간·익명)</div>
+        </div>
+        <div class="hotline-divider"></div>
+        <div class="hotline-item">
+          <div class="hotline-num">1388</div>
+          <div class="hotline-label">청소년 상담 (24시간)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PART 3 -->
+    <div class="part-section">
+      <div class="part-header">
+        <span class="part-badge">PART 3</span>
+        <span class="part-title">오늘 내가 기억할 한 문장</span>
+      </div>
+      <p class="part-desc">오늘 영상을 보고 난 후, 나 자신에게 남기고 싶은 한 문장을 써 보세요.<br>
+      <span style="color:#BBBBBB">(예: 나는 어떤 상황에서도 모르는 약은 먹지 않겠다.)</span></p>
+      <textarea class="free-write" placeholder="여기에 써보세요."></textarea>
+    </div>
+
+    <!-- 슬로건 -->
+    <div class="slogan">
+      약은 처방대로만 &nbsp;·&nbsp; 모르는 약은 절대 NO &nbsp;·&nbsp; 권유는 신고다
+    </div>
+
+    <!-- 인쇄 버튼 -->
+    <button class="print-btn" onclick="window.print()">🖨️ 인쇄하기</button>
+
+  </div>
+</div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('checked');
+  }
+</script>
+
+</body>
+</html>
