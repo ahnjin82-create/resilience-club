@@ -47,6 +47,7 @@
   .cage::after{content:"";position:absolute;inset:0;
         background:repeating-linear-gradient(90deg,transparent 0 13px,rgba(27,36,54,.8) 13px 17px);
         transition:transform 1s ease,opacity 1s ease;}
+  .cage.sm::after{background:repeating-linear-gradient(90deg,transparent 0 14px,rgba(27,36,54,.7) 14px 16px);}
   .cage.free::after{transform:translateY(-110%);opacity:0;}
   .bubble{position:relative;flex:1;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:11px 14px;font-size:14.5px;font-weight:500;}
   .bubble.center{margin:0 0 16px;text-align:center;}
@@ -58,7 +59,10 @@
         background:radial-gradient(circle at 50% 38%,#34568f 0%,#16294e 72%);
         box-shadow:0 0 0 4px rgba(255,255,255,.14),0 20px 44px rgba(0,0,0,.5);}
   .cage.xl .m-emoji{font-size:140px;}
-  .cage.xl::after{z-index:1;background:repeating-linear-gradient(90deg,transparent 0 23px,#0a1127 23px 31px,#4b608c 31px 32px);}
+  .cage.xl::after{z-index:1;
+        background:repeating-linear-gradient(90deg,transparent 0 34px,rgba(10,17,39,.85) 34px 37px,rgba(120,145,190,.55) 37px 38px);
+        -webkit-mask-image:radial-gradient(ellipse 46% 40% at 50% 44%,rgba(0,0,0,.3) 0%,#000 100%);
+        mask-image:radial-gradient(ellipse 46% 40% at 50% 44%,rgba(0,0,0,.3) 0%,#000 100%);}
   .cage.xl::before{content:"🔒";position:absolute;z-index:2;left:50%;bottom:5%;font-size:42px;line-height:1;
         transform:translateX(-50%);transition:transform .8s ease,opacity .8s ease;}
   .cage.xl.free::before{opacity:0;transform:translate(-50%,50px);}
