@@ -53,9 +53,37 @@
   .row .bubble::before{content:"";position:absolute;left:-7px;top:50%;width:12px;height:12px;background:#fff;
         border-left:1.5px solid var(--line);border-bottom:1.5px solid var(--line);transform:translateY(-50%) rotate(45deg);}
 
-  /* 시작 화면 */
-  .how{margin:6px 0 18px;padding-left:22px;font-size:14.5px;}
-  .how li{margin-bottom:6px;}
+  /* 큰 마냥이 우리 (첫 화면 · 탈출 성공 화면) */
+  .cage.xl{width:min(68vw,250px);height:min(68vw,250px);margin:0 auto;
+        background:radial-gradient(circle at 50% 38%,#34568f 0%,#16294e 72%);
+        box-shadow:0 0 0 4px rgba(255,255,255,.14),0 20px 44px rgba(0,0,0,.5);}
+  .cage.xl .m-emoji{font-size:140px;}
+  .cage.xl::after{z-index:1;background:repeating-linear-gradient(90deg,transparent 0 23px,#0a1127 23px 31px,#4b608c 31px 32px);}
+  .cage.xl::before{content:"🔒";position:absolute;z-index:2;left:50%;bottom:5%;font-size:42px;line-height:1;
+        transform:translateX(-50%);transition:transform .8s ease,opacity .8s ease;}
+  .cage.xl.free::before{opacity:0;transform:translate(-50%,50px);}
+  .cage.xl.rattle{animation:rattle .7s .4s 1;}
+
+  /* 첫 화면 히어로 */
+  main.hero-mode{padding:0;}
+  .hero{position:relative;overflow:hidden;padding:22px 22px 26px;text-align:center;color:#fff;
+        background:linear-gradient(180deg,#1B3A6B 0%,#0d1830 100%);}
+  .hero > *:not(.smoke){position:relative;z-index:1;}
+  .smoke{position:absolute;border-radius:50%;filter:blur(32px);animation:drift 15s ease-in-out infinite alternate;}
+  .smoke.s1{width:230px;height:230px;left:-70px;top:30px;background:#7fa4ff;opacity:.32;}
+  .smoke.s2{width:270px;height:270px;right:-100px;bottom:40px;background:#02C39A;opacity:.16;animation-duration:19s;}
+  .cage-wrap{position:relative;width:fit-content;margin:8px auto 0;}
+  .plead{position:absolute;z-index:3;right:-16px;top:-8px;background:#fff;color:var(--ink);
+        font:900 17px 'Noto Sans KR',sans-serif;padding:9px 15px;border-radius:16px 16px 16px 4px;
+        transform-origin:20% 100%;animation:pop .5s .9s both cubic-bezier(.34,1.56,.64,1);}
+  .hero-title{margin:16px 0 6px;font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:42px;line-height:1.15;
+        text-shadow:0 3px 0 #FF6B4A,0 10px 26px rgba(0,0,0,.45);}
+  .hero-sub{margin:0;font-size:16px;font-weight:500;color:#cfe9e3;}
+  .btn.hero-cta{max-width:320px;margin:18px auto 0;font-size:19px;padding:17px 10px;box-shadow:0 5px 0 #c04a30;}
+  .btn.hero-cta:active{transform:translateY(3px);box-shadow:0 2px 0 #c04a30;}
+  .hero-how{max-width:330px;margin:20px auto 0;padding-left:20px;text-align:left;font-size:13.5px;color:#cbd6ee;}
+  .hero-how li{margin-bottom:4px;}
+  .hero-tiny{margin:10px 0 0;font-size:12px;color:#8fa6cf;}
 
   /* 포스터 단서 */
   .clue{margin:0 0 14px;padding:14px 16px;background:#fff;border-left:5px solid var(--gold);
@@ -111,6 +139,9 @@
 
   button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  @keyframes rattle{0%,100%{transform:rotate(0)}15%{transform:rotate(-3deg)}30%{transform:rotate(3deg)}45%{transform:rotate(-2deg)}60%{transform:rotate(2deg)}80%{transform:rotate(-1deg)}}
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  @keyframes drift{to{transform:translate(34px,-24px) scale(1.18)}}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 </head>
@@ -222,6 +253,7 @@
       el.classList.toggle('now', k===state.keys && state.phase!=='start' && state.phase!=='end');
     });
     locksEl.setAttribute('aria-label','열쇠 '+state.keys+'개 / 7개');
+    stage.classList.toggle('hero-mode', state.phase==='start');
   }
 
   function mascot(cls){
@@ -233,15 +265,19 @@
   function renderStart(){
     state.i=0; state.keys=0; state.wrong=0; state.phase='start'; updateLocks();
     stage.innerHTML =
-      mascot('')+
-      '<div class="bubble center">도와줘요! 니코틴 하우스에 갇혔어요.<br>문 7개를 열어 저를 구해 주세요!</div>'+
-      '<ol class="how">'+
-        '<li>'+CONFIG.posterPlace+'에 전시된 Anti-Vaping 포스터 앞으로 가요.</li>'+
-        '<li>포스터를 직접 보고 그림을 맞힌 뒤, 소문이 진실인지 거짓인지 가려요.</li>'+
-        '<li>마지막 문은 “한 번 해볼래?”를 거절하는 한마디예요.</li>'+
-      '</ol>'+
-      '<button class="btn primary" data-act="start">탈출 시작</button>'+
-      '<p class="tiny">5분쯤 걸려요. 점수와 기록은 어디에도 저장되지 않아요.</p>';
+      '<section class="hero">'+
+        '<div class="smoke s1"></div><div class="smoke s2"></div>'+
+        '<div class="cage-wrap"><div class="plead">도와줘요!</div>'+mascot('xl rattle')+'</div>'+
+        '<h2 class="hero-title">마냥이가 갇혔다!</h2>'+
+        '<p class="hero-sub">니코틴 하우스의 문은 7개.<br>열쇠를 모아 탈출시켜 주세요.</p>'+
+        '<button class="btn primary hero-cta" data-act="start">탈출 시작</button>'+
+        '<ol class="hero-how">'+
+          '<li>'+CONFIG.posterPlace+'에 전시된 Anti-Vaping 포스터 앞으로 가요.</li>'+
+          '<li>포스터를 직접 보고 그림을 맞힌 뒤, 소문이 진실인지 거짓인지 가려요.</li>'+
+          '<li>마지막 문은 “한 번 해볼래?”를 거절하는 한마디예요.</li>'+
+        '</ol>'+
+        '<p class="hero-tiny">5분쯤 걸려요. 점수와 기록은 어디에도 저장되지 않아요.</p>'+
+      '</section>';
   }
 
   function renderFind(){
@@ -300,7 +336,7 @@
   function renderEnd(){
     state.phase='end'; updateLocks();
     stage.innerHTML =
-      mascot('')+
+      mascot('xl')+
       '<h2 class="done">탈출 성공!</h2>'+
       '<p class="center">열쇠 7개를 모두 모았어요. 마냥이가 풀려났어요.</p>'+
       '<div class="pledge">나 안 해!</div>'+
